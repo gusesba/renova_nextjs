@@ -1,0 +1,52 @@
+import { Client } from '.prisma/client';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createClient, getClients } from '../../../backend/controllers/client';
+import { prisma } from '../../../prisma/prismaClient';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Client | Client[] | { error: string }>
+) {
+  //IF POST REQUEST CREATE CLIENT - backend/client.ts
+  if (req.method == 'POST') {
+    const { name, phone } = req.body;
+
+    if (!name) return res.status(400).json({ error: 'Bad Request' });
+    if (name.length == 0) return res.status(400).json({ error: 'Bad Request' });
+    if (typeof name != 'string')
+      return res.status(400).json({ error: 'Bad Request' });
+
+    if (!phone) return res.status(400).json({ error: 'Bad Request' });
+    if (phone.length == 0)
+      return res.status(400).json({ error: 'Bad Request' });
+    if (typeof phone != 'string')
+      return res.status(400).json({ error: 'Bad Request' });
+
+    return createClient(name, phone)
+      .then(async (client: Client) => {
+        await prisma.$disconnect();
+        res.status(201).json(client);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  //IF GET REQUEST GET ALL CLIENTS - backend/client.ts
+  if (req.method == 'GET') {
+    const { number, skip, filter, order } = req.body;
+
+    return getClients(number, skip, filter, order)
+      .then(async (clients: Client[]) => {
+        await prisma.$disconnect();
+        res.status(201).json(clients);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+}
