@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Client {
+  id    Int     @id @default(autoincrement())
+  phone String  
+  name  String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  products Product[]
+  purchases Sell[]
+
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  price Decimal
+  product String
+  brand String
+  color String
+  providerId Int
+  description String?
+  entry DateTime
+  sellId Int?
+  sellPrice Decimal?
+  sell Sell? @relation(fields: [sellId], references: [id], onDelete: Restrict)
+  provider Client @relation(fields: [providerId],references: [id],onDelete: Restrict)
+  @@index([providerId])
+  @@index([sellId])
+}
+
+model Sell {
+  id Int @id @default(autoincrement())
+  type String
+  buyerId Int
+  buyer Client @relation(fields: [buyerId],references: [id],onDelete: Restrict)
+  products Product[]
+  @@index([buyerId])
+  
+}
