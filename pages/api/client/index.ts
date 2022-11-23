@@ -1,7 +1,14 @@
-import { Client } from '.prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient, getClients } from '../../../backend/controllers/client';
 import { prisma } from '../../../prisma/prismaClient';
+
+type Client = {
+  id?: number;
+  phone?: string;
+  name?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,9 +43,9 @@ export default async function handler(
 
   //IF GET REQUEST GET ALL CLIENTS - backend/client.ts
   if (req.method == 'GET') {
-    const { number, skip, filter, order } = req.body;
+    const { number, skip, filter, order, select } = req.body;
 
-    return getClients(number, skip, filter, order)
+    return getClients(number, skip, filter, order, select)
       .then(async (clients: Client[]) => {
         await prisma.$disconnect();
         res.status(201).json(clients);

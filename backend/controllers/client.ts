@@ -23,9 +23,17 @@ export async function getClients(
   take?: number,
   skip?: number,
   filter = {},
-  order = [{ id: 'desc' }]
+  order = [{ id: 'desc' }],
+  select?: {
+    id?: boolean;
+    name?: boolean;
+    phone?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+  }
 ) {
   const clients = await prisma.client.findMany({
+    select,
     take,
     skip,
     where: filter,
@@ -34,6 +42,8 @@ export async function getClients(
 
   return clients;
 }
+
+prisma.client.findMany;
 
 //FIND ONE CLIENT
 // PARAMS:

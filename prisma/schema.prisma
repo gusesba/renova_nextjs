@@ -46,6 +46,5 @@ model Sell {
   buyerId Int
   buyer Client @relation(fields: [buyerId],references: [id],onDelete: Restrict)
   products Product[]
-  @@index([buyerId])
-  
+  @@index([buyerId]) 
 }
