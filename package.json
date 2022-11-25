@@ -7,7 +7,7 @@
   "license": "MIT",
   "homepage": "YOUR_REPOSITORY_HERE",
   "engines": {
-    "node": ">=14.0.0",
+    "node": "16.x",
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
   },
