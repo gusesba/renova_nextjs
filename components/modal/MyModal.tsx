@@ -5,24 +5,28 @@ import Modal from 'react-bootstrap/Modal';
 export interface IMyModal {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
+  name: string;
+  ModalBody: React.FC;
 }
 
-const MyModal: React.FC<IMyModal> = ({ show, setShow }) => {
+const MyModal: React.FC<IMyModal> = ({ show, setShow, name, ModalBody }) => {
   const handleClose = () => setShow(false);
 
   return (
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Novo {name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, youre reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          <ModalBody />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            Cancelar
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save Changes
+            Adicionar
           </Button>
         </Modal.Footer>
       </Modal>
