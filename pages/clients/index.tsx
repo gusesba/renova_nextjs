@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import AddClientForm from '../../components/forms/addClientForm';
+import AddClientForm from '../../components/forms/AddClientForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyModal from '../../components/modal/MyModal';
 import MyTable from '../../components/table/MyTable';
