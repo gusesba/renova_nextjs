@@ -25,7 +25,7 @@ const MyModal: React.FC<IMyModal> = ({ show, setShow, name, ModalBody }) => {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button type="submit" form="addForm" variant="primary">
             Adicionar
           </Button>
         </Modal.Footer>
