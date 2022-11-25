@@ -1,31 +1,16 @@
-import Link from 'next/link';
-import React from 'react';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
-export interface IHeader extends React.ComponentPropsWithoutRef<'header'> {}
-
-const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
+const Header = () => {
   return (
-    <header
-      {...headerProps}
-      className={`w-full flex flex-row justify-between ${className}`}
-    >
-      <div className="space-x-5 m-5">
-        <Link className="hover:underline" href="/">
-          Home
-        </Link>
-        <Link className="hover:underline" href="/">
-          Store
-        </Link>
-      </div>
-      <div className="space-x-5 m-5">
-        <Link href="/" className="hover:underline hidden sm:inline">
-          Gmail
-        </Link>
-        <Link href="/" className="hover:underline hidden sm:inline">
-          Images
-        </Link>
-      </div>
-    </header>
+    <Navbar className="w-screen" bg="light" variant="light">
+      <Container>
+        <Navbar.Brand href="#home">Renova</Navbar.Brand>
+        <Nav className="me-auto">
+          <Nav.Link href="#home">Tabelas</Nav.Link>
+          <Nav.Link href="#features">Atividades</Nav.Link>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 };
 

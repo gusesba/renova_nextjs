@@ -1,21 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient, getClients } from '../../../backend/controllers/client';
 import { prisma } from '../../../prisma/prismaClient';
-
-type Client = {
-  id?: number;
-  phone?: string;
-  name?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
+import { Client } from '../../../types/types';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Client | Client[] | { error: string }>
 ) {
   //IF POST REQUEST CREATE CLIENT - backend/client.ts
-  if (req.method == 'POST') {
+  if (req.method == 'POST' && req.body?.action == 'POST') {
     const { name, phone } = req.body;
 
     if (!name) return res.status(400).json({ error: 'Bad Request' });
@@ -42,9 +35,8 @@ export default async function handler(
   }
 
   //IF GET REQUEST GET ALL CLIENTS - backend/client.ts
-  if (req.method == 'GET') {
+  if (req.method == 'POST' && req.body?.action == 'GET') {
     const { number, skip, filter, order, select } = req.body;
-
     return getClients(number, skip, filter, order, select)
       .then(async (clients: Client[]) => {
         await prisma.$disconnect();

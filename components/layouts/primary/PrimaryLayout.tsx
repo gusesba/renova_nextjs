@@ -1,5 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head';
-import Footer from '../../navigation/footer/Footer';
 import Header from '../../navigation/header/Header';
 
 export interface IPrimaryLayout extends React.ComponentPropsWithoutRef<'div'> {
@@ -20,7 +20,6 @@ const PrimaryLayout: React.FC<IPrimaryLayout> = ({
         <Header />
         <main className="px-5">{children}</main>
         <div className="m-auto" />
-        <Footer />
       </div>
     </>
   );
