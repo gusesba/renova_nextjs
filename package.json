@@ -11,6 +11,11 @@
     "yarn": ">=1.22.0",
     "npm": "please-use-yarn"
   },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

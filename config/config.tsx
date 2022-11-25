@@ -1,1 +1,1 @@
-export const baseURL = 'http://localhost:3000/api';
+export const baseURL = 'https://renova-nextjs-lk1xbb1yx-gusesba.vercel.app/api';
