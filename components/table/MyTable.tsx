@@ -63,7 +63,7 @@ const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
                 <td>
                   <FormCheck />
                 </td>
-                {Object.values(row).map((item, key) => {
+                {Object.values(row).map((item: any, key) => {
                   return <td key={key}>{item}</td>;
                 })}
               </tr>
