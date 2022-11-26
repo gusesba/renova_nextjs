@@ -1,21 +1,22 @@
-import { Product } from '.prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import {
   createProduct,
   getProducts,
 } from '../../../backend/controllers/product';
 import { prisma } from '../../../prisma/prismaClient';
+import { Product } from '../../../types/types';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Product | Product[] | { error: string }>
 ) {
   //IF POST REQUEST CREATE PRODUCT - backend/product.ts
-  if (req.method == 'POST') {
+  if (req.method == 'POST' && req.body?.action == 'POST') {
     const {
       price,
       product,
       brand,
+      size,
       color,
       providerId,
       description,
@@ -24,12 +25,13 @@ export default async function handler(
       sellPrice,
     } = req.body;
 
-    const date = new Date(entry);
+    const date = entry ? new Date(entry) : new Date(Date.now());
 
     return createProduct(
       price,
       product,
       brand,
+      size,
       color,
       providerId,
       description,
@@ -48,7 +50,7 @@ export default async function handler(
       });
   }
   //IF POST REQUEST GET PRODUCTS - backend/product.ts
-  if (req.method == 'GET') {
+  if (req.method == 'POST' && req.body?.action == 'GET') {
     const { number, skip, filter, order } = req.body;
 
     return getProducts(number, skip, filter, order)

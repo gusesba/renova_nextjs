@@ -15,6 +15,7 @@ const Clients: NextPageWithLayout<IClients> = () => {
         headers={['ID', 'Nome', 'Telefone']}
         fields={['id', 'name', 'phone']}
         url="/client"
+        name="Cliente"
       />
     </>
   );

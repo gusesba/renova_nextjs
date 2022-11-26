@@ -1,5 +1,5 @@
-import { Prisma } from "prisma/prisma-client";
-import { prisma } from "../../prisma/prismaClient";
+import { Prisma } from 'prisma/prisma-client';
+import { prisma } from '../../prisma/prismaClient';
 
 //CREATE PRODUCT
 //PARAMS
@@ -16,6 +16,7 @@ export async function createProduct(
   price: number,
   product: string,
   brand: string,
+  size: string,
   color: string,
   providerId: number,
   description: string | undefined,
@@ -30,6 +31,7 @@ export async function createProduct(
       price,
       product,
       brand,
+      size,
       color,
       description,
       entry,
@@ -49,13 +51,28 @@ export async function getProducts(
   take?: number,
   skip?: number,
   filter = {},
-  order = [{ id: "desc" }]
+  order = [{ id: 'desc' }]
 ) {
   const products = prisma.product.findMany({
     take,
     skip,
     where: filter,
     orderBy: order as Prisma.Enumerable<Prisma.ProductOrderByWithRelationInput>,
+    select: {
+      id: true,
+      price: true,
+      product: true,
+      brand: true,
+      size: true,
+      color: true,
+      provider: {
+        select: {
+          name: true,
+        },
+      },
+      description: true,
+      entry: true,
+    },
   });
 
   return products;

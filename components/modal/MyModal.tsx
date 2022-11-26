@@ -6,15 +6,22 @@ export interface IMyModal {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
   name: string;
-  ModalBody: React.FC;
+  ModalBody: React.FC<any>;
+  size?: 'sm' | 'lg' | 'xl';
 }
 
-const MyModal: React.FC<IMyModal> = ({ show, setShow, name, ModalBody }) => {
+const MyModal: React.FC<IMyModal> = ({
+  show,
+  setShow,
+  name,
+  ModalBody,
+  size,
+}) => {
   const handleClose = () => setShow(false);
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal size={size} show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Novo {name}</Modal.Title>
         </Modal.Header>

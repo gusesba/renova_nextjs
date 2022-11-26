@@ -28,6 +28,7 @@ model Product {
   price Decimal
   product String
   brand String
+  size String
   color String
   providerId Int
   description String?

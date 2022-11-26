@@ -52,7 +52,11 @@ const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
               <FormCheck />
             </th>
             {headers.map((column, key) => {
-              return <th key={key}>{column}</th>;
+              return (
+                <th className="text-center" key={key}>
+                  {column}
+                </th>
+              );
             })}
           </tr>
         </thead>
@@ -64,7 +68,17 @@ const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
                   <FormCheck />
                 </td>
                 {Object.values(row).map((item: any, key) => {
-                  return <td key={key}>{item}</td>;
+                  return (
+                    <td className="text-center" key={key}>
+                      <span className="pr-1 pl-1">
+                        {Object.values(item).length
+                          ? typeof item == typeof 'aa'
+                            ? item
+                            : Object.values(item)[0]
+                          : item}
+                      </span>
+                    </td>
+                  );
                 })}
               </tr>
             );
