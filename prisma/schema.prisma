@@ -35,7 +35,7 @@ model Product {
   entry DateTime
   sellId Int?
   sellPrice Decimal?
-  sell Sell? @relation(fields: [sellId], references: [id], onDelete: Restrict)
+  sell Sell? @relation(fields: [sellId], references: [id], onDelete: SetNull)
   provider Client @relation(fields: [providerId],references: [id],onDelete: Restrict)
   @@index([providerId])
   @@index([sellId])

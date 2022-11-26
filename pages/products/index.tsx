@@ -11,6 +11,7 @@ const Products: NextPageWithLayout<IProducts> = () => {
   return (
     <>
       <MyPage
+        filter={{ sellId: null }}
         name="Produto"
         size="lg"
         ModalBody={AddProductForm}

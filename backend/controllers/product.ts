@@ -53,7 +53,7 @@ export async function getProducts(
   filter = {},
   order = [{ id: 'desc' }]
 ) {
-  const products = prisma.product.findMany({
+  const products = await prisma.product.findMany({
     take,
     skip,
     where: filter,

@@ -10,6 +10,7 @@ export interface IMyPage {
   url: string;
   headers: Array<string>;
   fields: Array<string>;
+  filter?: {};
 }
 
 const MyPage: React.FC<IMyPage> = ({
@@ -19,6 +20,7 @@ const MyPage: React.FC<IMyPage> = ({
   fields,
   size,
   name,
+  filter,
 }) => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([] as Array<number>);
@@ -59,6 +61,7 @@ const MyPage: React.FC<IMyPage> = ({
         fields={fields}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
+        filter={filter}
       />
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">

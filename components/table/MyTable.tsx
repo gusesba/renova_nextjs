@@ -8,6 +8,7 @@ export interface IMyTable {
   fields: Array<string>;
   selectedRows: Array<number>;
   setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
+  filter?: {};
 }
 
 const MyTable: React.FC<IMyTable> = ({
@@ -16,6 +17,7 @@ const MyTable: React.FC<IMyTable> = ({
   fields,
   setSelectedRows,
   selectedRows,
+  filter,
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
@@ -26,6 +28,7 @@ const MyTable: React.FC<IMyTable> = ({
       number: 10,
       select: fields,
       skip: page * 10,
+      filter,
     };
 
     fetch(baseURL + url, {
