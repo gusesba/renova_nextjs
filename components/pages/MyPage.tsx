@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import MyModal from '../../components/modal/MyModal';
-import MyTable, { IMyTable } from '../../components/table/MyTable';
+import MyTable from '../../components/table/MyTable';
 import { baseURL } from '../../config/config';
 
-export interface IMyPage extends IMyTable {
+export interface IMyPage {
   ModalBody: React.FC<any>;
   size?: 'sm' | 'lg' | 'xl';
   name: string;
+  url: string;
+  headers: Array<string>;
+  fields: Array<string>;
 }
 
 const MyPage: React.FC<IMyPage> = ({
