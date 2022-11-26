@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FormCheck, Table } from 'react-bootstrap';
 import { baseURL } from '../../config/config';
 
@@ -6,9 +6,17 @@ export interface IMyTable {
   url: string;
   headers: Array<string>;
   fields: Array<string>;
+  selectedRows: Array<number>;
+  setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
 }
 
-const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
+const MyTable: React.FC<IMyTable> = ({
+  url,
+  headers,
+  fields,
+  setSelectedRows,
+  selectedRows,
+}) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
 
@@ -48,9 +56,7 @@ const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
       <Table bordered hover>
         <thead>
           <tr>
-            <th>
-              <FormCheck />
-            </th>
+            <th></th>
             {headers.map((column, key) => {
               return (
                 <th className="text-center" key={key}>
@@ -61,11 +67,26 @@ const MyTable: React.FC<IMyTable> = ({ url, headers, fields }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.map((row, key) => {
+          {data?.map((row: any, key) => {
             return (
               <tr key={key}>
                 <td>
-                  <FormCheck />
+                  <FormCheck
+                    key={key}
+                    name={row.id.toString()}
+                    onChange={(e) => {
+                      if (e.target.checked)
+                        setSelectedRows(
+                          [...selectedRows].concat(parseInt(e.target.name))
+                        );
+                      else
+                        setSelectedRows(
+                          [...selectedRows].filter((id) => {
+                            if (parseInt(e.target.name) != id) return id;
+                          })
+                        );
+                    }}
+                  />
                 </td>
                 {Object.values(row).map((item: any, key) => {
                   return (

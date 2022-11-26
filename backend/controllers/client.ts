@@ -57,8 +57,8 @@ export async function getClient(id: number) {
 //DELETE CLIENT
 // PARAMS:
 //   ID : NUMBER
-export async function deleteClient(id: number) {
-  const client = await prisma.client.delete({ where: { id } });
+export async function deleteClients(ids: Array<number>) {
+  const count = await prisma.client.deleteMany({ where: { id: { in: ids } } });
 
-  return client;
+  return count;
 }

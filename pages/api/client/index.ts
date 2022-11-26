@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient, getClients } from '../../../backend/controllers/client';
+import {
+  createClient,
+  deleteClients,
+  getClients,
+} from '../../../backend/controllers/client';
 import { prisma } from '../../../prisma/prismaClient';
 import { Client } from '../../../types/types';
 
@@ -41,6 +45,21 @@ export default async function handler(
       .then(async (clients: Client[]) => {
         await prisma.$disconnect();
         res.status(201).json(clients);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  //IF DELETE REQUEST DELETE CLIENTS ON IDS - backend/client.ts
+  if (req.method == 'DELETE') {
+    const { ids } = req.body;
+    return deleteClients(ids)
+      .then(async (count: any) => {
+        await prisma.$disconnect();
+        res.status(201).json(count);
       })
       .catch(async (e) => {
         console.error(e);

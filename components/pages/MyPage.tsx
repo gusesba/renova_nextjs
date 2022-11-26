@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MyModal from '../../components/modal/MyModal';
 import MyTable, { IMyTable } from '../../components/table/MyTable';
+import { baseURL } from '../../config/config';
 
 export interface IMyPage extends IMyTable {
   ModalBody: React.FC<any>;
@@ -17,6 +18,28 @@ const MyPage: React.FC<IMyPage> = ({
   name,
 }) => {
   const [addModalShow, setAddModalShow] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([] as Array<number>);
+
+  const handleDelete = () => {
+    const body = {
+      ids: selectedRows,
+    };
+
+    fetch(baseURL + url, {
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else console.log(data.count);
+      });
+  };
+
   return (
     <section>
       <MyModal
@@ -26,10 +49,19 @@ const MyPage: React.FC<IMyPage> = ({
         size={size}
         name={name}
       />
-      <MyTable headers={headers} url={url} fields={fields} />
+      <MyTable
+        headers={headers}
+        url={url}
+        fields={fields}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+      />
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
-        <div className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex">
+        <div
+          onClick={handleDelete}
+          className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex"
+        >
           <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
