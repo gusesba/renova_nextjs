@@ -49,7 +49,9 @@ prisma.client.findMany;
 // PARAMS:
 //   ID : NUMBER
 export async function getClient(id: number) {
-  const client = await prisma.client.findUnique({ where: { id } });
+  const client = await prisma.client.findUnique({
+    where: { id },
+  });
 
   return client;
 }

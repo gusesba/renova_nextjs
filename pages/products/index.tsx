@@ -1,6 +1,6 @@
 import AddProductForm from '../../components/forms/AddProductForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
-import MyPage from '../../components/pages/MyPage';
+import MyPage from '../../components/pages/MyPageTable';
 import { Product } from '../../types/types';
 import { NextPageWithLayout } from '../page';
 export interface IProducts {

@@ -82,7 +82,20 @@ export async function getProducts(
 // PARAMS:
 //   ID : NUMBER
 export async function getProduct(id: number) {
-  const product = await prisma.product.findUnique({ where: { id } });
+  const product = await prisma.product.findUnique({
+    select: {
+      id: true,
+      price: true,
+      product: true,
+      brand: true,
+      size: true,
+      color: true,
+      description: true,
+      entry: true,
+      sellPrice: true,
+    },
+    where: { id },
+  });
 
   return product;
 }

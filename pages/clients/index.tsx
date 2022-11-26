@@ -1,6 +1,6 @@
 import AddClientForm from '../../components/forms/AddClientForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
-import MyPage from '../../components/pages/MyPage';
+import MyPage from '../../components/pages/MyPageTable';
 import { Client } from '../../types/types';
 import { NextPageWithLayout } from '../page';
 export interface IClients {

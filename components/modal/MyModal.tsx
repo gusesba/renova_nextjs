@@ -6,7 +6,7 @@ export interface IMyModal {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
   name: string;
-  ModalBody: React.FC<any>;
+  children: React.ReactNode;
   size?: 'sm' | 'lg' | 'xl';
 }
 
@@ -14,7 +14,7 @@ const MyModal: React.FC<IMyModal> = ({
   show,
   setShow,
   name,
-  ModalBody,
+  children,
   size,
 }) => {
   const handleClose = () => setShow(false);
@@ -25,9 +25,7 @@ const MyModal: React.FC<IMyModal> = ({
         <Modal.Header closeButton>
           <Modal.Title>Novo {name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <ModalBody />
-        </Modal.Body>
+        <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancelar

@@ -1,70 +1,81 @@
 import { useState } from 'react';
-import MyModal from '../../components/modal/MyModal';
-import MyTable from '../../components/table/MyTable';
 import { baseURL } from '../../config/config';
+import AddSellProductForm from '../forms/AddSellProductForm';
+import MyModal from '../modal/MyModal';
+import MyTable from '../table/MySellTable';
 
-export interface IMyPage {
-  ModalBody: React.FC<any>;
-  size?: 'sm' | 'lg' | 'xl';
-  name: string;
-  url: string;
-  headers: Array<string>;
-  fields: Array<string>;
-}
+export interface IMyPage {}
 
-const MyPage: React.FC<IMyPage> = ({
-  ModalBody,
-  headers,
-  url,
-  fields,
-  size,
-  name,
-}) => {
+const MyPage: React.FC<IMyPage> = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([] as Array<number>);
+  const [rows, setRows] = useState([] as Array<Object>);
 
-  const handleDelete = () => {
+  const finishSell = () => {
     const body = {
-      ids: selectedRows,
+      action: 'POST',
+      type: 'sell',
+      buyerId: 1,
+      products: rows.map((column: any) => {
+        return {
+          id: column.id,
+        };
+      }),
     };
 
-    fetch(baseURL + url, {
+    fetch(baseURL + '/sell', {
       body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'DELETE',
+      method: 'POST',
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.error) {
           console.log(data.error);
-        } else console.log(data.count);
+        } else console.log(data);
       });
   };
 
   return (
     <section>
-      <MyModal
-        show={addModalShow}
-        setShow={setAddModalShow}
-        ModalBody={ModalBody}
-        size={size}
-        name={name}
-      />
+      <MyModal show={addModalShow} setShow={setAddModalShow} name={'Produto'}>
+        <AddSellProductForm rows={rows} setRows={setRows} />
+      </MyModal>
       <MyTable
-        headers={headers}
-        url={url}
-        fields={fields}
+        headers={[
+          'ID',
+          'Preço',
+          'Produto',
+          'Marca',
+          'Tamanho',
+          'Cor',
+          'Descrição',
+          'Entrada',
+          'Preço Venda',
+        ]}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
+        rows={rows}
       />
-
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
-        <div
-          onClick={handleDelete}
-          className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex"
-        >
+        <div className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex">
+          <button
+            onClick={finishSell}
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-check-lg ml-[11px]"
+              viewBox="0 0 16 16"
+            >
+              <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+            </svg>
+          </button>
           <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"

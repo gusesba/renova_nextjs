@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse<Sell | Sell[] | { error: string }>
 ) {
   //IF POST REQUEST CREATE CLIENT - backend/sell.ts
-  if (req.method == 'POST') {
+  if (req.method == 'POST' && req.body.action == 'POST') {
     const { type, buyerId, products } = req.body;
 
     return createSell(type, buyerId, products)
