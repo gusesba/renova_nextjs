@@ -1,6 +1,6 @@
-import { Product } from '.prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getProduct } from '../../../backend/controllers/product';
+import { Product } from '../../../types/types';
 
 import { prisma } from '../../../prisma/prismaClient';
 
