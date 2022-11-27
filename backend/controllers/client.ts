@@ -26,8 +26,6 @@ export async function getClients(
   order = [{ id: 'desc' }],
   fields?: {}
 ) {
-  console.log(fields);
-
   const clients = await prisma.client.findMany({
     select: fields,
     take,
