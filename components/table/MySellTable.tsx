@@ -72,6 +72,43 @@ const MyTable: React.FC<IMyTable> = ({
             );
           })}
         </tbody>
+        <tfoot>
+          <tr>
+            <th colSpan={4} className={'text-center'}>
+              Total - R$
+              {rows.length
+                ? rows.reduce((accumulator, curValue: any) => {
+                    return (
+                      parseInt(accumulator as string) + parseInt(curValue.price)
+                    );
+                  }, 0)
+                : 0}
+            </th>
+            <th colSpan={4} className={'text-center'}>
+              Desconto - R$
+              {rows.length
+                ? rows.reduce((accumulator, curValue: any) => {
+                    return (
+                      parseInt(accumulator as string) +
+                      parseInt(curValue.price) -
+                      parseInt(curValue.sellPrice)
+                    );
+                  }, 0)
+                : 0}
+            </th>
+            <th colSpan={4} className={'text-center'}>
+              Final - R$
+              {rows.length
+                ? rows.reduce((accumulator, curValue: any) => {
+                    return (
+                      parseInt(accumulator as string) +
+                      parseInt(curValue.sellPrice)
+                    );
+                  }, 0)
+                : 0}
+            </th>
+          </tr>
+        </tfoot>
       </Table>
     </div>
   );
