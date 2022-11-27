@@ -13,6 +13,23 @@ const MyPage: React.FC<IMyPage> = () => {
   const [rows, setRows] = useState([] as Array<Object>);
   const [modal, setModal] = useState('ad');
 
+  const removeRows = () => {
+    rows.forEach((row: any) => {
+      selectedRows.forEach((id) => {
+        if (row.id == id)
+          setRows(
+            rows.filter((row: any) => {
+              if (row.id != id) return row;
+            })
+          );
+      });
+    });
+    setSelectedRows([]);
+    document
+      .querySelectorAll('[type="checkbox"]')
+      .forEach((checkbox: any) => (checkbox.checked = false));
+  };
+
   const finishSell = (type: string, buyerId: number) => {
     const body = {
       action: 'POST',
@@ -86,7 +103,10 @@ const MyPage: React.FC<IMyPage> = () => {
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
             </svg>
           </button>
-          <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
+          <button
+            onClick={removeRows}
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
