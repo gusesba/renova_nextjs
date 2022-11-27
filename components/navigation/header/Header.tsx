@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
-const Header = () => {
+export interface IHeader {
+  pageName?: string;
+}
+
+const Header: React.FC<IHeader> = ({ pageName }) => {
   return (
-    <Navbar className="w-screen" bg="light" variant="light">
+    <Navbar className="w-screen h-[9vh]" bg="light" variant="light">
       <Container>
         <Navbar.Brand href="#home">Renova</Navbar.Brand>
         <Nav className="me-auto">
@@ -33,6 +37,7 @@ const Header = () => {
               </Link>
             </NavDropdown.Item>
           </NavDropdown>
+          <h2 className="absolute left-[45vw]">{pageName}</h2>
         </Nav>
       </Container>
     </Navbar>

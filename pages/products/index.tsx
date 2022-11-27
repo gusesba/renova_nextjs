@@ -50,5 +50,5 @@ const Products: NextPageWithLayout<IProducts> = () => {
 export default Products;
 
 Products.getLayout = (page) => {
-  return <PrimaryLayout>{page}</PrimaryLayout>;
+  return <PrimaryLayout pageName="Produtos">{page}</PrimaryLayout>;
 };

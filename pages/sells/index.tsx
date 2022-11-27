@@ -58,5 +58,5 @@ const Sells: NextPageWithLayout<ISells> = () => {
 export default Sells;
 
 Sells.getLayout = (page) => {
-  return <PrimaryLayout>{page}</PrimaryLayout>;
+  return <PrimaryLayout pageName="Saídas">{page}</PrimaryLayout>;
 };

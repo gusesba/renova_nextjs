@@ -10,5 +10,5 @@ const New: NextPageWithLayout<INew> = () => {
 export default New;
 
 New.getLayout = (page) => {
-  return <PrimaryLayout>{page}</PrimaryLayout>;
+  return <PrimaryLayout pageName="Efetuar Venda">{page}</PrimaryLayout>;
 };

@@ -24,5 +24,5 @@ const Clients: NextPageWithLayout<IClients> = () => {
 export default Clients;
 
 Clients.getLayout = (page) => {
-  return <PrimaryLayout>{page}</PrimaryLayout>;
+  return <PrimaryLayout pageName="Clientes">{page}</PrimaryLayout>;
 };
