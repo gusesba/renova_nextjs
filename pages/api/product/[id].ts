@@ -15,6 +15,12 @@ export default async function handler(
     return getProduct(parseInt(id as string))
       .then(async (product: Product | null) => {
         await prisma.$disconnect();
+
+        if (product) {
+          product.entry = `${(product.entry as Date).getDay()}/${(
+            product.entry as Date
+          ).getMonth()}/${(product.entry as Date).getFullYear()}`;
+        }
         res.status(201).json(product);
       })
       .catch(async (e) => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { baseURL } from '../../config/config';
 import AddSellProductForm from '../forms/AddSellProductForm';
+import EditSellPriceForm from '../forms/EditSellPriceForm';
 import FinishSellForm from '../forms/FinishSellForm';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MySellTable';
@@ -28,6 +29,17 @@ const MyPage: React.FC<IMyPage> = () => {
     document
       .querySelectorAll('[type="checkbox"]')
       .forEach((checkbox: any) => (checkbox.checked = false));
+  };
+
+  const editSellPrice = (sellPrice: number) => {
+    setRows(
+      rows.filter((row: any) => {
+        if (row.id == selectedRows[0]) {
+          row.sellPrice = sellPrice;
+        }
+        return row;
+      })
+    );
   };
 
   const finishSell = (type: string, buyerId: number) => {
@@ -60,9 +72,15 @@ const MyPage: React.FC<IMyPage> = () => {
 
   return (
     <section>
-      <MyModal show={addModalShow} setShow={setAddModalShow} name={'Produto'}>
+      <MyModal
+        show={addModalShow}
+        setShow={setAddModalShow}
+        name={modal == 'add' ? 'Produto' : modal == 'edit' ? 'Preço' : 'Venda'}
+      >
         {modal == 'add' ? (
           <AddSellProductForm rows={rows} setRows={setRows} />
+        ) : modal == 'edit' ? (
+          <EditSellPriceForm editSellPrice={editSellPrice} />
         ) : (
           <FinishSellForm finishSell={finishSell} />
         )}
@@ -101,6 +119,26 @@ const MyPage: React.FC<IMyPage> = () => {
               viewBox="0 0 16 16"
             >
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+            </svg>
+          </button>
+          <button
+            onClick={() => {
+              if (selectedRows.length == 1) {
+                setModal('edit');
+                setAddModalShow(true);
+              }
+            }}
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-pencil ml-[11px]"
+              viewBox="0 0 16 16"
+            >
+              <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
             </svg>
           </button>
           <button
