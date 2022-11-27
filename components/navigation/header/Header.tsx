@@ -12,30 +12,34 @@ const Header: React.FC<IHeader> = ({ pageName }) => {
         <Navbar.Brand href="#home">Renova</Navbar.Brand>
         <Nav className="me-auto">
           <NavDropdown title="Tabelas" id="collasible-nav-dropdown">
-            <NavDropdown.Item>
-              <Link className="no-underline text-black" href="/clients">
-                Clientes
-              </Link>
-            </NavDropdown.Item>
+            <Link
+              className="no-underline text-black dropdown-item"
+              href="/clients"
+            >
+              Clientes
+            </Link>
 
-            <NavDropdown.Item>
-              <Link className="no-underline text-black" href="/products">
-                Estoque
-              </Link>
-            </NavDropdown.Item>
+            <Link
+              className="no-underline text-black dropdown-item"
+              href="/products"
+            >
+              Estoque
+            </Link>
 
-            <NavDropdown.Item>
-              <Link className="no-underline text-black" href="/sells">
-                Saídas
-              </Link>
-            </NavDropdown.Item>
+            <Link
+              className="no-underline text-black dropdown-item"
+              href="/sells"
+            >
+              Saídas
+            </Link>
           </NavDropdown>
           <NavDropdown title="Atividades" id="collasible-nav-dropdown">
-            <NavDropdown.Item>
-              <Link className="no-underline text-black" href="/sells/new">
-                Efetuar Venda
-              </Link>
-            </NavDropdown.Item>
+            <Link
+              className="no-underline text-black dropdown-item"
+              href="/sells/new"
+            >
+              Efetuar Venda
+            </Link>
           </NavDropdown>
           <h2 className="absolute left-[45vw]">{pageName}</h2>
         </Nav>
