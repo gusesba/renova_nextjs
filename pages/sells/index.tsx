@@ -3,21 +3,23 @@ import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
 import { Product } from '../../types/types';
 import { NextPageWithLayout } from '../page';
-export interface IProducts {
-  products: Product[];
+export interface ISells {
+  sells: Product[];
 }
 
-const Products: NextPageWithLayout<IProducts> = () => {
+const Sells: NextPageWithLayout<ISells> = () => {
   return (
     <>
       <MyPage
-        filter={{ sellId: null }}
-        name="Produto"
+        filter={{ NOT: { sellId: null } }}
+        name="Saídas"
         size="lg"
         ModalBody={AddProductForm}
         headers={[
           'ID',
           'Preço',
+          'Preço Venda',
+          'Tipo',
           'Produto',
           'Marca',
           'Tamanho',
@@ -29,6 +31,12 @@ const Products: NextPageWithLayout<IProducts> = () => {
         fields={{
           id: true,
           price: true,
+          sellPrice: true,
+          sell: {
+            select: {
+              type: true,
+            },
+          },
           product: true,
           brand: true,
           size: true,
@@ -41,14 +49,14 @@ const Products: NextPageWithLayout<IProducts> = () => {
           description: true,
           entry: true,
         }}
-        url="/product "
+        url="/sell"
       />
     </>
   );
 };
 
-export default Products;
+export default Sells;
 
-Products.getLayout = (page) => {
+Sells.getLayout = (page) => {
   return <PrimaryLayout>{page}</PrimaryLayout>;
 };

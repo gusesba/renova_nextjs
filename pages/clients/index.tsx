@@ -13,7 +13,7 @@ const Clients: NextPageWithLayout<IClients> = () => {
       <MyPage
         ModalBody={AddClientForm}
         headers={['ID', 'Nome', 'Telefone']}
-        fields={['id', 'name', 'phone']}
+        fields={{ id: true, name: true, phone: true }}
         url="/client"
         name="Cliente"
       />

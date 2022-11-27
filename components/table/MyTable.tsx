@@ -5,7 +5,7 @@ import { baseURL } from '../../config/config';
 export interface IMyTable {
   url: string;
   headers: Array<string>;
-  fields: Array<string>;
+  fields: {};
   selectedRows: Array<number>;
   setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
   filter?: {};
@@ -22,11 +22,11 @@ const MyTable: React.FC<IMyTable> = ({
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
 
-  const fetchData = (url: string, fields: Object) => {
+  const fetchData = () => {
     const body = {
       action: 'GET',
       number: 10,
-      select: fields,
+      fields: fields,
       skip: page * 10,
       filter,
     };
@@ -47,11 +47,7 @@ const MyTable: React.FC<IMyTable> = ({
   };
 
   useEffect(() => {
-    const obj: any = {};
-    for (const field of fields) {
-      obj[field] = true;
-    }
-    fetchData(url, obj);
+    fetchData();
   }, [page]);
 
   return (
@@ -95,11 +91,13 @@ const MyTable: React.FC<IMyTable> = ({
                   return (
                     <td className="text-center" key={key}>
                       <span className="pr-1 pl-1">
-                        {Object.values(item).length
-                          ? typeof item == typeof 'aa'
-                            ? item
-                            : Object.values(item)[0]
-                          : item}
+                        {item
+                          ? Object.values(item).length
+                            ? typeof item == typeof 'aa'
+                              ? item
+                              : Object.values(item)[0]
+                            : item
+                          : ''}
                       </span>
                     </td>
                   );

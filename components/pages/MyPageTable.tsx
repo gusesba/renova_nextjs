@@ -9,7 +9,7 @@ export interface IMyPage {
   name: string;
   url: string;
   headers: Array<string>;
-  fields: Array<string>;
+  fields: {};
   filter?: {};
 }
 

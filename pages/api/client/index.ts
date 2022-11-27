@@ -40,8 +40,8 @@ export default async function handler(
 
   //IF GET REQUEST GET ALL CLIENTS - backend/client.ts
   if (req.method == 'POST' && req.body?.action == 'GET') {
-    const { number, skip, filter, order, select } = req.body;
-    return getClients(number, skip, filter, order, select)
+    const { number, skip, filter, order, fields } = req.body;
+    return getClients(number, skip, filter, order, fields)
       .then(async (clients: Client[]) => {
         await prisma.$disconnect();
         res.status(201).json(clients);

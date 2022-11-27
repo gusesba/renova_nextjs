@@ -24,16 +24,12 @@ export async function getClients(
   skip?: number,
   filter = {},
   order = [{ id: 'desc' }],
-  select?: {
-    id?: boolean;
-    name?: boolean;
-    phone?: boolean;
-    createdAt?: boolean;
-    updatedAt?: boolean;
-  }
+  fields?: {}
 ) {
+  console.log(fields);
+
   const clients = await prisma.client.findMany({
-    select,
+    select: fields,
     take,
     skip,
     where: filter,

@@ -51,28 +51,15 @@ export async function getProducts(
   take?: number,
   skip?: number,
   filter = {},
-  order = [{ id: 'desc' }]
+  order = [{ id: 'desc' }],
+  fields?: {}
 ) {
   const products = await prisma.product.findMany({
     take,
     skip,
     where: filter,
     orderBy: order as Prisma.Enumerable<Prisma.ProductOrderByWithRelationInput>,
-    select: {
-      id: true,
-      price: true,
-      product: true,
-      brand: true,
-      size: true,
-      color: true,
-      provider: {
-        select: {
-          name: true,
-        },
-      },
-      description: true,
-      entry: true,
-    },
+    select: fields,
   });
 
   return products;
