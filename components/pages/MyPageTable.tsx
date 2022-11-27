@@ -65,11 +65,11 @@ const MyPage: React.FC<IMyPage> = ({
       />
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
-        <div
-          onClick={handleDelete}
-          className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex"
-        >
-          <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
+        <div className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex">
+          <button
+            onClick={handleDelete}
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

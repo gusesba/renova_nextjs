@@ -1,6 +1,9 @@
 import { Sell } from '.prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getProducts } from '../../../backend/controllers/product';
+import {
+  getProducts,
+  updateProducts,
+} from '../../../backend/controllers/product';
 import { createSell } from '../../../backend/controllers/sell';
 import { prisma } from '../../../prisma/prismaClient';
 import { Product } from '../../../types/types';
@@ -33,6 +36,21 @@ export default async function handler(
       .then(async (products: Product[]) => {
         await prisma.$disconnect();
         res.status(201).json(products);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  //IF DELETE REQUEST DELETE SELLS ON IDS - backend/products.ts
+  if (req.method == 'DELETE') {
+    const { ids } = req.body;
+    return updateProducts(ids, { sellId: null, sellPrice: null })
+      .then(async (count: any) => {
+        await prisma.$disconnect();
+        res.status(201).json(count);
       })
       .catch(async (e) => {
         console.error(e);

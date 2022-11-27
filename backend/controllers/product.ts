@@ -90,11 +90,23 @@ export async function getProduct(id: number) {
 
 //DELETE PRODUCT
 // PARAMS:
-//   ID : NUMBER
-export async function deleteProducts(ids: number) {
-  const product = await prisma.product.deleteMany({
+//   IDS : ARRAY<NUMBER>
+export async function deleteProducts(ids: Array<number>) {
+  const products = await prisma.product.deleteMany({
     where: { id: { in: ids } },
   });
 
-  return product;
+  return products;
+}
+
+//UPDATE PRODUCTS
+// PARAMS:
+// IDS : ARRAY<NUMBER>
+
+export async function updateProducts(ids: Array<number>, data: {}) {
+  const products = await prisma.product.updateMany({
+    where: { id: { in: ids } },
+    data: data,
+  });
+  return products;
 }
