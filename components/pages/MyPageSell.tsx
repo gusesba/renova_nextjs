@@ -19,6 +19,7 @@ const MyPage: React.FC<IMyPage> = () => {
       products: rows.map((column: any) => {
         return {
           id: column.id,
+          sellPrice: column.sellPrice,
         };
       }),
     };

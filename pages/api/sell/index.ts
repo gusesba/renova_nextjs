@@ -27,9 +27,9 @@ export default async function handler(
 
   //IF POST REQUEST GET Sells - backend/product.ts
   if (req.method == 'POST' && req.body?.action == 'GET') {
-    const { number, skip, filter, order } = req.body;
+    const { number, skip, filter, order, fields } = req.body;
 
-    return getProducts(number, skip, filter, order)
+    return getProducts(number, skip, filter, order, fields)
       .then(async (products: Product[]) => {
         await prisma.$disconnect();
         res.status(201).json(products);

@@ -1,4 +1,3 @@
-import { Prisma } from 'prisma/prisma-client';
 import { prisma } from '../../prisma/prismaClient';
 
 //CREATE SELL
@@ -9,16 +8,22 @@ import { prisma } from '../../prisma/prismaClient';
 export async function createSell(
   type: string,
   buyerId: number,
-  products: Prisma.Enumerable<Prisma.ProductWhereUniqueInput> | undefined
+  products: [{}]
 ) {
   const sell = await prisma.sell.create({
     data: {
       type,
       buyerId,
-      products: {
-        connect: products,
-      },
     },
+  });
+  products.forEach(async (product: any) => {
+    await prisma.product.update({
+      where: { id: product.id },
+      data: {
+        sellId: sell.id,
+        sellPrice: product.sellPrice,
+      },
+    });
   });
   return sell;
 }

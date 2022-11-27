@@ -84,7 +84,8 @@ export async function getProduct(id: number) {
     where: { id },
   });
 
-  return product;
+  if (!product?.sellPrice) return product;
+  return null;
 }
 
 //DELETE PRODUCT

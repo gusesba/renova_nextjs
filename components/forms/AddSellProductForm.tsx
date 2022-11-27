@@ -36,8 +36,10 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
         })
           .then((response) => response.json())
           .then((data) => {
-            data.sellPrice = data.price;
-            setRows([...rows].concat(data));
+            if (data) {
+              data.sellPrice = data.price;
+              setRows([...rows].concat(data));
+            }
           });
       }
     }
