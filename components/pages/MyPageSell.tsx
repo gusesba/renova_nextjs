@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { baseURL } from '../../config/config';
 import AddSellProductForm from '../forms/AddSellProductForm';
+import FinishSellForm from '../forms/FinishSellForm';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MySellTable';
 
@@ -10,12 +11,13 @@ const MyPage: React.FC<IMyPage> = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([] as Array<number>);
   const [rows, setRows] = useState([] as Array<Object>);
+  const [modal, setModal] = useState('ad');
 
-  const finishSell = () => {
+  const finishSell = (type: string, buyerId: number) => {
     const body = {
       action: 'POST',
-      type: 'sell',
-      buyerId: 1,
+      type: type,
+      buyerId: buyerId,
       products: rows.map((column: any) => {
         return {
           id: column.id,
@@ -42,7 +44,11 @@ const MyPage: React.FC<IMyPage> = () => {
   return (
     <section>
       <MyModal show={addModalShow} setShow={setAddModalShow} name={'Produto'}>
-        <AddSellProductForm rows={rows} setRows={setRows} />
+        {modal == 'add' ? (
+          <AddSellProductForm rows={rows} setRows={setRows} />
+        ) : (
+          <FinishSellForm finishSell={finishSell} />
+        )}
       </MyModal>
       <MyTable
         headers={[
@@ -63,7 +69,10 @@ const MyPage: React.FC<IMyPage> = () => {
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
         <div className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex">
           <button
-            onClick={finishSell}
+            onClick={() => {
+              setModal('finish');
+              setAddModalShow(true);
+            }}
             className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
           >
             <svg
@@ -94,7 +103,10 @@ const MyPage: React.FC<IMyPage> = () => {
             </svg>
           </button>
           <button
-            onClick={() => setAddModalShow(true)}
+            onClick={() => {
+              setModal('add');
+              setAddModalShow(true);
+            }}
             className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300"
           >
             +

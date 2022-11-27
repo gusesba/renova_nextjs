@@ -170,3 +170,16 @@ export const optionsColor = [
     },
   };
 });
+
+export const optionsSell = ['Venda', 'Emprestimo', 'Devolucao', 'Doacao'].map(
+  (item) => {
+    return {
+      value: item,
+      label: item,
+      target: {
+        name: 'type',
+        value: item,
+      },
+    };
+  }
+);
