@@ -16,7 +16,7 @@ export type Product = {
   color?: string;
   providerId?: number;
   description?: string | null;
-  entry?: Date;
+  entry?: Date | string;
   sellId?: number | null;
   sellPrice?: Decimal | null;
   createdAt?: Date;

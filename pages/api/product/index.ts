@@ -57,6 +57,11 @@ export default async function handler(
     return getProducts(number, skip, filter, order, fields)
       .then(async (products: Product[]) => {
         await prisma.$disconnect();
+        products.forEach((product) => {
+          product.entry = `${(product.entry as Date).getDay()}/${(
+            product.entry as Date
+          ).getMonth()}/${(product.entry as Date).getFullYear()}`;
+        });
         res.status(201).json(products);
       })
       .catch(async (e) => {
