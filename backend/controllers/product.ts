@@ -54,6 +54,8 @@ export async function getProducts(
   order = [{ id: 'desc' }],
   fields?: {}
 ) {
+  console.log(fields);
+
   const products = await prisma.product.findMany({
     take,
     skip,

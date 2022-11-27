@@ -41,6 +41,7 @@ const Header: React.FC<IHeader> = ({ pageName }) => {
               Efetuar Venda
             </Link>
           </NavDropdown>
+
           <h2 className="absolute left-[45vw]">{pageName}</h2>
         </Nav>
       </Container>
