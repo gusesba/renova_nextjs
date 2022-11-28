@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { baseURL } from '../../config/config';
 import { printRecibo } from '../../printers/printers';
@@ -13,7 +14,9 @@ const MyPage: React.FC<IMyPage> = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([] as Array<number>);
   const [rows, setRows] = useState([] as Array<Object>);
-  const [modal, setModal] = useState('ad');
+  const [modal, setModal] = useState('add');
+
+  const router = useRouter();
 
   const removeRows = () => {
     rows.forEach((row: any) => {
@@ -67,7 +70,7 @@ const MyPage: React.FC<IMyPage> = () => {
       .then((data) => {
         if (data.error) {
           console.log(data.error);
-        } else console.log(data);
+        } else router.push('/sells');
       });
   };
 
