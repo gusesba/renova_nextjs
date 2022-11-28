@@ -30,6 +30,7 @@
     "@prisma/client": "^4.6.1",
     "bootstrap": "^5.2.3",
     "next": "13.0.4",
+    "qz-tray": "^2.2.1",
     "react": "18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "18.2.0",

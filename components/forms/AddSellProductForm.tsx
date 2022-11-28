@@ -39,6 +39,7 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
             if (data) {
               data.sellPrice = data.price;
               setRows([data].concat([...rows]));
+              values.id = '';
             }
           });
       }
