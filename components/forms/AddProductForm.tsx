@@ -4,9 +4,11 @@ import Select from 'react-select';
 import { baseURL } from '../../config/config';
 import { optionsColor, optionsProduct, optionsSize } from './options';
 
-export interface IAddProductForm {}
+export interface IAddProductForm {
+  setUpload: Function;
+}
 
-const AddProductForm: React.FC<IAddProductForm> = () => {
+const AddProductForm: React.FC<IAddProductForm> = ({ setUpload }) => {
   const [values, setValues] = useState({
     price: '',
     product: '',
@@ -73,6 +75,7 @@ const AddProductForm: React.FC<IAddProductForm> = () => {
       const body = {
         action: 'POST',
         ...values,
+        entry: new Date(Date.now()),
       };
       fetch(baseURL + '/product', {
         body: JSON.stringify(body),
@@ -86,13 +89,11 @@ const AddProductForm: React.FC<IAddProductForm> = () => {
           if (data.error) {
             console.log(data.error);
           } else {
+            setUpload(Math.random());
             setValues({
+              ...values,
               price: '',
-              product: '',
               brand: '',
-              size: '',
-              color: '',
-              providerId: 0,
               description: '',
             });
           }

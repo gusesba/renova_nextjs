@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { baseURL } from '../../config/config';
 
-export interface IAddClientForm {}
+export interface IAddClientForm {
+  after?: Function;
+  setUpload: Function;
+}
 
-const AddClientForm: React.FC<IAddClientForm> = () => {
+const AddClientForm: React.FC<IAddClientForm> = ({ after, setUpload }) => {
   const [values, setValues] = useState({ name: '', phone: '' });
 
   const onChange = (e: any) => {
@@ -34,6 +37,8 @@ const AddClientForm: React.FC<IAddClientForm> = () => {
             console.log(data.error);
           } else {
             setValues({ name: '', phone: '' });
+            if (after) after();
+            setUpload(Math.random());
           }
         });
     }

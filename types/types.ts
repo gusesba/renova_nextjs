@@ -9,6 +9,7 @@ export type Client = {
 };
 
 export type Product = {
+  id?: number;
   price?: Decimal;
   product?: string;
   brand?: string;
@@ -20,5 +21,14 @@ export type Product = {
   sellId?: number | null;
   sellPrice?: Decimal | null;
   createdAt?: Date;
+  updatedAt?: Date;
+  sell?: Sell;
+};
+
+export type Sell = {
+  id?: number;
+  type?: string;
+  buyerId?: number;
+  createdAt?: Date | string;
   updatedAt?: Date;
 };

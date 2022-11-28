@@ -26,8 +26,6 @@ export default async function handler(
       sellPrice,
     } = req.body;
 
-    const date = entry ? new Date(entry) : new Date(Date.now());
-
     return createProduct(
       price,
       product,
@@ -36,7 +34,7 @@ export default async function handler(
       color,
       providerId,
       description,
-      date,
+      entry,
       sellId,
       sellPrice
     )
@@ -59,9 +57,9 @@ export default async function handler(
         await prisma.$disconnect();
         products.forEach((product) => {
           if (product.entry) {
-            product.entry = `${(product.entry as Date).getDay()}/${(
-              product.entry as Date
-            ).getMonth()}/${(product.entry as Date).getFullYear()}`;
+            product.entry = `${(product.entry as Date).getDate()}/${
+              (product.entry as Date).getMonth() + 1
+            }/${(product.entry as Date).getFullYear()}`;
           }
         });
         res.status(201).json(products);

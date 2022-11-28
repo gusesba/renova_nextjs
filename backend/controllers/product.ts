@@ -24,8 +24,6 @@ export async function createProduct(
   sellId: number | undefined,
   sellPrice: number | undefined
 ) {
-  console.log(product);
-
   const newProduct = await prisma.product.create({
     data: {
       price,
@@ -54,8 +52,6 @@ export async function getProducts(
   order = [{ id: 'desc' }],
   fields?: {}
 ) {
-  console.log(fields);
-
   const products = await prisma.product.findMany({
     take,
     skip,

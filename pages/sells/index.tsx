@@ -20,6 +20,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
           'Preço',
           'Preço Venda',
           'Tipo',
+          'Comprador',
           'Produto',
           'Marca',
           'Tamanho',
@@ -35,6 +36,11 @@ const Sells: NextPageWithLayout<ISells> = () => {
           sell: {
             select: {
               type: true,
+              buyer: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
           product: true,

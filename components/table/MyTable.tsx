@@ -9,6 +9,7 @@ export interface IMyTable {
   selectedRows: Array<number>;
   setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
   filter?: {};
+  upload: number;
 }
 
 const MyTable: React.FC<IMyTable> = ({
@@ -18,6 +19,7 @@ const MyTable: React.FC<IMyTable> = ({
   setSelectedRows,
   selectedRows,
   filter,
+  upload,
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
@@ -48,7 +50,7 @@ const MyTable: React.FC<IMyTable> = ({
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [page, upload]);
 
   return (
     <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
@@ -89,17 +91,55 @@ const MyTable: React.FC<IMyTable> = ({
                 </td>
                 {Object.values(row).map((item: any, key) => {
                   return (
-                    <td className="text-center" key={key}>
-                      <span className="pr-1 pl-1">
-                        {item
-                          ? Object.values(item).length
-                            ? typeof item == typeof 'aa'
-                              ? item
-                              : Object.values(item)[0]
-                            : item
-                          : ''}
-                      </span>
-                    </td>
+                    <>
+                      {item ? (
+                        Object.values(item).length ? (
+                          typeof item == typeof 'aa' ? (
+                            <td className="text-center" key={key}>
+                              <span className="pr-1 pl-1">{item}</span>
+                            </td>
+                          ) : (
+                            Object.values(item).map((item: any, key) => {
+                              return (
+                                <>
+                                  {item ? (
+                                    Object.values(item).length ? (
+                                      typeof item == typeof 'aa' ? (
+                                        <td className="text-center" key={key}>
+                                          <span className="pr-1 pl-1">
+                                            {item}
+                                          </span>
+                                        </td>
+                                      ) : (
+                                        <td className="text-center" key={key}>
+                                          <span className="pr-1 pl-1">
+                                            {Object.values(item)[0]}
+                                          </span>
+                                        </td>
+                                      )
+                                    ) : (
+                                      <td className="text-center" key={key}>
+                                        <span className="pr-1 pl-1">
+                                          {item}
+                                        </span>
+                                      </td>
+                                    )
+                                  ) : (
+                                    <td></td>
+                                  )}
+                                </>
+                              );
+                            })
+                          )
+                        ) : (
+                          <td className="text-center" key={key}>
+                            <span className="pr-1 pl-1">{item}</span>
+                          </td>
+                        )
+                      ) : (
+                        <td></td>
+                      )}
+                    </>
                   );
                 })}
               </tr>

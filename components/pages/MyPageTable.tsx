@@ -12,6 +12,7 @@ export interface IMyPage {
   headers: Array<string>;
   fields: {};
   filter?: {};
+  after?: Function;
 }
 
 const MyPage: React.FC<IMyPage> = ({
@@ -22,9 +23,11 @@ const MyPage: React.FC<IMyPage> = ({
   size,
   name,
   filter,
+  after,
 }) => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, setSelectedRows] = useState([] as Array<number>);
+  const [upload, setUpload] = useState(0);
 
   const handleDelete = () => {
     const body = {
@@ -42,7 +45,14 @@ const MyPage: React.FC<IMyPage> = ({
       .then((data) => {
         if (data.error) {
           console.log(data.error);
-        } else console.log(data.count);
+        } else {
+          console.log(data.count);
+          setUpload(Math.random());
+          setSelectedRows([]);
+          document
+            .querySelectorAll('[type="checkbox"]')
+            .forEach((checkbox: any) => (checkbox.checked = false));
+        }
       });
   };
 
@@ -54,7 +64,7 @@ const MyPage: React.FC<IMyPage> = ({
         size={size}
         name={name}
       >
-        <ModalBody />
+        <ModalBody after={after} setUpload={setUpload} />
       </MyModal>
       <MyTable
         headers={headers}
@@ -63,6 +73,7 @@ const MyPage: React.FC<IMyPage> = ({
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         filter={filter}
+        upload={upload}
       />
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
@@ -104,12 +115,14 @@ const MyPage: React.FC<IMyPage> = ({
               />
             </svg>
           </button>
-          <button
-            onClick={() => setAddModalShow(true)}
-            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300"
-          >
-            +
-          </button>
+          {name != 'Saídas' && (
+            <button
+              onClick={() => setAddModalShow(true)}
+              className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300"
+            >
+              +
+            </button>
+          )}
         </div>
         <button className="bg-[#000] absolute text-white w-10 h-10 rounded-md hover:bg-gray-300 group transition-all duration-300">
           C
