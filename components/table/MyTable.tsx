@@ -113,7 +113,7 @@ const MyTable: React.FC<IMyTable> = ({
                                       ) : (
                                         <td className="text-center" key={key}>
                                           <span className="pr-1 pl-1">
-                                            {Object.values(item)[0]}
+                                            {Object.values(item)[0] as string}
                                           </span>
                                         </td>
                                       )
