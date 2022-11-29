@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { FormCheck, Table } from 'react-bootstrap';
+import { Form, FormCheck, Table } from 'react-bootstrap';
 import { baseURL } from '../../config/config';
 
 export interface IMyTable {
@@ -23,6 +23,10 @@ const MyTable: React.FC<IMyTable> = ({
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
+
+  const onChange = (e: any) => {
+    setPage(e.target.value);
+  };
 
   const fetchData = () => {
     const body = {
@@ -125,7 +129,7 @@ const MyTable: React.FC<IMyTable> = ({
                                       </td>
                                     )
                                   ) : (
-                                    <td></td>
+                                    <td key={key}></td>
                                   )}
                                 </>
                               );
@@ -137,7 +141,7 @@ const MyTable: React.FC<IMyTable> = ({
                           </td>
                         )
                       ) : (
-                        <td></td>
+                        <td key={key}></td>
                       )}
                     </>
                   );
@@ -152,10 +156,7 @@ const MyTable: React.FC<IMyTable> = ({
         aria-label="Table navigation"
       >
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-          Página{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {page + 1}
-          </span>
+          Página: <span className="font-semibold text-gray-900">{page}</span>
         </span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
@@ -178,6 +179,16 @@ const MyTable: React.FC<IMyTable> = ({
                 ></path>
               </svg>
             </button>
+          </li>
+          <li>
+            <Form.Group className="w-[60px]">
+              <Form.Control
+                type="number"
+                name="page"
+                value={page}
+                onChange={onChange}
+              />
+            </Form.Group>
           </li>
 
           <li>
