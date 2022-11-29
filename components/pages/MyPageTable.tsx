@@ -76,8 +76,8 @@ const MyPage: React.FC<IMyPage> = ({
         upload={upload}
       />
 
-      <div className="group fixed flex flex-col right-[10vw] top-[90vh] ">
-        <div className="absolute bottom-[0] right-[-2.5rem] hidden flex-col pb-3 group-hover:flex">
+      <div className="group fixed flex flex-col right-[10vw] top-[90vh]">
+        <div className="absolute bottom-[0] right-[-5rem] hidden flex-col pb-3 group-hover:flex w-[7.5rem] items-center">
           {name == 'Produto' && (
             <button
               onClick={() => printEtiqueta(selectedRows)}
