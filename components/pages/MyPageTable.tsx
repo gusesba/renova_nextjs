@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { baseURL } from '../../config/config';
 import { printEtiqueta } from '../../printers/printers';
 import MyModal from '../modal/MyModal';
@@ -26,12 +26,35 @@ const MyPage: React.FC<IMyPage> = ({
   after,
 }) => {
   const [addModalShow, setAddModalShow] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([] as Array<number>);
+  const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
+  const selectedRowsRef = useRef(selectedRows);
   const [upload, setUpload] = useState(0);
+
+  const setSelectedRows = (data: any) => {
+    selectedRowsRef.current = data;
+    _setSelectedRows(data);
+  };
+
+  useEffect(() => {
+    const shortcuts = (e: KeyboardEvent) => {
+      e.preventDefault();
+
+      if (e.key === '+' && e.shiftKey) {
+        if (name != 'Saídas') setAddModalShow(true);
+      } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
+        handleDelete();
+      }
+    };
+    document.addEventListener('keydown', shortcuts);
+
+    return () => {
+      document.removeEventListener('keydown', shortcuts);
+    };
+  }, []);
 
   const handleDelete = () => {
     const body = {
-      ids: selectedRows,
+      ids: selectedRowsRef.current,
     };
 
     fetch(baseURL + url, {
@@ -78,6 +101,18 @@ const MyPage: React.FC<IMyPage> = ({
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh]">
         <div className="absolute bottom-[0] right-[-5rem] hidden flex-col pb-3 group-hover:flex w-[7.5rem] items-center">
+          <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-search ml-[11px]"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+          </button>
           {name == 'Produto' && (
             <button
               onClick={() => printEtiqueta(selectedRows)}

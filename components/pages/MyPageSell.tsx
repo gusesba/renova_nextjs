@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { baseURL } from '../../config/config';
 import { printRecibo } from '../../printers/printers';
 import AddSellProductForm from '../forms/AddSellProductForm';
@@ -12,18 +12,52 @@ export interface IMyPage {}
 
 const MyPage: React.FC<IMyPage> = () => {
   const [addModalShow, setAddModalShow] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([] as Array<number>);
-  const [rows, setRows] = useState([] as Array<Object>);
+  const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
+  const [rows, _setRows] = useState([] as Array<Object>);
+  const selectedRowsRef = useRef(selectedRows);
+  const rowsRef = useRef(rows);
   const [modal, setModal] = useState('add');
+
+  const setSelectedRows = (data: any) => {
+    selectedRowsRef.current = data;
+    _setSelectedRows(data);
+  };
+
+  const setRows = (data: any) => {
+    rowsRef.current = data;
+    _setRows(data);
+  };
 
   const router = useRouter();
 
+  useEffect(() => {
+    const shortcuts = (e: KeyboardEvent) => {
+      if (e.key === '+' && e.shiftKey) {
+        setAddModalShow(true);
+        setModal('add');
+      } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
+        removeRows();
+      } else if (e.key?.toLowerCase() === 'e' && e.shiftKey) {
+        if (selectedRowsRef.current.length == 1) {
+          setModal('edit');
+          setAddModalShow(true);
+        }
+      }
+    };
+
+    document.addEventListener('keydown', shortcuts);
+
+    return () => {
+      document.removeEventListener('keydown', shortcuts);
+    };
+  }, []);
+
   const removeRows = () => {
-    rows.forEach((row: any) => {
-      selectedRows.forEach((id) => {
+    rowsRef.current.forEach((row: any) => {
+      selectedRowsRef.current.forEach((id) => {
         if (row.id == id)
           setRows(
-            rows.filter((row: any) => {
+            rowsRef.current.filter((row: any) => {
               if (row.id != id) return row;
             })
           );

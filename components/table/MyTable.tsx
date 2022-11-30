@@ -67,7 +67,7 @@ const MyTable: React.FC<IMyTable> = ({
             <th></th>
             {headers.map((column, key) => {
               return (
-                <th className="text-center" key={key}>
+                <th className="text-center group" key={key}>
                   {column}
                 </th>
               );
@@ -99,11 +99,15 @@ const MyTable: React.FC<IMyTable> = ({
                 {fieldsState.map((field, key) => {
                   let a = field.split('.');
 
-                  a = a.reduce((value, cur) => {
+                  const newField = a.reduce((value, cur) => {
                     return value[cur];
                   }, row);
 
-                  return <td key={key}>{a}</td>;
+                  return (
+                    <td className="text-center" key={key}>
+                      {newField}
+                    </td>
+                  );
                 })}
               </tr>
             );
