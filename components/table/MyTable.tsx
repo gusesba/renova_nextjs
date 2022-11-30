@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Form, FormCheck, Table } from 'react-bootstrap';
 import { baseURL } from '../../config/config';
+import { objToArray } from '../../utils/utils';
 
 export interface IMyTable {
   url: string;
@@ -23,6 +24,7 @@ const MyTable: React.FC<IMyTable> = ({
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
+  const [fieldsState, setFieldsState] = useState([] as string[]);
 
   const onChange = (e: any) => {
     setPage(e.target.value);
@@ -53,6 +55,7 @@ const MyTable: React.FC<IMyTable> = ({
   };
 
   useEffect(() => {
+    setFieldsState(objToArray(fields));
     fetchData();
   }, [page, upload]);
 
@@ -93,58 +96,14 @@ const MyTable: React.FC<IMyTable> = ({
                     }}
                   />
                 </td>
-                {Object.values(row).map((item: any, key) => {
-                  return (
-                    <>
-                      {item ? (
-                        Object.values(item).length ? (
-                          typeof item == typeof 'aa' ? (
-                            <td className="text-center" key={key}>
-                              <span className="pr-1 pl-1">{item}</span>
-                            </td>
-                          ) : (
-                            Object.values(item).map((item: any, key) => {
-                              return (
-                                <>
-                                  {item ? (
-                                    Object.values(item).length ? (
-                                      typeof item == typeof 'aa' ? (
-                                        <td className="text-center" key={key}>
-                                          <span className="pr-1 pl-1">
-                                            {item}
-                                          </span>
-                                        </td>
-                                      ) : (
-                                        <td className="text-center" key={key}>
-                                          <span className="pr-1 pl-1">
-                                            {Object.values(item)[0] as string}
-                                          </span>
-                                        </td>
-                                      )
-                                    ) : (
-                                      <td className="text-center" key={key}>
-                                        <span className="pr-1 pl-1">
-                                          {item}
-                                        </span>
-                                      </td>
-                                    )
-                                  ) : (
-                                    <td key={key}></td>
-                                  )}
-                                </>
-                              );
-                            })
-                          )
-                        ) : (
-                          <td className="text-center" key={key}>
-                            <span className="pr-1 pl-1">{item}</span>
-                          </td>
-                        )
-                      ) : (
-                        <td key={key}></td>
-                      )}
-                    </>
-                  );
+                {fieldsState.map((field, key) => {
+                  let a = field.split('.');
+
+                  a = a.reduce((value, cur) => {
+                    return value[cur];
+                  }, row);
+
+                  return <td key={key}>{a}</td>;
                 })}
               </tr>
             );
