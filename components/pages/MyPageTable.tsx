@@ -37,8 +37,6 @@ const MyPage: React.FC<IMyPage> = ({
 
   useEffect(() => {
     const shortcuts = (e: KeyboardEvent) => {
-      e.preventDefault();
-
       if (e.key === '+' && e.shiftKey) {
         if (name != 'Saídas') setAddModalShow(true);
       } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
