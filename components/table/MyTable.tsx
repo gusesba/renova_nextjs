@@ -59,6 +59,13 @@ const MyTable: React.FC<IMyTable> = ({
     fetchData();
   }, [page, upload]);
 
+  useEffect(() => {
+    document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
+      checkbox.checked = false;
+    });
+    setSelectedRows([]);
+  }, [page]);
+
   return (
     <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
       <Table bordered hover>

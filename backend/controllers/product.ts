@@ -56,7 +56,8 @@ export async function getProducts(
     take,
     skip,
     where: filter,
-    orderBy: order as Prisma.Enumerable<Prisma.ProductOrderByWithRelationInput>,
+    orderBy:
+      order as Prisma.Enumerable<Prisma.ProductOrderByWithAggregationInput>,
     select: fields,
   });
 

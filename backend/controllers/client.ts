@@ -31,7 +31,8 @@ export async function getClients(
     take,
     skip,
     where: filter,
-    orderBy: order as Prisma.Enumerable<Prisma.ClientOrderByWithRelationInput>,
+    orderBy:
+      order as Prisma.Enumerable<Prisma.ClientOrderByWithAggregationInput>,
   });
 
   return clients;
