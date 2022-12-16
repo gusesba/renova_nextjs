@@ -23,11 +23,13 @@ const MyTable: React.FC<IMyTable> = ({
   upload,
 }) => {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(0 as number | string);
   const [fieldsState, setFieldsState] = useState([] as string[]);
 
   const onChange = (e: any) => {
-    setPage(e.target.value);
+    if (!isNaN(e.target.value) || e.target.value == '') {
+      setPage(e.target.value);
+    }
   };
 
   const fetchData = () => {
@@ -35,7 +37,7 @@ const MyTable: React.FC<IMyTable> = ({
       action: 'GET',
       number: 10,
       fields: fields,
-      skip: page * 10,
+      skip: (page as number) * 10,
       filter,
     };
 
@@ -131,7 +133,13 @@ const MyTable: React.FC<IMyTable> = ({
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button
-              onClick={() => setPage(page - 1 >= 0 ? page - 1 : page)}
+              onClick={() =>
+                setPage(
+                  parseInt(page as string) - 1 >= 0
+                    ? parseInt(page as string) - 1
+                    : page
+                )
+              }
               className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span className="sr-only">Previous</span>
@@ -152,18 +160,13 @@ const MyTable: React.FC<IMyTable> = ({
           </li>
           <li>
             <Form.Group className="w-[60px]">
-              <Form.Control
-                type="number"
-                name="page"
-                value={page}
-                onChange={onChange}
-              />
+              <Form.Control name="page" value={page} onChange={onChange} />
             </Form.Group>
           </li>
 
           <li>
             <button
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage(parseInt(page as string) + 1)}
               className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span className="sr-only">Next</span>
