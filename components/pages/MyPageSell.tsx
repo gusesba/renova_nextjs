@@ -113,7 +113,13 @@ const MyPage: React.FC<IMyPage> = () => {
       <MyModal
         show={addModalShow}
         setShow={setAddModalShow}
-        name={modal == 'add' ? 'Produto' : modal == 'edit' ? 'Preço' : 'Venda'}
+        title={
+          modal == 'add'
+            ? 'Novo Produto'
+            : modal == 'edit'
+            ? 'Editar Preço de Venda'
+            : 'Nova Venda'
+        }
       >
         {modal == 'add' ? (
           <AddSellProductForm rows={rows} setRows={setRows} />

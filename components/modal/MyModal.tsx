@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 export interface IMyModal {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
-  name: string;
+  title: string;
   children: React.ReactNode;
   size?: 'sm' | 'lg' | 'xl';
 }
@@ -13,7 +13,7 @@ export interface IMyModal {
 const MyModal: React.FC<IMyModal> = ({
   show,
   setShow,
-  name,
+  title,
   children,
   size,
 }) => {
@@ -23,7 +23,7 @@ const MyModal: React.FC<IMyModal> = ({
     <>
       <Modal size={size} show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Novo {name}</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>

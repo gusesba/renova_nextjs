@@ -83,7 +83,7 @@ const MyPage: React.FC<IMyPage> = ({
         show={addModalShow}
         setShow={setAddModalShow}
         size={size}
-        name={name}
+        title={'Novo ' + name}
       >
         <ModalBody after={after} setUpload={setUpload} />
       </MyModal>
