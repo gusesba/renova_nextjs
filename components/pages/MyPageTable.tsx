@@ -31,6 +31,9 @@ const MyPage: React.FC<IMyPage> = ({
   const selectedRowsRef = useRef(selectedRows);
   const [upload, setUpload] = useState(0);
   const [modal, setModal] = useState('add');
+  const [stateFields, setStateFields] = useState(fields);
+  const [stateFilter, setStateFilter] = useState(filter);
+  const [stateHeaders, setStateHeaders] = useState(headers);
 
   const setSelectedRows = (data: any) => {
     selectedRowsRef.current = data;
@@ -90,16 +93,22 @@ const MyPage: React.FC<IMyPage> = ({
         {modal == 'add' ? (
           <AddForm after={after} setUpload={setUpload} />
         ) : (
-          <SearchClientForm />
+          <SearchClientForm
+            filter={stateFilter}
+            setFilter={setStateFilter}
+            setFields={setStateFields}
+            fields={stateFields}
+            setHeaders={setStateHeaders}
+          />
         )}
       </MyModal>
       <MyTable
-        headers={headers}
+        headers={stateHeaders}
         url={url}
-        fields={fields}
+        fields={stateFields}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
-        filter={filter}
+        filter={stateFilter}
         upload={upload}
       />
 

@@ -52,14 +52,16 @@ const MyTable: React.FC<IMyTable> = ({
       .then((data) => {
         if (data.error) {
           console.log(data.error);
-        } else setData(data);
+        } else {
+          setData(data);
+        }
       });
   };
 
   useEffect(() => {
     setFieldsState(objToArray(fields));
     fetchData();
-  }, [page, upload]);
+  }, [page, upload, fields]);
 
   useEffect(() => {
     document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {

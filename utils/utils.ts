@@ -2,6 +2,9 @@ export const objToArray = (obj: any) => {
   let array = Object.keys(obj);
 
   array.forEach((item) => {
+    if (obj[item] == false) {
+      array.splice(array.indexOf(item), 1);
+    }
     if (typeof obj[item] == 'object') {
       const newObj = objToArray(obj[item].select);
       for (let i = 0; i < newObj.length; i++) {
