@@ -80,7 +80,6 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
       <Form.Group className="mb-3" controlId="formName">
         <div className="flex">
           <FormCheck
-            className="mr-1"
             checked={values.nameCheck}
             onChange={() =>
               setValues({ ...values, nameCheck: !values.nameCheck })
@@ -99,7 +98,6 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
       <Form.Group className="mb-3" controlId="formPhone">
         <div className="flex">
           <FormCheck
-            className="mr-1"
             checked={values.phoneCheck}
             onChange={() =>
               setValues({ ...values, phoneCheck: !values.phoneCheck })
