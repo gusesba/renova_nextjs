@@ -3,8 +3,14 @@ import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
 export interface ISearchClientForm {
-  fields: {};
-  filter: {} | undefined;
+  fields: { name: boolean; phone: boolean };
+  filter:
+    | {
+        id: number | undefined;
+        name: { contains: string } | undefined;
+        phone: { contains: string } | undefined;
+      }
+    | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
   setFields: Dispatch<SetStateAction<{}>>;
   setHeaders: Dispatch<SetStateAction<string[]>>;
@@ -18,11 +24,11 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   setHeaders,
 }) => {
   const [values, setValues] = useState({
-    name: '',
-    phone: '',
-    id: '',
-    nameCheck: true,
-    phoneCheck: true,
+    name: filter ? (filter.name ? filter.name.contains : '') : '',
+    phone: filter ? (filter.phone ? filter.phone.contains : '') : '',
+    id: filter ? (filter.id ? filter.id.toString() : '') : '',
+    nameCheck: fields.name,
+    phoneCheck: fields.phone,
   });
 
   const onChange = (e: any) => {
@@ -51,9 +57,7 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
     filter.phone = { contains: values.phone };
 
     setFilter(filter);
-
     setHeaders(headers);
-
     setFields({
       id: true,
       name: values.nameCheck,
