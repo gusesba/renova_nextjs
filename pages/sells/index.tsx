@@ -14,7 +14,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
         filter={{ NOT: { sellId: null } }}
         name="Saídas"
         size="lg"
-        ModalBody={AddProductForm}
+        AddForm={AddProductForm}
         headers={[
           'ID',
           'Preço',

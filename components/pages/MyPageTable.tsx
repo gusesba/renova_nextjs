@@ -5,7 +5,7 @@ import MyModal from '../modal/MyModal';
 import MyTable from '../table/MyTable';
 
 export interface IMyPage {
-  ModalBody: React.FC<any>;
+  AddForm: React.FC<any>;
   size?: 'sm' | 'lg' | 'xl';
   name: string;
   url: string;
@@ -16,7 +16,7 @@ export interface IMyPage {
 }
 
 const MyPage: React.FC<IMyPage> = ({
-  ModalBody,
+  AddForm,
   headers,
   url,
   fields,
@@ -85,7 +85,7 @@ const MyPage: React.FC<IMyPage> = ({
         size={size}
         title={'Novo ' + name}
       >
-        <ModalBody after={after} setUpload={setUpload} />
+        <AddForm after={after} setUpload={setUpload} />
       </MyModal>
       <MyTable
         headers={headers}
