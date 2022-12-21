@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { baseURL } from '../../config/config';
 import { printEtiqueta } from '../../printers/printers';
+import SearchClientForm from '../forms/SearchClientForm';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MyTable';
 
@@ -29,6 +30,7 @@ const MyPage: React.FC<IMyPage> = ({
   const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
   const selectedRowsRef = useRef(selectedRows);
   const [upload, setUpload] = useState(0);
+  const [modal, setModal] = useState('add');
 
   const setSelectedRows = (data: any) => {
     selectedRowsRef.current = data;
@@ -83,9 +85,13 @@ const MyPage: React.FC<IMyPage> = ({
         show={addModalShow}
         setShow={setAddModalShow}
         size={size}
-        title={'Novo ' + name}
+        title={modal == 'add' ? 'Novo ' + name : 'Busca'}
       >
-        <AddForm after={after} setUpload={setUpload} />
+        {modal == 'add' ? (
+          <AddForm after={after} setUpload={setUpload} />
+        ) : (
+          <SearchClientForm />
+        )}
       </MyModal>
       <MyTable
         headers={headers}
@@ -118,7 +124,13 @@ const MyPage: React.FC<IMyPage> = ({
               />
             </svg>
           </button>
-          <button className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]">
+          <button
+            onClick={() => {
+              setModal('search');
+              setAddModalShow(true);
+            }}
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -151,7 +163,10 @@ const MyPage: React.FC<IMyPage> = ({
 
           {name != 'Saídas' && (
             <button
-              onClick={() => setAddModalShow(true)}
+              onClick={() => {
+                setModal('add');
+                setAddModalShow(true);
+              }}
               className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300"
             >
               +
