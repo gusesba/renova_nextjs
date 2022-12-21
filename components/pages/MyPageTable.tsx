@@ -43,9 +43,15 @@ const MyPage: React.FC<IMyPage> = ({
   useEffect(() => {
     const shortcuts = (e: KeyboardEvent) => {
       if (e.key === '+' && e.shiftKey) {
-        if (name != 'Saídas') setAddModalShow(true);
+        if (name != 'Saídas') {
+          setModal('add');
+          setAddModalShow(true);
+        }
       } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
         handleDelete();
+      } else if (e.key?.toLocaleLowerCase() === 'f' && e.shiftKey) {
+        setModal('search');
+        setAddModalShow(true);
       }
     };
     document.addEventListener('keydown', shortcuts);
