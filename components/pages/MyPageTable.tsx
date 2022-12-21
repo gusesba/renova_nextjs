@@ -11,8 +11,8 @@ export interface IMyPage {
   name: string;
   url: string;
   headers: Array<string>;
-  fields: {};
-  filter?: {};
+  fields: any;
+  filter?: any;
   after?: Function;
 }
 
