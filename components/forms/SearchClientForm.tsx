@@ -20,7 +20,7 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   const [values, setValues] = useState({
     name: '',
     phone: '',
-
+    id: '',
     nameCheck: true,
     phoneCheck: true,
   });
@@ -35,10 +35,22 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
+    let filter: {
+      id: number | undefined;
+      name: { contains: string } | undefined;
+      phone: { contains: string } | undefined;
+    } = { id: undefined, name: undefined, phone: undefined };
+
     let headers = ['Id'];
 
     if (values.nameCheck) headers = headers.concat(['Nome']);
     if (values.phoneCheck) headers = headers.concat(['Telefone']);
+
+    filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
+    filter.name = { contains: values.name };
+    filter.phone = { contains: values.phone };
+
+    setFilter(filter);
 
     setHeaders(headers);
 
@@ -51,6 +63,16 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
 
   return (
     <Form onSubmit={handleSubmit} id="addForm">
+      <Form.Group className="mb-3" controlId="formId">
+        <Form.Label>Id</Form.Label>
+        <Form.Control
+          type="text"
+          placeholder="Id"
+          value={values.id}
+          name={'id'}
+          onChange={onChange}
+        />
+      </Form.Group>
       <Form.Group className="mb-3" controlId="formName">
         <div className="flex">
           <FormCheck
