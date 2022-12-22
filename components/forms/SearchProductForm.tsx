@@ -2,13 +2,23 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
-export interface ISearchClientForm {
-  fields: { name: boolean; phone: boolean };
+export interface ISearchProductForm {
+  fields: {
+    description: boolean;
+    product: boolean;
+    brand: boolean;
+    size: boolean;
+    color: boolean;
+  };
   filter:
     | {
         id: number | undefined;
-        name: { contains: string } | undefined;
-        phone: { contains: string } | undefined;
+        provider: { name: { contains: string } | undefined } | undefined;
+        description: { contains: string } | undefined;
+        product: { contains: string } | undefined;
+        brand: { contains: string } | undefined;
+        size: { contains: string } | undefined;
+        color: { contains: string } | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -16,7 +26,7 @@ export interface ISearchClientForm {
   setHeaders: Dispatch<SetStateAction<string[]>>;
 }
 
-const SearchClientForm: React.FC<ISearchClientForm> = ({
+const SearchProductForm: React.FC<ISearchProductForm> = ({
   fields,
   filter,
   setFilter,
@@ -24,11 +34,26 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   setHeaders,
 }) => {
   const [values, setValues] = useState({
-    name: filter ? (filter.name ? filter.name.contains : '') : '',
-    phone: filter ? (filter.phone ? filter.phone.contains : '') : '',
+    providerName: filter
+      ? filter.provider?.name
+        ? filter.provider.name.contains
+        : ''
+      : '',
+    description: filter
+      ? filter.description
+        ? filter.description.contains
+        : ''
+      : '',
+    product: filter ? (filter.product ? filter.product.contains : '') : '',
+    brand: filter ? (filter.brand ? filter.brand.contains : '') : '',
+    size: filter ? (filter.size ? filter.size.contains : '') : '',
+    color: filter ? (filter.color ? filter.color.contains : '') : '',
     id: filter ? (filter.id ? filter.id.toString() : '') : '',
-    nameCheck: fields.name,
-    phoneCheck: fields.phone,
+    descriptionCheck: fields.description,
+    productCheck: fields.product,
+    brandCheck: fields.brand,
+    sizeCheck: fields.size,
+    colorCheck: fields.color,
   });
 
   const onChange = (e: any) => {
@@ -41,27 +66,56 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    let filter: {
-      id: number | undefined;
-      name: { contains: string } | undefined;
-      phone: { contains: string } | undefined;
-    } = { id: undefined, name: undefined, phone: undefined };
+    let filter:
+      | {
+          id: number | undefined;
+          provider: { name: { contains: string } | undefined } | undefined;
+          description: { contains: string } | undefined;
+          product: { contains: string } | undefined;
+          brand: { contains: string } | undefined;
+          size: { contains: string } | undefined;
+          color: { contains: string } | undefined;
+        }
+      | undefined = {
+      id: undefined,
+      provider: { name: undefined },
+      description: undefined,
+      product: undefined,
+      brand: undefined,
+      size: undefined,
+      color: undefined,
+    };
 
-    let headers = ['Id'];
+    let headers = ['Id', 'Preço'];
 
-    if (values.nameCheck) headers = headers.concat(['Nome']);
-    if (values.phoneCheck) headers = headers.concat(['Telefone']);
+    if (values.productCheck) headers = headers.concat(['Produto']);
+    if (values.brandCheck) headers = headers.concat(['Marca']);
+    if (values.sizeCheck) headers = headers.concat(['Tamanho']);
+    if (values.colorCheck) headers = headers.concat(['Cor']);
+    headers = headers.concat(['Fornecedor']);
+    if (values.descriptionCheck) headers = headers.concat(['Descrição']);
+    headers = headers.concat(['Entrada']);
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
-    filter.name = { contains: values.name };
-    filter.phone = { contains: values.phone };
+    filter.product = { contains: values.product };
+    filter.brand = { contains: values.brand };
+    filter.size = { contains: values.size };
+    filter.color = { contains: values.color };
+    filter.provider = { name: { contains: values.providerName } };
+    filter.description = { contains: values.description };
 
     setFilter(filter);
     setHeaders(headers);
     setFields({
       id: true,
-      name: values.nameCheck,
-      phone: values.phoneCheck,
+      price: true,
+      product: values.productCheck,
+      brand: values.brandCheck,
+      size: values.sizeCheck,
+      color: values.colorCheck,
+      provider: { select: { name: true } },
+      description: values.descriptionCheck,
+      entry: true,
     });
   };
 
@@ -77,39 +131,108 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
           onChange={onChange}
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formName">
+      <Form.Group className="mb-3" controlId="formProduct">
         <div className="flex">
           <FormCheck
-            checked={values.nameCheck}
+            checked={values.productCheck}
             onChange={() =>
-              setValues({ ...values, nameCheck: !values.nameCheck })
+              setValues({ ...values, productCheck: !values.productCheck })
             }
           />
-          <Form.Label>Nome</Form.Label>
+          <Form.Label>Produto</Form.Label>
         </div>
         <Form.Control
           type="text"
-          placeholder="Nome"
-          value={values.name}
-          name={'name'}
+          placeholder="Produto"
+          value={values.product}
+          name={'product'}
           onChange={onChange}
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formPhone">
+      <Form.Group className="mb-3" controlId="formBrand">
         <div className="flex">
           <FormCheck
-            checked={values.phoneCheck}
+            checked={values.brandCheck}
             onChange={() =>
-              setValues({ ...values, phoneCheck: !values.phoneCheck })
+              setValues({ ...values, brandCheck: !values.brandCheck })
             }
           />
-          <Form.Label>Telefone</Form.Label>
+          <Form.Label>Marca</Form.Label>
         </div>
         <Form.Control
           type="text"
-          placeholder="Telefone"
-          name="phone"
-          value={values.phone}
+          placeholder="Marca"
+          name="brand"
+          value={values.brand}
+          onChange={onChange}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formSize">
+        <div className="flex">
+          <FormCheck
+            checked={values.sizeCheck}
+            onChange={() =>
+              setValues({ ...values, sizeCheck: !values.sizeCheck })
+            }
+          />
+          <Form.Label>Tamanho</Form.Label>
+        </div>
+        <Form.Control
+          type="text"
+          placeholder="Tamanho"
+          name="size"
+          value={values.size}
+          onChange={onChange}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formColor">
+        <div className="flex">
+          <FormCheck
+            checked={values.colorCheck}
+            onChange={() =>
+              setValues({ ...values, colorCheck: !values.colorCheck })
+            }
+          />
+          <Form.Label>Cor</Form.Label>
+        </div>
+        <Form.Control
+          type="text"
+          placeholder="Cor"
+          name="color"
+          value={values.color}
+          onChange={onChange}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formProvider">
+        <div className="flex">
+          <Form.Label>Fornecedor</Form.Label>
+        </div>
+        <Form.Control
+          type="text"
+          placeholder="Fornecedor"
+          name="providerName"
+          value={values.providerName}
+          onChange={onChange}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formDescription">
+        <div className="flex">
+          <FormCheck
+            checked={values.descriptionCheck}
+            onChange={() =>
+              setValues({
+                ...values,
+                descriptionCheck: !values.descriptionCheck,
+              })
+            }
+          />
+          <Form.Label>Descrição</Form.Label>
+        </div>
+        <Form.Control
+          type="text"
+          placeholder="Descrição"
+          name="description"
+          value={values.description}
           onChange={onChange}
         />
       </Form.Group>
@@ -117,4 +240,4 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
   );
 };
 
-export default SearchClientForm;
+export default SearchProductForm;

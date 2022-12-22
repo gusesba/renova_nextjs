@@ -1,4 +1,5 @@
 import AddProductForm from '../../components/forms/AddProductForm';
+import SearchProductForm from '../../components/forms/SearchProductForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
 import { Product } from '../../types/types';
@@ -15,6 +16,7 @@ const Products: NextPageWithLayout<IProducts> = () => {
         name="Produto"
         size="lg"
         AddForm={AddProductForm}
+        SearchForm={SearchProductForm}
         headers={[
           'ID',
           'Preço',

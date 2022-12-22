@@ -1,4 +1,5 @@
 import AddClientForm from '../../components/forms/AddClientForm';
+import SearchClientForm from '../../components/forms/SearchClientForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
 import { Client } from '../../types/types';
@@ -16,6 +17,7 @@ const Clients: NextPageWithLayout<IClients> = () => {
         fields={{ id: true, name: true, phone: true }}
         url="/client"
         name="Cliente"
+        SearchForm={SearchClientForm}
       />
     </>
   );

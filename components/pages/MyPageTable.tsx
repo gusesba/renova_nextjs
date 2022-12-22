@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { baseURL } from '../../config/config';
 import { printEtiqueta } from '../../printers/printers';
-import SearchClientForm from '../forms/SearchClientForm';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MyTable';
 
 export interface IMyPage {
+  SearchForm: React.FC<any>;
   AddForm: React.FC<any>;
   size?: 'sm' | 'lg' | 'xl';
   name: string;
@@ -18,6 +18,7 @@ export interface IMyPage {
 
 const MyPage: React.FC<IMyPage> = ({
   AddForm,
+  SearchForm,
   headers,
   url,
   fields,
@@ -99,7 +100,7 @@ const MyPage: React.FC<IMyPage> = ({
         {modal == 'add' ? (
           <AddForm after={after} setUpload={setUpload} />
         ) : (
-          <SearchClientForm
+          <SearchForm
             filter={stateFilter}
             setFilter={setStateFilter}
             setFields={setStateFields}
