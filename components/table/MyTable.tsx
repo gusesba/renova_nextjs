@@ -111,7 +111,11 @@ const MyTable: React.FC<IMyTable> = ({
                   let a = field.split('.');
 
                   const newField = a.reduce((value, cur) => {
-                    return value[cur];
+                    try {
+                      return value[cur];
+                    } catch (error) {
+                      return '';
+                    }
                   }, row);
 
                   return (

@@ -9,6 +9,7 @@ export interface ISearchProductForm {
     brand: boolean;
     size: boolean;
     color: boolean;
+    provider: { select: { name: boolean } | undefined };
   };
   filter:
     | {
@@ -54,6 +55,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     brandCheck: fields.brand,
     sizeCheck: fields.size,
     colorCheck: fields.color,
+    providerNameCheck: fields.provider.select?.name,
   });
 
   const onChange = (e: any) => {
@@ -92,7 +94,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     if (values.brandCheck) headers = headers.concat(['Marca']);
     if (values.sizeCheck) headers = headers.concat(['Tamanho']);
     if (values.colorCheck) headers = headers.concat(['Cor']);
-    headers = headers.concat(['Fornecedor']);
+    if (values.providerNameCheck) headers = headers.concat(['Fornecedor']);
     if (values.descriptionCheck) headers = headers.concat(['Descrição']);
     headers = headers.concat(['Entrada']);
 
@@ -106,6 +108,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
 
     setFilter(filter);
     setHeaders(headers);
+
     setFields({
       id: true,
       price: true,
@@ -113,7 +116,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       brand: values.brandCheck,
       size: values.sizeCheck,
       color: values.colorCheck,
-      provider: { select: { name: true } },
+      provider: values.providerNameCheck ? { select: { name: true } } : false,
       description: values.descriptionCheck,
       entry: true,
     });
@@ -121,103 +124,127 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
 
   return (
     <Form onSubmit={handleSubmit} id="addForm">
-      <Form.Group className="mb-3" controlId="formId">
-        <Form.Label>Id</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Id"
-          value={values.id}
-          name={'id'}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formProduct">
-        <div className="flex">
-          <FormCheck
-            checked={values.productCheck}
-            onChange={() =>
-              setValues({ ...values, productCheck: !values.productCheck })
-            }
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formId">
+          <Form.Label>Id</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Id"
+            value={values.id}
+            name={'id'}
+            onChange={onChange}
           />
-          <Form.Label>Produto</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Produto"
-          value={values.product}
-          name={'product'}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBrand">
-        <div className="flex">
-          <FormCheck
-            checked={values.brandCheck}
-            onChange={() =>
-              setValues({ ...values, brandCheck: !values.brandCheck })
-            }
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formProduct">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.productCheck}
+              onChange={() =>
+                setValues({ ...values, productCheck: !values.productCheck })
+              }
+            />
+            <Form.Label>Produto</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Produto"
+            value={values.product}
+            name={'product'}
+            onChange={onChange}
           />
-          <Form.Label>Marca</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Marca"
-          name="brand"
-          value={values.brand}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formSize">
-        <div className="flex">
-          <FormCheck
-            checked={values.sizeCheck}
-            onChange={() =>
-              setValues({ ...values, sizeCheck: !values.sizeCheck })
-            }
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formBrand">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.brandCheck}
+              onChange={() =>
+                setValues({ ...values, brandCheck: !values.brandCheck })
+              }
+            />
+            <Form.Label>Marca</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Marca"
+            name="brand"
+            value={values.brand}
+            onChange={onChange}
           />
-          <Form.Label>Tamanho</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Tamanho"
-          name="size"
-          value={values.size}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formColor">
-        <div className="flex">
-          <FormCheck
-            checked={values.colorCheck}
-            onChange={() =>
-              setValues({ ...values, colorCheck: !values.colorCheck })
-            }
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formSize">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.sizeCheck}
+              onChange={() =>
+                setValues({ ...values, sizeCheck: !values.sizeCheck })
+              }
+            />
+            <Form.Label>Tamanho</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Tamanho"
+            name="size"
+            value={values.size}
+            onChange={onChange}
           />
-          <Form.Label>Cor</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Cor"
-          name="color"
-          value={values.color}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formProvider">
-        <div className="flex">
-          <Form.Label>Fornecedor</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Fornecedor"
-          name="providerName"
-          value={values.providerName}
-          onChange={onChange}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formDescription">
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formColor">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.colorCheck}
+              onChange={() =>
+                setValues({ ...values, colorCheck: !values.colorCheck })
+              }
+            />
+            <Form.Label>Cor</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Cor"
+            name="color"
+            value={values.color}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formProvider">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.providerNameCheck}
+              onChange={() =>
+                setValues({
+                  ...values,
+                  providerNameCheck: !values.providerNameCheck,
+                })
+              }
+            />
+            <Form.Label>Fornecedor</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Fornecedor"
+            name="providerName"
+            value={values.providerName}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
+      <Form.Group
+        className="mb-3 w-[95%] ml-[2.5%]"
+        controlId="formDescription"
+      >
         <div className="flex">
           <FormCheck
+            className="mr-1"
             checked={values.descriptionCheck}
             onChange={() =>
               setValues({
