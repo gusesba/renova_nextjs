@@ -6,6 +6,7 @@ export interface ISearchProductForm {
   fields: {
     description: boolean;
     product: boolean;
+    price: boolean;
     brand: boolean;
     size: boolean;
     color: boolean;
@@ -20,6 +21,7 @@ export interface ISearchProductForm {
         brand: { contains: string } | undefined;
         size: { contains: string } | undefined;
         color: { contains: string } | undefined;
+        price: { lte: number | undefined; gte: number | undefined } | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -49,12 +51,27 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     brand: filter ? (filter.brand ? filter.brand.contains : '') : '',
     size: filter ? (filter.size ? filter.size.contains : '') : '',
     color: filter ? (filter.color ? filter.color.contains : '') : '',
+    priceMin: filter
+      ? filter.price
+        ? filter.price.gte
+          ? filter.price.gte
+          : ''
+        : ''
+      : '',
+    priceMax: filter
+      ? filter.price
+        ? filter.price.lte
+          ? filter.price.lte
+          : ''
+        : ''
+      : '',
     id: filter ? (filter.id ? filter.id.toString() : '') : '',
     descriptionCheck: fields.description,
     productCheck: fields.product,
     brandCheck: fields.brand,
     sizeCheck: fields.size,
     colorCheck: fields.color,
+    priceCheck: fields.price,
     providerNameCheck: fields.provider.select?.name,
   });
 
@@ -77,6 +94,9 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           brand: { contains: string } | undefined;
           size: { contains: string } | undefined;
           color: { contains: string } | undefined;
+          price:
+            | { lte: number | undefined; gte: number | undefined }
+            | undefined;
         }
       | undefined = {
       id: undefined,
@@ -86,10 +106,12 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       brand: undefined,
       size: undefined,
       color: undefined,
+      price: undefined,
     };
 
-    let headers = ['Id', 'Preço'];
+    let headers = ['Id'];
 
+    if (values.priceCheck) headers = headers.concat(['Preço']);
     if (values.productCheck) headers = headers.concat(['Produto']);
     if (values.brandCheck) headers = headers.concat(['Marca']);
     if (values.sizeCheck) headers = headers.concat(['Tamanho']);
@@ -105,13 +127,29 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     filter.color = { contains: values.color };
     filter.provider = { name: { contains: values.providerName } };
     filter.description = { contains: values.description };
+    if (values.priceMin) {
+      if (values.priceMax)
+        filter.price = {
+          lte: parseInt(values.priceMax as string),
+          gte: parseInt(values.priceMin as string),
+        };
+      else
+        filter.price = {
+          lte: undefined,
+          gte: parseInt(values.priceMin as string),
+        };
+    } else if (values.priceMax)
+      filter.price = {
+        lte: parseInt(values.priceMax as string),
+        gte: undefined,
+      };
 
     setFilter(filter);
     setHeaders(headers);
 
     setFields({
       id: true,
-      price: true,
+      price: values.priceCheck,
       product: values.productCheck,
       brand: values.brandCheck,
       size: values.sizeCheck,
@@ -151,6 +189,37 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
             placeholder="Produto"
             value={values.product}
             name={'product'}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formPriceMin">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.priceCheck}
+              onChange={() =>
+                setValues({ ...values, priceCheck: !values.priceCheck })
+              }
+            />
+            <Form.Label>Preço Min</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Preço Mínimo"
+            value={values.priceMin}
+            name={'priceMin'}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formPriceMax">
+          <Form.Label>Max</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Preço Máximo"
+            value={values.priceMax}
+            name={'priceMax'}
             onChange={onChange}
           />
         </Form.Group>
