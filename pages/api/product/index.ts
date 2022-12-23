@@ -57,9 +57,9 @@ export default async function handler(
         await prisma.$disconnect();
         products.forEach((product) => {
           if (product.entry) {
-            product.entry = `${(product.entry as Date).getDate()}/${
-              (product.entry as Date).getMonth() + 1
-            }/${(product.entry as Date).getFullYear()}`;
+            product.entry = `${(product.entry as Date).getUTCDate()}/${
+              (product.entry as Date).getUTCMonth() + 1
+            }/${(product.entry as Date).getUTCFullYear()}`;
           }
         });
         res.status(201).json(products);

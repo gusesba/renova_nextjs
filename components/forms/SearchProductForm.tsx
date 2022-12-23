@@ -11,6 +11,7 @@ export interface ISearchProductForm {
     size: boolean;
     color: boolean;
     provider: { select: { name: boolean } | undefined };
+    entry: boolean;
   };
   filter:
     | {
@@ -22,6 +23,7 @@ export interface ISearchProductForm {
         size: { contains: string } | undefined;
         color: { contains: string } | undefined;
         price: { lte: number | undefined; gte: number | undefined } | undefined;
+        entry: { lte: string | undefined; gte: string | undefined } | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -65,6 +67,20 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           : ''
         : ''
       : '',
+    dateMin: filter
+      ? filter.entry
+        ? filter.entry.gte
+          ? filter.entry.gte
+          : ''
+        : ''
+      : '',
+    dateMax: filter
+      ? filter.entry
+        ? filter.entry.lte
+          ? filter.entry.lte
+          : ''
+        : ''
+      : '',
     id: filter ? (filter.id ? filter.id.toString() : '') : '',
     descriptionCheck: fields.description,
     productCheck: fields.product,
@@ -72,6 +88,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     sizeCheck: fields.size,
     colorCheck: fields.color,
     priceCheck: fields.price,
+    entryCheck: fields.entry,
     providerNameCheck: fields.provider.select?.name,
   });
 
@@ -97,6 +114,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           price:
             | { lte: number | undefined; gte: number | undefined }
             | undefined;
+          entry: { lte: Date | undefined; gte: Date | undefined } | undefined;
         }
       | undefined = {
       id: undefined,
@@ -107,6 +125,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       size: undefined,
       color: undefined,
       price: undefined,
+      entry: undefined,
     };
 
     let headers = ['Id'];
@@ -118,7 +137,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     if (values.colorCheck) headers = headers.concat(['Cor']);
     if (values.providerNameCheck) headers = headers.concat(['Fornecedor']);
     if (values.descriptionCheck) headers = headers.concat(['Descrição']);
-    headers = headers.concat(['Entrada']);
+    if (values.entryCheck) headers = headers.concat(['Entrada']);
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
     filter.product = { contains: values.product };
@@ -144,6 +163,26 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
         gte: undefined,
       };
 
+    console.log(values.dateMin);
+    console.log(values.dateMax);
+
+    if (values.dateMin) {
+      if (values.dateMax)
+        filter.entry = {
+          lte: new Date(values.dateMax),
+          gte: new Date(values.dateMin),
+        };
+      else
+        filter.entry = {
+          lte: undefined,
+          gte: new Date(values.dateMin),
+        };
+    } else if (values.dateMax)
+      filter.entry = {
+        lte: new Date(values.dateMax),
+        gte: undefined,
+      };
+
     setFilter(filter);
     setHeaders(headers);
 
@@ -156,7 +195,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       color: values.colorCheck,
       provider: values.providerNameCheck ? { select: { name: true } } : false,
       description: values.descriptionCheck,
-      entry: true,
+      entry: values.entryCheck,
     });
   };
 
@@ -332,6 +371,37 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           onChange={onChange}
         />
       </Form.Group>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formDateMin">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.entryCheck}
+              onChange={() =>
+                setValues({ ...values, entryCheck: !values.entryCheck })
+              }
+            />
+            <Form.Label>Data Min</Form.Label>
+          </div>
+          <Form.Control
+            type="date"
+            placeholder="Data Mínima"
+            value={values.dateMin}
+            name={'dateMin'}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formDateMax">
+          <Form.Label>Max</Form.Label>
+          <Form.Control
+            type="date"
+            placeholder="Data Máxima"
+            value={values.dateMax}
+            name={'dateMax'}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
     </Form>
   );
 };
