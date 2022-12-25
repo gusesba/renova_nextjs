@@ -1,5 +1,5 @@
 import AddProductForm from '../../components/forms/AddProductForm';
-import SearchProductForm from '../../components/forms/SearchProductForm';
+import SearchSellForm from '../../components/forms/SearchSellForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
 import { Product } from '../../types/types';
@@ -16,7 +16,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
         name="Saídas"
         size="lg"
         AddForm={AddProductForm}
-        SearchForm={SearchProductForm}
+        SearchForm={SearchSellForm}
         headers={[
           'ID',
           'Preço',
@@ -37,12 +37,12 @@ const Sells: NextPageWithLayout<ISells> = () => {
           sellPrice: true,
           sell: {
             select: {
-              type: true,
               buyer: {
                 select: {
                   name: true,
                 },
               },
+              type: true,
             },
           },
           product: true,

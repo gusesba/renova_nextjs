@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
-export interface ISearchProductForm {
+export interface ISearchSellForm {
   fields: {
     description: boolean;
     product: boolean;
@@ -12,6 +12,25 @@ export interface ISearchProductForm {
     color: boolean;
     provider: { select: { name: boolean } | undefined };
     entry: boolean;
+    sellPrice: boolean;
+    sell:
+      | {
+          select:
+            | {
+                buyer:
+                  | {
+                      select:
+                        | {
+                            name: boolean;
+                          }
+                        | undefined;
+                    }
+                  | undefined;
+                type: boolean;
+              }
+            | undefined;
+        }
+      | undefined;
   };
   filter:
     | {
@@ -24,6 +43,15 @@ export interface ISearchProductForm {
         color: { contains: string } | undefined;
         price: { lte: number | undefined; gte: number | undefined } | undefined;
         entry: { lte: string | undefined; gte: string | undefined } | undefined;
+        sellPrice:
+          | { lte: number | undefined; gte: number | undefined }
+          | undefined;
+        sell:
+          | {
+              type: { contains: string } | undefined;
+              buyer: { name: { contains: string } } | undefined;
+            }
+          | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -31,7 +59,7 @@ export interface ISearchProductForm {
   setHeaders: Dispatch<SetStateAction<string[]>>;
 }
 
-const SearchProductForm: React.FC<ISearchProductForm> = ({
+const SearchSellForm: React.FC<ISearchSellForm> = ({
   fields,
   filter,
   setFilter,
@@ -53,6 +81,20 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     brand: filter ? (filter.brand ? filter.brand.contains : '') : '',
     size: filter ? (filter.size ? filter.size.contains : '') : '',
     color: filter ? (filter.color ? filter.color.contains : '') : '',
+    buyer: filter
+      ? filter.sell
+        ? filter.sell.buyer
+          ? filter.sell.buyer.name.contains
+          : ''
+        : ''
+      : '',
+    type: filter
+      ? filter.sell
+        ? filter.sell.type
+          ? filter.sell.type.contains
+          : ''
+        : ''
+      : '',
     priceMin: filter
       ? filter.price
         ? filter.price.gte
@@ -64,6 +106,20 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       ? filter.price
         ? filter.price.lte
           ? filter.price.lte
+          : ''
+        : ''
+      : '',
+    sellPriceMin: filter
+      ? filter.sellPrice
+        ? filter.sellPrice.gte
+          ? filter.sellPrice.gte
+          : ''
+        : ''
+      : '',
+    sellPriceMax: filter
+      ? filter.sellPrice
+        ? filter.sellPrice.lte
+          ? filter.sellPrice.lte
           : ''
         : ''
       : '',
@@ -84,10 +140,13 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     id: filter ? (filter.id ? filter.id.toString() : '') : '',
     descriptionCheck: fields.description,
     productCheck: fields.product,
+    buyerCheck: fields.sell?.select?.buyer?.select?.name,
+    typeCheck: fields.sell?.select?.type,
     brandCheck: fields.brand,
     sizeCheck: fields.size,
     colorCheck: fields.color,
     priceCheck: fields.price,
+    sellPriceCheck: fields.sellPrice,
     entryCheck: fields.entry,
     providerNameCheck: fields.provider.select?.name,
   });
@@ -114,7 +173,16 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           price:
             | { lte: number | undefined; gte: number | undefined }
             | undefined;
+          sellPrice:
+            | { lte: number | undefined; gte: number | undefined }
+            | undefined;
           entry: { lte: Date | undefined; gte: Date | undefined } | undefined;
+          sell:
+            | {
+                type: { contains: string } | undefined;
+                buyer: { name: { contains: string } | undefined } | undefined;
+              }
+            | undefined;
         }
       | undefined = {
       id: undefined,
@@ -125,12 +193,17 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       size: undefined,
       color: undefined,
       price: undefined,
+      sellPrice: undefined,
       entry: undefined,
+      sell: { type: undefined, buyer: { name: undefined } },
     };
 
     let headers = ['Id'];
 
     if (values.priceCheck) headers = headers.concat(['Preço']);
+    if (values.sellPriceCheck) headers = headers.concat(['Preço Venda']);
+    if (values.typeCheck) headers = headers.concat(['Tipo']);
+    if (values.buyerCheck) headers = headers.concat(['Comprador']);
     if (values.productCheck) headers = headers.concat(['Produto']);
     if (values.brandCheck) headers = headers.concat(['Marca']);
     if (values.sizeCheck) headers = headers.concat(['Tamanho']);
@@ -145,6 +218,10 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     filter.size = { contains: values.size };
     filter.color = { contains: values.color };
     filter.provider = { name: { contains: values.providerName } };
+    filter.sell = {
+      type: { contains: values.type },
+      buyer: { name: { contains: values.buyer } },
+    };
     filter.description = { contains: values.description };
     if (values.priceMin) {
       if (values.priceMax)
@@ -161,6 +238,27 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       filter.price = {
         lte: parseInt(values.priceMax as string),
         gte: undefined,
+      };
+    if (values.sellPriceMin) {
+      if (values.sellPriceMax)
+        filter.sellPrice = {
+          lte: parseInt(values.sellPriceMax as string),
+          gte: parseInt(values.sellPriceMin as string),
+        };
+      else
+        filter.sellPrice = {
+          lte: undefined,
+          gte: parseInt(values.sellPriceMin as string),
+        };
+    } else if (values.sellPriceMax)
+      filter.sellPrice = {
+        lte: parseInt(values.sellPriceMax as string),
+        gte: undefined,
+      };
+    else
+      filter.sellPrice = {
+        lte: undefined,
+        gte: -10000,
       };
 
     if (values.dateMin) {
@@ -186,6 +284,14 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     setFields({
       id: true,
       price: values.priceCheck,
+      sellPrice: values.sellPriceCheck,
+      sell: values.typeCheck
+        ? values.buyerCheck
+          ? { select: { buyer: { select: { name: true } }, type: true } }
+          : { select: { type: true } }
+        : values.buyerCheck
+        ? { select: { buyer: { select: { name: true } } } }
+        : false,
       product: values.productCheck,
       brand: values.brandCheck,
       size: values.sizeCheck,
@@ -230,6 +336,49 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
         </Form.Group>
       </div>
       <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formType">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.typeCheck}
+              onChange={() =>
+                setValues({ ...values, typeCheck: !values.typeCheck })
+              }
+            />
+            <Form.Label>Tipo</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Tipo"
+            name="type"
+            value={values.type}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formBuyer">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.buyerCheck}
+              onChange={() =>
+                setValues({
+                  ...values,
+                  buyerCheck: !values.buyerCheck,
+                })
+              }
+            />
+            <Form.Label>Comprador</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Comprador"
+            name="buyer"
+            value={values.buyer}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
         <Form.Group className="mb-3 w-[45%]" controlId="formPriceMin">
           <div className="flex">
             <FormCheck
@@ -256,6 +405,37 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
             placeholder="Preço Máximo"
             value={values.priceMax}
             name={'priceMax'}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formSellPriceMin">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.sellPriceCheck}
+              onChange={() =>
+                setValues({ ...values, sellPriceCheck: !values.sellPriceCheck })
+              }
+            />
+            <Form.Label>Preço Venda Min</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Preço Venda Mínimo"
+            value={values.sellPriceMin}
+            name={'sellPriceMin'}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formSellPriceMax">
+          <Form.Label>Max</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Preço Venda Máximo"
+            value={values.sellPriceMax}
+            name={'sellPriceMax'}
             onChange={onChange}
           />
         </Form.Group>
@@ -343,31 +523,52 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           />
         </Form.Group>
       </div>
-      <Form.Group
-        className="mb-3 w-[95%] ml-[2.5%]"
-        controlId="formDescription"
-      >
-        <div className="flex">
-          <FormCheck
-            className="mr-1"
-            checked={values.descriptionCheck}
-            onChange={() =>
-              setValues({
-                ...values,
-                descriptionCheck: !values.descriptionCheck,
-              })
-            }
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formBuyer">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.descriptionCheck}
+              onChange={() =>
+                setValues({
+                  ...values,
+                  descriptionCheck: !values.descriptionCheck,
+                })
+              }
+            />
+            <Form.Label>Comprador</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Comprador"
+            name="buyer"
+            value={values.description}
+            onChange={onChange}
           />
-          <Form.Label>Descrição</Form.Label>
-        </div>
-        <Form.Control
-          type="text"
-          placeholder="Descrição"
-          name="description"
-          value={values.description}
-          onChange={onChange}
-        />
-      </Form.Group>
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formDescription">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.descriptionCheck}
+              onChange={() =>
+                setValues({
+                  ...values,
+                  descriptionCheck: !values.descriptionCheck,
+                })
+              }
+            />
+            <Form.Label>Descrição</Form.Label>
+          </div>
+          <Form.Control
+            type="text"
+            placeholder="Descrição"
+            name="description"
+            value={values.description}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
       <div className="flex justify-around">
         <Form.Group className="mb-3 w-[45%]" controlId="formDateMin">
           <div className="flex">
@@ -403,4 +604,4 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
   );
 };
 
-export default SearchProductForm;
+export default SearchSellForm;
