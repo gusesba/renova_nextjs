@@ -16,6 +16,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
         name="Saídas"
         size="lg"
         AddForm={AddProductForm}
+        EditForm={AddProductForm}
         SearchForm={SearchSellForm}
         headers={[
           'ID',

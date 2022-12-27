@@ -61,7 +61,7 @@ const MyPage: React.FC<IMyPage> = ({
       } else if (e.key?.toLocaleLowerCase() === 'e' && e.ctrlKey) {
         e.preventDefault();
 
-        if (selectedRowsRef.current.length == 1) {
+        if (selectedRowsRef.current.length == 1 && name != 'Saídas') {
           setModal('edit');
           setAddModalShow(true);
         }

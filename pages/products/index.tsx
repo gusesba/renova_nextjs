@@ -16,6 +16,7 @@ const Products: NextPageWithLayout<IProducts> = () => {
         name="Produto"
         size="lg"
         AddForm={AddProductForm}
+        EditForm={AddProductForm}
         SearchForm={SearchProductForm}
         headers={[
           'ID',
