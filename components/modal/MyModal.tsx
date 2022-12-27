@@ -8,6 +8,7 @@ export interface IMyModal {
   title: string;
   children: React.ReactNode;
   size?: 'sm' | 'lg' | 'xl';
+  submitText?: string;
 }
 
 const MyModal: React.FC<IMyModal> = ({
@@ -16,6 +17,7 @@ const MyModal: React.FC<IMyModal> = ({
   title,
   children,
   size,
+  submitText = 'Adicionar',
 }) => {
   const handleClose = () => setShow(false);
 
@@ -31,7 +33,7 @@ const MyModal: React.FC<IMyModal> = ({
             Cancelar
           </Button>
           <Button type="submit" form="addForm" variant="primary">
-            Adicionar
+            {submitText}
           </Button>
         </Modal.Footer>
       </Modal>

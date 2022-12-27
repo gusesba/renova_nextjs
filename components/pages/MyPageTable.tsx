@@ -7,6 +7,7 @@ import MyTable from '../table/MyTable';
 export interface IMyPage {
   SearchForm: React.FC<any>;
   AddForm: React.FC<any>;
+  EditForm: React.FC<any>;
   size?: 'sm' | 'lg' | 'xl';
   name: string;
   url: string;
@@ -18,6 +19,7 @@ export interface IMyPage {
 
 const MyPage: React.FC<IMyPage> = ({
   AddForm,
+  EditForm,
   SearchForm,
   headers,
   url,
@@ -43,16 +45,26 @@ const MyPage: React.FC<IMyPage> = ({
 
   useEffect(() => {
     const shortcuts = (e: KeyboardEvent) => {
-      if (e.key === '+' && e.shiftKey) {
+      if (e.key === '=' && e.ctrlKey) {
         if (name != 'Saídas') {
+          e.preventDefault();
           setModal('add');
           setAddModalShow(true);
         }
-      } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
+      } else if (e.key?.toLowerCase() === 'd' && e.ctrlKey) {
+        e.preventDefault();
         handleDelete();
-      } else if (e.key?.toLocaleLowerCase() === 'f' && e.shiftKey) {
+      } else if (e.key?.toLocaleLowerCase() === 'f' && e.ctrlKey) {
+        e.preventDefault();
         setModal('search');
         setAddModalShow(true);
+      } else if (e.key?.toLocaleLowerCase() === 'e' && e.ctrlKey) {
+        e.preventDefault();
+
+        if (selectedRowsRef.current.length == 1) {
+          setModal('edit');
+          setAddModalShow(true);
+        }
       }
     };
     document.addEventListener('keydown', shortcuts);
@@ -95,11 +107,18 @@ const MyPage: React.FC<IMyPage> = ({
         show={addModalShow}
         setShow={setAddModalShow}
         size={size}
-        title={modal == 'add' ? 'Novo ' + name : 'Busca'}
+        title={
+          modal == 'add'
+            ? 'Novo ' + name
+            : modal == 'search'
+            ? 'Busca'
+            : 'Editar ' + name
+        }
+        submitText={modal == 'add' ? 'Adicionar' : 'Buscar'}
       >
         {modal == 'add' ? (
           <AddForm after={after} setUpload={setUpload} />
-        ) : (
+        ) : modal == 'search' ? (
           <SearchForm
             filter={stateFilter}
             setFilter={setStateFilter}
@@ -107,6 +126,8 @@ const MyPage: React.FC<IMyPage> = ({
             fields={stateFields}
             setHeaders={setStateHeaders}
           />
+        ) : (
+          <EditForm id={selectedRows[0]} setUpload={setUpload} />
         )}
       </MyModal>
       <MyTable

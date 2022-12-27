@@ -59,3 +59,16 @@ export async function deleteClients(ids: Array<number>) {
 
   return count;
 }
+
+export async function updateClient(id: number, name?: string, phone?: string) {
+  const client = await prisma.client.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      phone,
+    },
+  });
+  return client;
+}

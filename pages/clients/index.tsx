@@ -1,4 +1,5 @@
 import AddClientForm from '../../components/forms/AddClientForm';
+import EditClientForm from '../../components/forms/EditClientForm';
 import SearchClientForm from '../../components/forms/SearchClientForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
@@ -13,6 +14,7 @@ const Clients: NextPageWithLayout<IClients> = () => {
     <>
       <MyPage
         AddForm={AddClientForm}
+        EditForm={EditClientForm}
         headers={['ID', 'Nome', 'Telefone']}
         fields={{ id: true, name: true, phone: true }}
         url="/client"

@@ -32,13 +32,16 @@ const MyPage: React.FC<IMyPage> = () => {
 
   useEffect(() => {
     const shortcuts = (e: KeyboardEvent) => {
-      if (e.key === '+' && e.shiftKey) {
+      if (e.key === '=' && e.ctrlKey) {
+        e.preventDefault();
         setAddModalShow(true);
         setModal('add');
-      } else if (e.key?.toLowerCase() === 'd' && e.shiftKey) {
+      } else if (e.key?.toLowerCase() === 'd' && e.ctrlKey) {
+        e.preventDefault();
         removeRows();
-      } else if (e.key?.toLowerCase() === 'e' && e.shiftKey) {
+      } else if (e.key?.toLowerCase() === 'e' && e.ctrlKey) {
         if (selectedRowsRef.current.length == 1) {
+          e.preventDefault();
           setModal('edit');
           setAddModalShow(true);
         }

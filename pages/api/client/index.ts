@@ -3,6 +3,7 @@ import {
   createClient,
   deleteClients,
   getClients,
+  updateClient,
 } from '../../../backend/controllers/client';
 import { prisma } from '../../../prisma/prismaClient';
 import { Client } from '../../../types/types';
@@ -60,6 +61,21 @@ export default async function handler(
       .then(async (count: any) => {
         await prisma.$disconnect();
         res.status(201).json(count);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  if (req.method == 'PATCH') {
+    const { id, name, phone } = req.body;
+
+    return updateClient(id, name, phone)
+      .then(async (client: Client) => {
+        await prisma.$disconnect();
+        res.status(200).json(client);
       })
       .catch(async (e) => {
         console.error(e);
