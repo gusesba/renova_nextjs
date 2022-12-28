@@ -3,7 +3,7 @@ import {
   createProduct,
   deleteProducts,
   getProducts,
-  updateProducts,
+  updateProduct,
 } from '../../../backend/controllers/product';
 import { prisma } from '../../../prisma/prismaClient';
 import { Product } from '../../../types/types';
@@ -104,7 +104,7 @@ export default async function handler(
       sellPrice,
     } = req.body;
 
-    return updateProducts(
+    return updateProduct(
       id,
       price,
       product,

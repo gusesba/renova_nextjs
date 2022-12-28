@@ -102,7 +102,15 @@ export async function deleteProducts(ids: Array<number>) {
 // PARAMS:
 // IDS : ARRAY<NUMBER>
 
-export async function updateProducts(
+export async function updateProducts(ids: Array<number>, data: {}) {
+  const products = await prisma.product.updateMany({
+    where: { id: { in: ids } },
+    data: data,
+  });
+  return products;
+}
+
+export async function updateProduct(
   id: number,
   price: number,
   product: string,
