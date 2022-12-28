@@ -3,6 +3,7 @@ import {
   createProduct,
   deleteProducts,
   getProducts,
+  updateProducts,
 } from '../../../backend/controllers/product';
 import { prisma } from '../../../prisma/prismaClient';
 import { Product } from '../../../types/types';
@@ -78,6 +79,47 @@ export default async function handler(
       .then(async (count: any) => {
         await prisma.$disconnect();
         res.status(201).json(count);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  //UPDATE
+
+  if (req.method == 'PATCH') {
+    const {
+      id,
+      price,
+      product,
+      brand,
+      size,
+      color,
+      providerId,
+      description,
+      entry,
+      sellId,
+      sellPrice,
+    } = req.body;
+
+    return updateProducts(
+      id,
+      price,
+      product,
+      brand,
+      size,
+      color,
+      providerId,
+      description,
+      entry,
+      sellId,
+      sellPrice
+    )
+      .then(async (product: Product) => {
+        await prisma.$disconnect();
+        res.status(201).json(product);
       })
       .catch(async (e) => {
         console.error(e);
