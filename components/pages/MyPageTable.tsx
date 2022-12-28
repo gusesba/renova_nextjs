@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { baseURL } from '../../config/config';
+import AlertContext from '../../contexts/AlertContext';
 import { printEtiqueta } from '../../printers/printers';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MyTable';
@@ -37,6 +45,11 @@ const MyPage: React.FC<IMyPage> = ({
   const [stateFields, setStateFields] = useState(fields);
   const [stateFilter, setStateFilter] = useState(filter);
   const [stateHeaders, setStateHeaders] = useState(headers);
+
+  const { setAlerts } = useContext(AlertContext) as {
+    alerts: { variant: string; message: string }[];
+    setAlerts: Dispatch<SetStateAction<{ variant: string; message: string }[]>>;
+  };
 
   const setSelectedRows = (data: any) => {
     selectedRowsRef.current = data;
@@ -119,7 +132,22 @@ const MyPage: React.FC<IMyPage> = ({
         }
       >
         {modal == 'add' ? (
-          <AddForm after={after} setUpload={setUpload} />
+          <AddForm
+            after={() => {
+              setAlerts((old) => {
+                return [
+                  ...old,
+                  { variant: 'success', message: 'Cliente Adicionado' },
+                ];
+              });
+              setTimeout(() => {
+                setAlerts((old) => {
+                  return old.slice(1);
+                });
+              }, 3000);
+            }}
+            setUpload={setUpload}
+          />
         ) : modal == 'search' ? (
           <SearchForm
             filter={stateFilter}
