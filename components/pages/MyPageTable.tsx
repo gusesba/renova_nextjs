@@ -105,6 +105,20 @@ const MyPage: React.FC<IMyPage> = ({
           console.log(data.error);
         } else {
           console.log(data.count);
+          setAlerts((oldAlerts) => {
+            return [
+              ...oldAlerts,
+              {
+                variant: 'success',
+                message: data.count + ' ' + name + ' Excluídos',
+              },
+            ];
+          });
+          setTimeout(() => {
+            setAlerts((oldAlerts) => {
+              return oldAlerts.slice(1);
+            });
+          }, 3000);
           setUpload(Math.random());
           setSelectedRows([]);
           document

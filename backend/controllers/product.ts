@@ -84,7 +84,7 @@ export async function getProduct(id: number) {
   });
 
   if (!product?.sellPrice) return product;
-  return null;
+  return { error: 'Produto não está em estoque' };
 }
 
 //DELETE PRODUCT

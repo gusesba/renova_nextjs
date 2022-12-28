@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { baseURL } from '../../config/config';
+import AlertContext from '../../contexts/AlertContext';
 
 export interface IAddSellProductForm {
   setRows: Dispatch<SetStateAction<Array<Object>>>;
@@ -12,6 +13,11 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
   setRows,
 }) => {
   const [values, setValues] = useState({ id: '' });
+
+  const { setAlerts } = useContext(AlertContext) as {
+    alerts: { variant: string; message: string }[];
+    setAlerts: Dispatch<SetStateAction<{ variant: string; message: string }[]>>;
+  };
 
   const onChange = (e: any) => {
     setValues({
@@ -36,12 +42,57 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
         })
           .then((response) => response.json())
           .then((data) => {
-            if (data) {
+            if (!data.error) {
               data.sellPrice = data.price;
               setRows([data].concat([...rows]));
               values.id = '';
+
+              setAlerts((oldAlerts) => {
+                return [
+                  ...oldAlerts,
+                  {
+                    variant: 'success',
+                    message: 'Produto adicionado com sucesso',
+                  },
+                ];
+              });
+              setTimeout(() => {
+                setAlerts((oldAlerts) => {
+                  return oldAlerts.slice(1);
+                });
+              }, 3000);
+            } else {
+              setAlerts((oldAlerts) => {
+                return [
+                  ...oldAlerts,
+                  {
+                    variant: 'danger',
+                    message: data.error,
+                  },
+                ];
+              });
+              setTimeout(() => {
+                setAlerts((oldAlerts) => {
+                  return oldAlerts.slice(1);
+                });
+              }, 3000);
             }
           });
+      } else {
+        setAlerts((oldAlerts) => {
+          return [
+            ...oldAlerts,
+            {
+              variant: 'danger',
+              message: 'Produto já incluído na lista de venda',
+            },
+          ];
+        });
+        setTimeout(() => {
+          setAlerts((oldAlerts) => {
+            return oldAlerts.slice(1);
+          });
+        }, 3000);
       }
     }
   };

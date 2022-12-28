@@ -13,13 +13,18 @@ export default async function handler(
     const { id } = req.query;
 
     return getProduct(parseInt(id as string))
-      .then(async (product: Product | null) => {
+      .then(async (product: Product | null | { error: string }) => {
         await prisma.$disconnect();
 
-        if (product) {
-          product.entry = `${(product.entry as Date).getDay()}/${(
-            product.entry as Date
-          ).getMonth()}/${(product.entry as Date).getFullYear()}`;
+        if (product == null)
+          res.status(200).json({ error: 'Produto não cadastrado' });
+
+        if (!(product as { error: string }).error) {
+          (product as Product).entry = `${(
+            (product as Product).entry as Date
+          ).getDay()}/${((product as Product).entry as Date).getMonth()}/${(
+            (product as Product).entry as Date
+          ).getFullYear()}`;
         }
         res.status(201).json(product);
       })
