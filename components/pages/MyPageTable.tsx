@@ -114,7 +114,9 @@ const MyPage: React.FC<IMyPage> = ({
             ? 'Busca'
             : 'Editar ' + name
         }
-        submitText={modal == 'add' ? 'Adicionar' : 'Buscar'}
+        submitText={
+          modal == 'add' ? 'Adicionar' : modal == 'search' ? 'Buscar' : 'Editar'
+        }
       >
         {modal == 'add' ? (
           <AddForm after={after} setUpload={setUpload} />
