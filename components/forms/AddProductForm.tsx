@@ -6,9 +6,10 @@ import { optionsColor, optionsProduct, optionsSize } from './options';
 
 export interface IAddProductForm {
   setUpload: Function;
+  after: Function;
 }
 
-const AddProductForm: React.FC<IAddProductForm> = ({ setUpload }) => {
+const AddProductForm: React.FC<IAddProductForm> = ({ setUpload, after }) => {
   const [values, setValues] = useState({
     price: '',
     product: '',
@@ -96,6 +97,7 @@ const AddProductForm: React.FC<IAddProductForm> = ({ setUpload }) => {
               brand: '',
               description: '',
             });
+            if (after) after(data);
           }
         });
     }
