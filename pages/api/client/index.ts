@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {
   createClient,
   deleteClients,
+  getClientPageHeaderData,
   getClients,
   updateClient,
 } from '../../../backend/controllers/client';
@@ -76,6 +77,20 @@ export default async function handler(
       .then(async (client: Client) => {
         await prisma.$disconnect();
         res.status(200).json(client);
+      })
+      .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        res.status(500).json({ error: 'Server Side Error' });
+      });
+  }
+
+  if (req.method == 'POST' && req.body?.action == 'GETCLIENTHEADER') {
+    const { id } = req.body;
+    return getClientPageHeaderData(id)
+      .then(async (clients: any) => {
+        await prisma.$disconnect();
+        res.status(201).json(clients);
       })
       .catch(async (e) => {
         console.error(e);

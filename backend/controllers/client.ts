@@ -72,3 +72,37 @@ export async function updateClient(id: number, name?: string, phone?: string) {
   });
   return client;
 }
+
+export async function getClientPageHeaderData(id: number) {
+  const client = await prisma.client.findUnique({
+    select: { name: true, phone: true },
+    where: { id },
+  });
+
+  const sells = await prisma.product.aggregate({
+    _count: { id: true },
+    _sum: { sellPrice: true },
+    where: { providerId: id, sellId: { not: null } },
+  });
+
+  const buys = await prisma.product.aggregate({
+    _count: { id: true },
+    _sum: { sellPrice: true },
+    where: {
+      sell: {
+        buyer: {
+          id: id,
+        },
+      },
+    },
+  });
+
+  return {
+    name: client?.name,
+    phone: client?.phone,
+    sells: sells._count.id,
+    totalSells: sells._sum.sellPrice,
+    buys: buys._count.id,
+    totalBuys: buys._sum.sellPrice,
+  };
+}

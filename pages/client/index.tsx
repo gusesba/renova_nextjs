@@ -9,6 +9,7 @@ export interface IClient {}
 const Client: NextPageWithLayout<IClient> = () => {
   const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
   const selectedRowsRef = useRef(selectedRows);
+  const [selected, setSelected] = useState('stock');
 
   const setSelectedRows = (data: any) => {
     selectedRowsRef.current = data;
@@ -92,7 +93,13 @@ const Client: NextPageWithLayout<IClient> = () => {
         </div>
       </div>
       <div className="flex mt-[2rem] space-x-[4rem]">
-        <span className="text-gray-700 text-base text-[1.3em] font-semibold">
+        <span
+          className={
+            selected == 'stock'
+              ? 'text-blue-800 text-base text-[1.3em] font-semibold'
+              : 'text-gray-700 text-base text-[1.3em] font-semibold'
+          }
+        >
           Estoque
         </span>
         <span className="text-gray-700 text-base text-[1.3em] font-semibold">
@@ -102,6 +109,7 @@ const Client: NextPageWithLayout<IClient> = () => {
           Comprados
         </span>
       </div>
+      <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
       <div className="mb-[2rem] ml-auto mr-auto">
         <MyTable
           headers={['ID', 'Nome', 'Telefone']}
