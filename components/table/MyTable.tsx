@@ -75,7 +75,7 @@ const MyTable: React.FC<IMyTable> = ({
       <Table bordered hover>
         <thead>
           <tr>
-            <th></th>
+            <th className="w-[2.5rem]"></th>
             {headers.map((column, key) => {
               return (
                 <th className="text-center group" key={key}>
@@ -89,7 +89,7 @@ const MyTable: React.FC<IMyTable> = ({
           {data?.map((row: any, key) => {
             return (
               <tr key={key}>
-                <td>
+                <td className="w-[2.5rem] text-center">
                   <FormCheck
                     key={key}
                     name={row.id.toString()}

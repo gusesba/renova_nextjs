@@ -1,13 +1,23 @@
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
+import MyTable from '../../components/table/MyTable';
 
 import { NextPageWithLayout } from '../page';
 export interface IClient {}
 
 const Client: NextPageWithLayout<IClient> = () => {
+  const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
+  const selectedRowsRef = useRef(selectedRows);
+
+  const setSelectedRows = (data: any) => {
+    selectedRowsRef.current = data;
+    _setSelectedRows(data);
+  };
+
   return (
     <>
-      <div className="flex mt-[1.5rem]">
+      <div className="flex mt-[1.5rem] justify-center">
         <div className="mr-[1rem] w-[20rem] ">
           <div className="max-w-sm rounded overflow-hidden shadow-md relative h-[27rem]">
             <Image
@@ -80,6 +90,27 @@ const Client: NextPageWithLayout<IClient> = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex mt-[2rem] space-x-[4rem]">
+        <span className="text-gray-700 text-base text-[1.3em] font-semibold">
+          Estoque
+        </span>
+        <span className="text-gray-700 text-base text-[1.3em] font-semibold">
+          Vendidos
+        </span>
+        <span className="text-gray-700 text-base text-[1.3em] font-semibold">
+          Comprados
+        </span>
+      </div>
+      <div className="mb-[2rem] ml-auto mr-auto">
+        <MyTable
+          headers={['ID', 'Nome', 'Telefone']}
+          url={'/client'}
+          fields={{ id: true, name: true, phone: true }}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          upload={1}
+        />
       </div>
     </>
   );
