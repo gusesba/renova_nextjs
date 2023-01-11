@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Client | null | { error: string }>
 ) {
-  //IF GET REQUEST GET ONE CLIENT - backend/client.ts
+  //IF GET REQUEST GET ONE CLIENT  - backend/client.ts
   if (req.method == 'GET') {
     const { id } = req.query;
 
