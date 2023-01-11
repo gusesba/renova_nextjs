@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+  url = env("DATABASE_URL_TESTE")
   referentialIntegrity = "prisma"
 }
 
@@ -47,5 +47,6 @@ model Sell {
   buyerId Int
   buyer Client @relation(fields: [buyerId],references: [id],onDelete: Restrict)
   products Product[]
+  createdAt        DateTime           @default(now())
   @@index([buyerId]) 
 }

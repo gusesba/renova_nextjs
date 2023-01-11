@@ -86,8 +86,8 @@ export default async function handler(
   }
 
   if (req.method == 'POST' && req.body?.action == 'GETCLIENTHEADER') {
-    const { id } = req.body;
-    return getClientPageHeaderData(id)
+    const { id, dateMax, dateMin } = req.body;
+    return getClientPageHeaderData(id, dateMax, dateMin)
       .then(async (clients: any) => {
         await prisma.$disconnect();
         res.status(201).json(clients);

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { Form } from 'react-bootstrap';
 import ChangeClientForm from '../../components/forms/ChangeClientForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyModal from '../../components/modal/MyModal';
@@ -15,6 +16,10 @@ const Client: NextPageWithLayout<IClient> = () => {
   const [selected, setSelected] = useState('stock');
   const [clientId, setClientId] = useState(22);
   const [modalShow, setModalShow] = useState(false);
+  const [values, setValues] = useState({
+    dateMin: new Date('01-01-2000').toString(),
+    dateMax: new Date(Date.now()).toString(),
+  });
 
   const [header, setHeader] = useState({
     name: 'Nome',
@@ -32,7 +37,12 @@ const Client: NextPageWithLayout<IClient> = () => {
 
   useEffect(() => {
     fetch(baseURL + '/client', {
-      body: JSON.stringify({ action: 'GETCLIENTHEADER', id: clientId }),
+      body: JSON.stringify({
+        action: 'GETCLIENTHEADER',
+        id: clientId,
+        dateMax: values.dateMax,
+        dateMin: values.dateMin,
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -46,7 +56,14 @@ const Client: NextPageWithLayout<IClient> = () => {
           setHeader(data);
         }
       });
-  }, [clientId]);
+  }, [clientId, values.dateMax, values.dateMin]);
+
+  const onChange = (e: any) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
@@ -93,6 +110,30 @@ const Client: NextPageWithLayout<IClient> = () => {
               <p className="text-gray-700 text-base text-[1rem] font-semibold">
                 {header.phone}
               </p>
+
+              <div className="flex justify-around">
+                <Form.Group className="mb-3 w-[48%]" controlId="formDateMin">
+                  <Form.Label>Data Min</Form.Label>
+
+                  <Form.Control
+                    type="date"
+                    placeholder="Data Mínima"
+                    value={values.dateMin}
+                    name={'dateMin'}
+                    onChange={onChange}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3 w-[48%]" controlId="formDateMax">
+                  <Form.Label>Max</Form.Label>
+                  <Form.Control
+                    type="date"
+                    placeholder="Data Máxima"
+                    value={values.dateMax}
+                    name={'dateMax'}
+                    onChange={onChange}
+                  />
+                </Form.Group>
+              </div>
             </div>
           </div>
         </div>
@@ -237,10 +278,30 @@ const Client: NextPageWithLayout<IClient> = () => {
           ]}
           filter={
             selected == 'stock'
-              ? { providerId: clientId, sellPrice: null }
+              ? {
+                  providerId: clientId,
+                  sellPrice: null,
+                }
               : selected == 'sells'
-              ? { providerId: clientId, sellPrice: { not: null } }
-              : { sell: { buyerId: clientId } }
+              ? {
+                  providerId: clientId,
+                  sellPrice: { not: null },
+                  sell: {
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                  },
+                }
+              : {
+                  sell: {
+                    buyerId: clientId,
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                  },
+                }
           }
           url={'/product'}
           fields={{

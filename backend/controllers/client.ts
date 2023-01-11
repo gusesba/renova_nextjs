@@ -73,7 +73,11 @@ export async function updateClient(id: number, name?: string, phone?: string) {
   return client;
 }
 
-export async function getClientPageHeaderData(id: number) {
+export async function getClientPageHeaderData(
+  id: number,
+  dateMax: string,
+  dateMin: string
+) {
   const client = await prisma.client.findUnique({
     select: { name: true, phone: true },
     where: { id },
@@ -82,7 +86,16 @@ export async function getClientPageHeaderData(id: number) {
   const sells = await prisma.product.aggregate({
     _count: { id: true },
     _sum: { sellPrice: true },
-    where: { providerId: id, sellId: { not: null } },
+    where: {
+      providerId: id,
+      sellId: { not: null },
+      sell: {
+        createdAt: {
+          gte: new Date(dateMin),
+          lte: new Date(dateMax),
+        },
+      },
+    },
   });
 
   const buys = await prisma.product.aggregate({
@@ -92,6 +105,10 @@ export async function getClientPageHeaderData(id: number) {
       sell: {
         buyer: {
           id: id,
+        },
+        createdAt: {
+          gte: new Date(dateMin),
+          lte: new Date(dateMax),
         },
       },
     },
