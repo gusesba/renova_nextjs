@@ -14,7 +14,7 @@ const Client: NextPageWithLayout<IClient> = () => {
   const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
   const selectedRowsRef = useRef(selectedRows);
   const [selected, setSelected] = useState('stock');
-  const [clientId, setClientId] = useState(22);
+  const [clientId, setClientId] = useState(1);
   const [modalShow, setModalShow] = useState(false);
   const [values, setValues] = useState({
     dateMin: new Date('01-01-2000').toString(),
