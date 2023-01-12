@@ -170,6 +170,7 @@ const MyPage: React.FC<IMyPage> = () => {
                 });
             }}
             setUpload={() => {}}
+            setShow={setAddModalShow}
           />
         ) : (
           <FinishSellForm finishSell={finishSell} />
