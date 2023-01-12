@@ -180,7 +180,6 @@ const MyPage: React.FC<IMyPage> = ({
         url={url}
         fields={stateFields}
         selectedRows={selectedRows}
-        selectedRowsRef={selectedRowsRef}
         setSelectedRows={setSelectedRows}
         filter={stateFilter}
         upload={upload}
