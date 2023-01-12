@@ -8,6 +8,7 @@ export interface IMyTable {
   headers: Array<string>;
   fields: {};
   selectedRows: Array<number>;
+  selectedRowsRef: any;
   setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
   filter?: {};
   upload: number;
@@ -19,6 +20,7 @@ const MyTable: React.FC<IMyTable> = ({
   fields,
   setSelectedRows,
   selectedRows,
+  selectedRowsRef,
   filter,
   upload,
 }) => {
@@ -64,10 +66,18 @@ const MyTable: React.FC<IMyTable> = ({
   }, [page, upload, fields]);
 
   useEffect(() => {
-    document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
-      checkbox.checked = false;
-    });
-    setSelectedRows([]);
+    setTimeout(() => {
+      document
+        .querySelectorAll('[type="checkbox"]')
+        .forEach((checkbox: any) => {
+          let controll = 0;
+          selectedRowsRef.current.forEach((id: any) => {
+            if (id == checkbox.name) controll = 1;
+          });
+          if (controll == 1) checkbox.checked = true;
+          else checkbox.checked = false;
+        });
+    }, 500);
   }, [page]);
 
   return (
