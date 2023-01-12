@@ -151,7 +151,7 @@ const MyPage: React.FC<IMyPage> = ({
               setAlerts((old) => {
                 return [
                   ...old,
-                  { variant: 'success', message: 'Cliente Adicionado' },
+                  { variant: 'success', message: `${name} Adicionado` },
                 ];
               });
               setTimeout(() => {
@@ -160,6 +160,7 @@ const MyPage: React.FC<IMyPage> = ({
                 });
               }, 3000);
             }}
+            setShow={setAddModalShow}
             setUpload={setUpload}
           />
         ) : modal == 'search' ? (

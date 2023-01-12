@@ -9,11 +9,8 @@ const MyAlert: React.FC<IMyAlert> = () => {
     alerts: { variant: string; message: string }[];
     setAlerts: Dispatch<SetStateAction<{ variant: string; message: string }[]>>;
   };
-
-  console.log(alerts);
-
   return (
-    <div className="w-[15rem] absolute bottom-0 left-0">
+    <div className="w-[15rem] absolute bottom-1 left-2">
       {alerts.map((alert, index) => {
         return (
           <Alert key={index} variant={alert.variant}>

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
 import { baseURL } from '../../config/config';
@@ -7,9 +8,14 @@ import { optionsColor, optionsProduct, optionsSize } from './options';
 export interface IAddProductForm {
   setUpload: Function;
   after: Function;
+  setShow: Dispatch<SetStateAction<boolean>>;
 }
 
-const AddProductForm: React.FC<IAddProductForm> = ({ setUpload, after }) => {
+const AddProductForm: React.FC<IAddProductForm> = ({
+  setUpload,
+  after,
+  setShow,
+}) => {
   const [values, setValues] = useState({
     price: '',
     product: '',
@@ -18,6 +24,7 @@ const AddProductForm: React.FC<IAddProductForm> = ({ setUpload, after }) => {
     color: '',
     providerId: 0,
     description: '',
+    keepCheck: false,
   });
 
   const [optionsProvider, setOptionsProvider] = useState([]);
@@ -98,6 +105,7 @@ const AddProductForm: React.FC<IAddProductForm> = ({ setUpload, after }) => {
               description: '',
             });
             if (after) after(data);
+            if (values.keepCheck === false) setShow(false);
           }
         });
     }
@@ -105,6 +113,18 @@ const AddProductForm: React.FC<IAddProductForm> = ({ setUpload, after }) => {
 
   return (
     <Form onSubmit={handleSubmit} id="addForm">
+      <div className="flex">
+        <FormCheck
+          className="mr-2 ml-[2.5%]"
+          checked={values.keepCheck}
+          onChange={() =>
+            setValues({ ...values, keepCheck: !values.keepCheck })
+          }
+        />
+        <Form.Label>Manter Campos</Form.Label>
+      </div>
+      <hr />
+
       <div className="flex justify-around">
         <Form.Group className="mb-3 w-[45%]" controlId="formProviderId">
           <Form.Label>Fornecedor</Form.Label>

@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { baseURL } from '../../config/config';
 
 export interface IAddClientForm {
   after?: Function;
   setUpload: Function;
+  setShow: Dispatch<SetStateAction<boolean>>;
 }
 
-const AddClientForm: React.FC<IAddClientForm> = ({ after, setUpload }) => {
+const AddClientForm: React.FC<IAddClientForm> = ({
+  after,
+  setUpload,
+  setShow,
+}) => {
   const [values, setValues] = useState({ name: '', phone: '' });
 
   const onChange = (e: any) => {
@@ -39,6 +44,7 @@ const AddClientForm: React.FC<IAddClientForm> = ({ after, setUpload }) => {
             setValues({ name: '', phone: '' });
             if (after) after();
             setUpload(Math.random());
+            setShow(false);
           }
         });
     }
