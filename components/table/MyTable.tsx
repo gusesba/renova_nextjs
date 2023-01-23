@@ -64,19 +64,15 @@ const MyTable: React.FC<IMyTable> = ({
   }, [page, upload, fields]);
 
   useEffect(() => {
-    setTimeout(() => {
-      document
-        .querySelectorAll('[type="checkbox"]')
-        .forEach((checkbox: any) => {
-          let controll = 0;
-          selectedRows.forEach((id: any) => {
-            if (id == checkbox.name) controll = 1;
-          });
-          if (controll == 1) checkbox.checked = true;
-          else checkbox.checked = false;
-        });
-    }, 500);
-  }, [page]);
+    document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
+      let controll = 0;
+      selectedRows.forEach((id: any) => {
+        if (id == checkbox.name) controll = 1;
+      });
+      if (controll == 1) checkbox.checked = true;
+      else checkbox.checked = false;
+    });
+  });
 
   return (
     <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
