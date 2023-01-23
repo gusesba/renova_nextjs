@@ -24,13 +24,14 @@ const Sells: NextPageWithLayout<ISells> = () => {
           'Preço Venda',
           'Tipo',
           'Comprador',
+          'Saída',
+          'Entrada',
           'Produto',
           'Marca',
           'Tamanho',
           'Cor',
           'Fornecedor',
           'Descrição',
-          'Entrada',
         ]}
         fields={{
           id: true,
@@ -38,6 +39,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
           sellPrice: true,
           sell: {
             select: {
+              createdAt: true,
               buyer: {
                 select: {
                   name: true,
@@ -46,6 +48,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
               type: true,
             },
           },
+          entry: true,
           product: true,
           brand: true,
           size: true,
@@ -56,7 +59,6 @@ const Sells: NextPageWithLayout<ISells> = () => {
             },
           },
           description: true,
-          entry: true,
         }}
         url="/sell"
       />

@@ -27,6 +27,7 @@ export interface ISearchSellForm {
                     }
                   | undefined;
                 type: boolean;
+                createdAt: boolean;
               }
             | undefined;
         }
@@ -50,6 +51,9 @@ export interface ISearchSellForm {
           | {
               type: { contains: string } | undefined;
               buyer: { name: { contains: string } } | undefined;
+              createdAt:
+                | { lte: string | undefined; gte: string | undefined }
+                | undefined;
             }
           | undefined;
       }
@@ -137,6 +141,24 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
           : ''
         : ''
       : '',
+    outMin: filter
+      ? filter.sell
+        ? filter.sell.createdAt
+          ? filter.sell.createdAt.gte
+            ? filter.sell.createdAt.gte
+            : ''
+          : ''
+        : ''
+      : '',
+    outMax: filter
+      ? filter.sell
+        ? filter.sell.createdAt
+          ? filter.sell.createdAt.lte
+            ? filter.sell.createdAt.lte
+            : ''
+          : ''
+        : ''
+      : '',
     id: filter ? (filter.id ? filter.id.toString() : '') : '',
     descriptionCheck: fields.description,
     productCheck: fields.product,
@@ -148,6 +170,7 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     priceCheck: fields.price,
     sellPriceCheck: fields.sellPrice,
     entryCheck: fields.entry,
+    outCheck: fields.sell?.select?.createdAt,
     providerNameCheck: fields.provider.select?.name,
   });
 
@@ -181,6 +204,9 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
             | {
                 type: { contains: string } | undefined;
                 buyer: { name: { contains: string } | undefined } | undefined;
+                createdAt:
+                  | { lte: Date | undefined; gte: Date | undefined }
+                  | undefined;
               }
             | undefined;
         }
@@ -195,7 +221,11 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
       price: undefined,
       sellPrice: undefined,
       entry: undefined,
-      sell: { type: undefined, buyer: { name: undefined } },
+      sell: {
+        type: undefined,
+        buyer: { name: undefined },
+        createdAt: undefined,
+      },
     };
 
     let headers = ['Id'];
@@ -204,13 +234,33 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     if (values.sellPriceCheck) headers = headers.concat(['Preço Venda']);
     if (values.typeCheck) headers = headers.concat(['Tipo']);
     if (values.buyerCheck) headers = headers.concat(['Comprador']);
+    if (values.outCheck) headers = headers.concat(['Saída']);
+    if (values.entryCheck) headers = headers.concat(['Entrada']);
     if (values.productCheck) headers = headers.concat(['Produto']);
     if (values.brandCheck) headers = headers.concat(['Marca']);
     if (values.sizeCheck) headers = headers.concat(['Tamanho']);
     if (values.colorCheck) headers = headers.concat(['Cor']);
     if (values.providerNameCheck) headers = headers.concat(['Fornecedor']);
     if (values.descriptionCheck) headers = headers.concat(['Descrição']);
-    if (values.entryCheck) headers = headers.concat(['Entrada']);
+
+    let createdAt;
+
+    if (values.outMin) {
+      if (values.outMax)
+        createdAt = {
+          lte: new Date(values.outMax),
+          gte: new Date(values.outMin),
+        };
+      else
+        createdAt = {
+          lte: undefined,
+          gte: new Date(values.outMin),
+        };
+    } else if (values.outMax)
+      createdAt = {
+        lte: new Date(values.outMax),
+        gte: undefined,
+      };
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
     filter.product = { contains: values.product };
@@ -221,6 +271,7 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     filter.sell = {
       type: { contains: values.type },
       buyer: { name: { contains: values.buyer } },
+      createdAt: createdAt,
     };
     filter.description = { contains: values.description };
     if (values.priceMin) {
@@ -281,24 +332,26 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     setFilter(filter);
     setHeaders(headers);
 
+    let sell: { select: any } = { select: false };
+
+    if (values.outCheck) sell.select = { createdAt: true };
+
+    if (values.buyerCheck)
+      sell.select = { ...sell.select, buyer: { select: { name: true } } };
+    if (values.typeCheck) sell.select = { ...sell.select, type: true };
+
     setFields({
       id: true,
       price: values.priceCheck,
       sellPrice: values.sellPriceCheck,
-      sell: values.typeCheck
-        ? values.buyerCheck
-          ? { select: { buyer: { select: { name: true } }, type: true } }
-          : { select: { type: true } }
-        : values.buyerCheck
-        ? { select: { buyer: { select: { name: true } } } }
-        : false,
+      sell: sell.select ? sell : false,
+      entry: values.entryCheck,
       product: values.productCheck,
       brand: values.brandCheck,
       size: values.sizeCheck,
       color: values.colorCheck,
       provider: values.providerNameCheck ? { select: { name: true } } : false,
       description: values.descriptionCheck,
-      entry: values.entryCheck,
     });
   };
 
@@ -579,7 +632,7 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
                 setValues({ ...values, entryCheck: !values.entryCheck })
               }
             />
-            <Form.Label>Data Min</Form.Label>
+            <Form.Label>Entrada Min</Form.Label>
           </div>
           <Form.Control
             type="date"
@@ -596,6 +649,37 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
             placeholder="Data Máxima"
             value={values.dateMax}
             name={'dateMax'}
+            onChange={onChange}
+          />
+        </Form.Group>
+      </div>
+      <div className="flex justify-around">
+        <Form.Group className="mb-3 w-[45%]" controlId="formOutMin">
+          <div className="flex">
+            <FormCheck
+              className="mr-1"
+              checked={values.outCheck}
+              onChange={() =>
+                setValues({ ...values, outCheck: !values.outCheck })
+              }
+            />
+            <Form.Label>Saída Min</Form.Label>
+          </div>
+          <Form.Control
+            type="date"
+            placeholder="Saída Mínima"
+            value={values.outMin}
+            name={'outMin'}
+            onChange={onChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3 w-[45%]" controlId="formDateMax">
+          <Form.Label>Max</Form.Label>
+          <Form.Control
+            type="date"
+            placeholder="Saída Máxima"
+            value={values.outMax}
+            name={'outMax'}
             onChange={onChange}
           />
         </Form.Group>
