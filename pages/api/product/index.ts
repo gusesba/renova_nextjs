@@ -62,7 +62,15 @@ export default async function handler(
               (product.entry as Date).getUTCMonth() + 1
             }/${(product.entry as Date).getUTCFullYear()}`;
           }
+          if (product.sell?.createdAt) {
+            product.sell.createdAt = `${(
+              product.sell.createdAt as Date
+            ).getUTCDate()}/${
+              (product.sell.createdAt as Date).getUTCMonth() + 1
+            }/${(product.sell.createdAt as Date).getUTCFullYear()}`;
+          }
         });
+
         res.status(201).json(products);
       })
       .catch(async (e) => {

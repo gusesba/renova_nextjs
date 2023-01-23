@@ -261,21 +261,69 @@ const Client: NextPageWithLayout<IClient> = () => {
             <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
           ) : null}
         </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSelected('borrowed');
+          }}
+        >
+          <span
+            className={
+              selected == 'borrowed'
+                ? 'text-blue-800 text-base text-[1.3em] font-semibold'
+                : 'text-gray-700 text-base text-[1.3em] font-semibold'
+            }
+          >
+            Emprestados
+          </span>
+          {selected == 'borrowed' ? (
+            <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
+          ) : null}
+        </div>
       </div>
 
       <div className="mb-[2rem] ml-auto mr-auto">
         <MyTable
-          headers={[
-            'ID',
-            'Preço',
-            'Produto',
-            'Marca',
-            'Tamanho',
-            'Cor',
-            'Fornecedor',
-            'Descrição',
-            'Entrada',
-          ]}
+          headers={
+            selected == 'stock'
+              ? [
+                  'ID',
+                  'Preço',
+                  'Entrada',
+                  'Produto',
+                  'Marca',
+                  'Tamanho',
+                  'Cor',
+                  'Fornecedor',
+                  'Descrição',
+                ]
+              : selected == 'sells' || selected == 'buys'
+              ? [
+                  'ID',
+                  'Preço',
+                  'Venda',
+                  'Saída',
+                  'Entrada',
+                  'Produto',
+                  'Marca',
+                  'Tamanho',
+                  'Cor',
+                  'Fornecedor',
+                  'Descrição',
+                ]
+              : [
+                  'ID',
+                  'Preço',
+                  'Saída',
+                  'Entrada',
+                  'Produto',
+                  'Marca',
+                  'Tamanho',
+                  'Cor',
+                  'Fornecedor',
+                  'Descrição',
+                ]
+          }
           filter={
             selected == 'stock'
               ? {
@@ -291,34 +339,85 @@ const Client: NextPageWithLayout<IClient> = () => {
                       gte: new Date(values.dateMin),
                       lte: new Date(values.dateMax),
                     },
+                    type: 'Venda',
                   },
                 }
-              : {
+              : selected == 'buys'
+              ? {
                   sell: {
                     buyerId: clientId,
+                    type: 'Venda',
                     createdAt: {
                       gte: new Date(values.dateMin),
                       lte: new Date(values.dateMax),
                     },
                   },
                 }
+              : {
+                  providerId: clientId,
+                  sellPrice: { not: null },
+                  sell: {
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                    type: 'Emprestimo',
+                  },
+                }
           }
           url={'/product'}
-          fields={{
-            id: true,
-            price: true,
-            product: true,
-            brand: true,
-            size: true,
-            color: true,
-            provider: {
-              select: {
-                name: true,
-              },
-            },
-            description: true,
-            entry: true,
-          }}
+          fields={
+            selected == 'stock'
+              ? {
+                  id: true,
+                  price: true,
+                  entry: true,
+                  product: true,
+                  brand: true,
+                  size: true,
+                  color: true,
+                  provider: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                  description: true,
+                }
+              : selected == 'sells' || selected == 'buys'
+              ? {
+                  id: true,
+                  price: true,
+                  sellPrice: true,
+                  sell: { select: { createdAt: true } },
+                  entry: true,
+                  product: true,
+                  brand: true,
+                  size: true,
+                  color: true,
+                  provider: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                  description: true,
+                }
+              : {
+                  id: true,
+                  price: true,
+                  sell: { select: { createdAt: true } },
+                  entry: true,
+                  product: true,
+                  brand: true,
+                  size: true,
+                  color: true,
+                  provider: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                  description: true,
+                }
+          }
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
           upload={1}

@@ -21,7 +21,7 @@ export async function createSell(
       where: { id: product.id },
       data: {
         sellId: sell.id,
-        sellPrice: product.sellPrice,
+        sellPrice: type == 'Venda' ? product.sellPrice : 0,
       },
     });
   });

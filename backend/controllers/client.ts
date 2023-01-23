@@ -90,6 +90,7 @@ export async function getClientPageHeaderData(
       providerId: id,
       sellId: { not: null },
       sell: {
+        type: 'Venda',
         createdAt: {
           gte: new Date(dateMin),
           lte: new Date(dateMax),
@@ -103,6 +104,7 @@ export async function getClientPageHeaderData(
     _sum: { sellPrice: true },
     where: {
       sell: {
+        type: 'Venda',
         buyer: {
           id: id,
         },
