@@ -280,6 +280,63 @@ const Client: NextPageWithLayout<IClient> = () => {
             <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
           ) : null}
         </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSelected('borrow');
+          }}
+        >
+          <span
+            className={
+              selected == 'borrow'
+                ? 'text-blue-800 text-base text-[1.3em] font-semibold'
+                : 'text-gray-700 text-base text-[1.3em] font-semibold'
+            }
+          >
+            Empréstimos
+          </span>
+          {selected == 'borrow' ? (
+            <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
+          ) : null}
+        </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSelected('devolution');
+          }}
+        >
+          <span
+            className={
+              selected == 'devolution'
+                ? 'text-blue-800 text-base text-[1.3em] font-semibold'
+                : 'text-gray-700 text-base text-[1.3em] font-semibold'
+            }
+          >
+            Devolvidos
+          </span>
+          {selected == 'devolution' ? (
+            <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
+          ) : null}
+        </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setSelected('donated');
+          }}
+        >
+          <span
+            className={
+              selected == 'donated'
+                ? 'text-blue-800 text-base text-[1.3em] font-semibold'
+                : 'text-gray-700 text-base text-[1.3em] font-semibold'
+            }
+          >
+            Doados
+          </span>
+          {selected == 'donated' ? (
+            <hr className="w-[3em] text-blue-800 h-[0.35em] bg-blue-800 rounded-md" />
+          ) : null}
+        </div>
       </div>
 
       <div className="mb-[2rem] ml-auto mr-auto">
@@ -353,7 +410,8 @@ const Client: NextPageWithLayout<IClient> = () => {
                     },
                   },
                 }
-              : {
+              : selected == 'borrowed'
+              ? {
                   providerId: clientId,
                   sellPrice: { not: null },
                   sell: {
@@ -362,6 +420,40 @@ const Client: NextPageWithLayout<IClient> = () => {
                       lte: new Date(values.dateMax),
                     },
                     type: 'Emprestimo',
+                  },
+                }
+              : selected == 'borrow'
+              ? {
+                  sell: {
+                    buyerId: clientId,
+                    type: 'Emprestimo',
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                  },
+                }
+              : selected == 'devolution'
+              ? {
+                  providerId: clientId,
+                  sellPrice: { not: null },
+                  sell: {
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                    type: 'Devolucao',
+                  },
+                }
+              : {
+                  providerId: clientId,
+                  sellPrice: { not: null },
+                  sell: {
+                    createdAt: {
+                      gte: new Date(values.dateMin),
+                      lte: new Date(values.dateMax),
+                    },
+                    type: 'Doacao',
                   },
                 }
           }
