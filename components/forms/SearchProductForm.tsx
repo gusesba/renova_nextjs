@@ -24,6 +24,7 @@ export interface ISearchProductForm {
         color: { contains: string } | undefined;
         price: { lte: number | undefined; gte: number | undefined } | undefined;
         entry: { lte: string | undefined; gte: string | undefined } | undefined;
+        sellPrice: number | null | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -114,6 +115,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
           price:
             | { lte: number | undefined; gte: number | undefined }
             | undefined;
+          sellPrice: number | null | undefined;
           entry: { lte: Date | undefined; gte: Date | undefined } | undefined;
         }
       | undefined = {
@@ -126,6 +128,7 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       color: undefined,
       price: undefined,
       entry: undefined,
+      sellPrice: null,
     };
 
     let headers = ['Id'];
