@@ -65,21 +65,46 @@ const MyTable: React.FC<IMyTable> = ({
 
   useEffect(() => {
     document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
-      let controll = 0;
-      selectedRows.forEach((id: any) => {
-        if (id == checkbox.name) controll = 1;
-      });
-      if (controll == 1) checkbox.checked = true;
-      else checkbox.checked = false;
+      if (checkbox.name != 'controllCheckbox') {
+        let controll = 0;
+        selectedRows.forEach((id: any) => {
+          if (id == checkbox.name) controll = 1;
+        });
+        if (controll == 1) checkbox.checked = true;
+        else checkbox.checked = false;
+      }
     });
   });
+
+  useEffect(() => {
+    document.querySelectorAll('[name="controllCheckbox"]').forEach((e: any) => {
+      e.checked = false;
+    });
+  }, [page]);
 
   return (
     <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
       <Table bordered hover>
         <thead>
           <tr>
-            <th className="w-[2.5rem]"></th>
+            <th className="w-[2.5rem]">
+              <FormCheck
+                name="controllCheckbox"
+                onChange={(e) => {
+                  console.log(e.target.checked);
+                  if (!e.target.checked) setSelectedRows([]);
+                  else {
+                    let arr = [] as Array<number>;
+                    document
+                      .querySelectorAll('[type="checkbox"]')
+                      .forEach((checkbox: any) => {
+                        arr.push(parseInt(checkbox.name));
+                      });
+                    setSelectedRows(arr);
+                  }
+                }}
+              />
+            </th>
             {headers.map((column, key) => {
               return (
                 <th className="text-center group" key={key}>
