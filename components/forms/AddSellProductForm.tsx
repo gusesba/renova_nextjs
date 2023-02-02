@@ -43,7 +43,24 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
           .then((response) => response.json())
           .then((data) => {
             if (!data.error) {
-              data.sellPrice = data.price;
+              let date = data.entry.split('/');
+              date = new Date(date[2], date[1] - 1, date[0]);
+              let today = new Date(Date.now());
+
+              let monthDiff = today.getUTCMonth() - date.getUTCMonth();
+
+              while (monthDiff < 0) {
+                monthDiff += 12;
+              }
+
+              if (monthDiff >= 6) {
+                data.sellPrice = data.price * 0.5;
+              } else if (monthDiff >= 5) {
+                data.sellPrice = data.price * 0.6;
+              } else if (monthDiff >= 4) {
+                data.sellPrice = data.price * 0.7;
+              } else data.sellPrice = data.price;
+
               setRows([data].concat([...rows]));
               values.id = '';
 

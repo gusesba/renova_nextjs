@@ -22,9 +22,11 @@ export default async function handler(
         if (!(product as { error: string }).error) {
           (product as Product).entry = `${(
             (product as Product).entry as Date
-          ).getDay()}/${((product as Product).entry as Date).getMonth()}/${(
+          ).getUTCDate()}/${(
             (product as Product).entry as Date
-          ).getFullYear()}`;
+          ).getUTCMonth()}/${(
+            (product as Product).entry as Date
+          ).getUTCFullYear()}`;
         }
         res.status(201).json(product);
       })

@@ -77,34 +77,41 @@ const MyTable: React.FC<IMyTable> = ({
             <th colSpan={4} className={'text-center'}>
               Total - R$
               {rows.length
-                ? rows.reduce((accumulator, curValue: any) => {
-                    return (
-                      parseInt(accumulator as string) + parseInt(curValue.price)
-                    );
-                  }, 0)
+                ? parseFloat(
+                    rows.reduce((accumulator, curValue: any) => {
+                      return (
+                        parseFloat(accumulator as string) +
+                        parseFloat(curValue.price)
+                      );
+                    }, 0) as string
+                  ).toFixed(2)
                 : 0}
             </th>
             <th colSpan={4} className={'text-center'}>
               Desconto - R$
               {rows.length
-                ? rows.reduce((accumulator, curValue: any) => {
-                    return (
-                      parseInt(accumulator as string) +
-                      parseInt(curValue.price) -
-                      parseInt(curValue.sellPrice)
-                    );
-                  }, 0)
+                ? (
+                    rows.reduce((accumulator, curValue: any) => {
+                      return (
+                        parseFloat(accumulator as string) +
+                        parseFloat(curValue.price) -
+                        parseFloat(curValue.sellPrice)
+                      );
+                    }, 0) as number
+                  ).toFixed(2)
                 : 0}
             </th>
             <th colSpan={4} className={'text-center'}>
               Final - R$
               {rows.length
-                ? rows.reduce((accumulator, curValue: any) => {
-                    return (
-                      parseInt(accumulator as string) +
-                      parseInt(curValue.sellPrice)
-                    );
-                  }, 0)
+                ? (
+                    rows.reduce((accumulator, curValue: any) => {
+                      return (
+                        parseFloat(accumulator as string) +
+                        parseFloat(curValue.sellPrice)
+                      );
+                    }, 0) as number
+                  ).toFixed(2)
                 : 0}
             </th>
           </tr>
