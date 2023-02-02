@@ -384,8 +384,8 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0065' + //row bottom to top - max 200
             '0110' + // collumn left to right - max 400
-            products[products.length - 2].product +
-            products[products.length - 2].color +
+            products[products.length - 1].product +
+            products[products.length - 1].color +
             '\n',
           // Desc
           '3' + // rotation
@@ -395,7 +395,7 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0090' + //row bottom to top - max 200
             '0110' + // collumn left to right - max 400
-            products[products.length - 2].brand + // data
+            products[products.length - 1].brand + // data
             '\n',
           // Data
           '3' + // rotation
@@ -403,9 +403,9 @@ const printEtiqueta2 = (products) => {
             '1' + // width mult
             '1' + // height mult
             '000' + // pattern
-            '0120' + //row bottom to top - max 200
-            '0010' + // collumn left to right - max 400
-            products[products.length - 2].entry + // data
+            '0110' + //row bottom to top - max 200
+            '0110' + // collumn left to right - max 0
+            products[products.length - 1].entry + // data
             '\n',
           //Tam
           '3' + // rotation
@@ -413,23 +413,23 @@ const printEtiqueta2 = (products) => {
             '1' + // width mult
             '1' + // height mult
             '000' + // pattern
-            '0115' + //row bottom to top - max 200
+            '0140' + //row bottom to top - max 200
             '0050' + // collumn left to right - max 400
-            products[products.length - 2].size + // data
+            products[products.length - 1].size + // data
             '\n',
           //Preco
-          '1' + // rotation
+          '3' + // rotation
             '3' + // font size
             '1' + // width mult
             '1' + // height mult
             '000' + // pattern
-            '0115' + //row bottom to top - max 200
+            '0140' + //row bottom to top - max 200
             '0110' + // collumn left to right - max 400
             'R$' +
-            products[products.length - 2].price + // data
+            products[products.length - 1].price + // data
             '\n',
           //Barcode
-          '3D5200002000110' + padId(products[products.length - 2].id) + '\n',
+          '3D5200002000110' + padId(products[products.length - 1].id) + '\n',
 
           //Etq 2
           //Renova
@@ -450,10 +450,10 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0065' + //row bottom to top - max 200
             '0245' + // collumn left to right - max 400
-            products[products.length - 1].product +
-            products[products.length - 1].color +
+            products[products.length - 2].product +
+            products[products.length - 2].color +
             '\n',
-          // Desc
+          //Marca
           '3' + // rotation
             '2' + // font size
             '1' + // width mult
@@ -461,7 +461,7 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0090' + //row bottom to top - max 200
             '0245' + // collumn left to right - max 400
-            products[products.length - 1].brand + // data
+            products[products.length - 2].brand + // data
             '\n',
           // Data
           '3' + // rotation
@@ -471,7 +471,7 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0115' + //row bottom to top - max 200
             '0245' + // collumn left to right - max 400
-            products[products.length - 1].entry + // data
+            products[products.length - 2].entry + // data
             '\n',
           //Tam
           '3' + // rotation
@@ -481,7 +481,7 @@ const printEtiqueta2 = (products) => {
             '000' + // pattern
             '0140' + //row bottom to top - max 200
             '0185' + // collumn left to right - max 400
-            products[products.length - 1].size + // data
+            products[products.length - 2].size + // data
             '\n',
           //Preco
           '3' + // rotation
@@ -492,10 +492,10 @@ const printEtiqueta2 = (products) => {
             '0140' + //row bottom to top - max 200
             '0245' + // collumn left to right - max 400
             'R$' +
-            products[products.length - 1].price + // data
+            products[products.length - 2].price + // data
             '\n',
           //Barcode
-          '3D5200002000110' + padId(products[products.length - 1].id) + '\n',
+          '3D5200002000245' + padId(products[products.length - 2].id) + '\n',
 
           'E\n',
         ];

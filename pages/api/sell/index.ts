@@ -36,17 +36,21 @@ export default async function handler(
       .then(async (products: Product[]) => {
         await prisma.$disconnect();
         products.forEach((product) => {
+          if (product.id == 4735) {
+            console.log(product.sell?.createdAt);
+          }
+
           if (product.entry) {
-            product.entry = `${(product.entry as Date).getDate()}/${
-              (product.entry as Date).getMonth() + 1
-            }/${(product.entry as Date).getFullYear()}`;
+            product.entry = `${(product.entry as Date).getUTCDate()}/${
+              (product.entry as Date).getUTCMonth() + 1
+            }/${(product.entry as Date).getUTCFullYear()}`;
           }
           if (product.sell?.createdAt) {
             product.sell.createdAt = `${(
               product.sell.createdAt as Date
-            ).getDate()}/${(product.sell.createdAt as Date).getMonth() + 1}/${(
-              product.sell.createdAt as Date
-            ).getFullYear()}`;
+            ).getUTCDate()}/${
+              (product.sell.createdAt as Date).getUTCMonth() + 1
+            }/${(product.sell.createdAt as Date).getUTCFullYear()}`;
           }
         });
         res.status(201).json(products);
