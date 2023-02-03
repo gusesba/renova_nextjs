@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
 import { baseURL } from '../../config/config';
+import AlertContext from '../../contexts/AlertContext';
 import { optionsColor, optionsProduct, optionsSize } from './options';
 
 export interface IEditProductForm {
@@ -22,6 +23,7 @@ const EditProductForm: React.FC<IEditProductForm> = ({ setUpload, id }) => {
   });
 
   const [optionsProvider, setOptionsProvider] = useState([]);
+  const { setAlerts } = useContext(AlertContext) as any;
 
   useEffect(() => {
     const body = {
@@ -89,6 +91,21 @@ const EditProductForm: React.FC<IEditProductForm> = ({ setUpload, id }) => {
       .then((data) => {
         if (data.error) {
           console.log(data.error);
+
+          setAlerts((oldAlerts: any) => {
+            return [
+              ...oldAlerts,
+              {
+                variant: 'danger',
+                message: 'Erro ao editar produto!',
+              },
+            ];
+          });
+          setTimeout(() => {
+            setAlerts((oldAlerts: any) => {
+              return oldAlerts.slice(1);
+            });
+          }, 3000);
         } else {
           setUpload(Math.random());
           setValues({
@@ -98,6 +115,21 @@ const EditProductForm: React.FC<IEditProductForm> = ({ setUpload, id }) => {
             description: '',
             entry: '',
           });
+
+          setAlerts((oldAlerts: any) => {
+            return [
+              ...oldAlerts,
+              {
+                variant: 'success',
+                message: 'Produto editado com sucesso!',
+              },
+            ];
+          });
+          setTimeout(() => {
+            setAlerts((oldAlerts: any) => {
+              return oldAlerts.slice(1);
+            });
+          }, 3000);
         }
       });
   };
