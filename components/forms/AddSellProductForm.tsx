@@ -56,9 +56,9 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
               if (monthDiff >= 6) {
                 data.sellPrice = data.price * 0.5;
               } else if (monthDiff >= 5) {
-                data.sellPrice = data.price * 0.6;
-              } else if (monthDiff >= 4) {
                 data.sellPrice = data.price * 0.7;
+              } else if (monthDiff >= 4) {
+                data.sellPrice = data.price * 0.8;
               } else data.sellPrice = data.price;
 
               setRows([data].concat([...rows]));

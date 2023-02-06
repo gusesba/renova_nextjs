@@ -83,11 +83,13 @@ const Client: NextPageWithLayout<IClient> = () => {
   };
 
   useEffect(() => {
+    let maxDate = new Date(values.dateMax);
+    maxDate.setDate(maxDate.getDate() + 2);
     fetch(baseURL + '/client', {
       body: JSON.stringify({
         action: 'GETCLIENTHEADER',
         id: clientId,
-        dateMax: values.dateMax,
+        dateMax: maxDate,
         dateMin: values.dateMin,
       }),
       headers: {
