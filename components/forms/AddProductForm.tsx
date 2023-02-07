@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { FormCheck } from 'react-bootstrap';
+import { FormCheck, FormGroup } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
 import { baseURL } from '../../config/config';
@@ -22,6 +22,7 @@ const AddProductForm: React.FC<IAddProductForm> = ({
     brand: '',
     size: '',
     color: '',
+    quantity: 1,
     providerId: 0,
     description: '',
     keepCheck: false,
@@ -80,48 +81,66 @@ const AddProductForm: React.FC<IAddProductForm> = ({
       values.color &&
       values.providerId
     ) {
-      const body = {
-        action: 'POST',
-        ...values,
-        entry: new Date(Date.now()),
-      };
-      fetch(baseURL + '/product', {
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            console.log(data.error);
-          } else {
-            setUpload(Math.random());
-            setValues({
-              ...values,
-              price: '',
-              brand: '',
-              description: '',
-            });
-            if (after) after(data);
-            if (values.keepCheck === false) setShow(false);
-          }
-        });
+      for (let i = 0; i < values.quantity; i++) {
+        console.log('i: ' + i);
+        console.log('quantity: ' + values.quantity);
+        const body = {
+          action: 'POST',
+          ...values,
+          entry: new Date(Date.now()),
+        };
+        fetch(baseURL + '/product', {
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              console.log(data.error);
+            } else {
+              console.log('teste2');
+              if (i === values.quantity - 1) {
+                setUpload(Math.random());
+                setValues({
+                  ...values,
+                  price: '',
+                  brand: '',
+                  description: '',
+                });
+                if (after) after(data);
+                if (values.keepCheck === false) setShow(false);
+              }
+            }
+          });
+      }
     }
   };
 
   return (
     <Form onSubmit={handleSubmit} id="addForm">
-      <div className="flex">
-        <FormCheck
-          className="mr-2 ml-[2.5%]"
-          checked={values.keepCheck}
-          onChange={() =>
-            setValues({ ...values, keepCheck: !values.keepCheck })
-          }
-        />
-        <Form.Label>Manter Campos</Form.Label>
+      <div className="flex justify-around">
+        <div className="flex w-[45%] mt-[20px]">
+          <FormCheck
+            className="mr-2 ml-[2.5%]"
+            checked={values.keepCheck}
+            onChange={() =>
+              setValues({ ...values, keepCheck: !values.keepCheck })
+            }
+          />
+          <Form.Label>Manter Campos</Form.Label>
+        </div>
+        <FormGroup className="mb-3 w-[45%]" controlId="formQuantity">
+          <Form.Label>Quantidade</Form.Label>
+          <Form.Control
+            onChange={onChange}
+            type="number"
+            placeholder="Quantidade"
+            name="quantity"
+          />
+        </FormGroup>
       </div>
       <hr />
 
