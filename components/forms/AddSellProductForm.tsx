@@ -53,11 +53,11 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
                 monthDiff += 12;
               }
 
-              if (monthDiff >= 6) {
+              if (monthDiff >= 7) {
                 data.sellPrice = data.price * 0.5;
-              } else if (monthDiff >= 5) {
+              } else if (monthDiff >= 6) {
                 data.sellPrice = data.price * 0.7;
-              } else if (monthDiff >= 4) {
+              } else if (monthDiff >= 5) {
                 data.sellPrice = data.price * 0.8;
               } else data.sellPrice = data.price;
 
