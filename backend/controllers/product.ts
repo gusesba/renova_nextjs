@@ -68,7 +68,7 @@ export async function getProducts(
 // PARAMS:
 //   ID : NUMBER
 export async function getProduct(id: number) {
-  const product = await prisma.product.findUnique({
+  const product: any = await prisma.product.findUnique({
     select: {
       id: true,
       price: true,
@@ -79,11 +79,16 @@ export async function getProduct(id: number) {
       description: true,
       entry: true,
       sellPrice: true,
+      sell: { select: { type: true } },
     },
     where: { id },
   });
 
-  if (!product?.sellPrice) return product;
+  if (product?.sell?.type == 'Emprestimo' || !product?.sellPrice) {
+    delete product.sell;
+    return product;
+  }
+
   return { error: 'Produto não está em estoque' };
 }
 

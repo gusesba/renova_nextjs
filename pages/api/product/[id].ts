@@ -13,7 +13,7 @@ export default async function handler(
     const { id } = req.query;
 
     return getProduct(parseInt(id as string))
-      .then(async (product: Product | null | { error: string }) => {
+      .then(async (product: any) => {
         await prisma.$disconnect();
 
         if (product == null)

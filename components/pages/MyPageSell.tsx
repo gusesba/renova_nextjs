@@ -12,20 +12,22 @@ import AlertContext from '../../contexts/AlertContext';
 import { printRecibo } from '../../printers/printers';
 import AddProductForm from '../forms/AddProductForm';
 import AddSellProductForm from '../forms/AddSellProductForm';
+import ClientSellForm from '../forms/ClientSellForm';
 import EditSellPriceForm from '../forms/EditSellPriceForm';
-import FinishSellForm from '../forms/FinishSellForm';
 import MyModal from '../modal/MyModal';
 import MyTable from '../table/MySellTable';
 
 export interface IMyPage {}
 
 const MyPage: React.FC<IMyPage> = () => {
-  const [addModalShow, setAddModalShow] = useState(false);
+  const [addModalShow, setAddModalShow] = useState(true);
   const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
   const [rows, _setRows] = useState([] as Array<Object>);
   const selectedRowsRef = useRef(selectedRows);
   const rowsRef = useRef(rows);
-  const [modal, setModal] = useState('add');
+  const [modal, setModal] = useState('client');
+  const [client, setClient] = useState();
+  const [type, setType] = useState('Venda');
 
   const setSelectedRows = (data: any) => {
     selectedRowsRef.current = data;
@@ -43,6 +45,36 @@ const MyPage: React.FC<IMyPage> = () => {
     alerts: { variant: string; message: string }[];
     setAlerts: Dispatch<SetStateAction<{ variant: string; message: string }[]>>;
   };
+
+  useEffect(() => {
+    const body = {
+      action: 'GET',
+      number: 10,
+      fields: {
+        id: true,
+        price: true,
+        product: true,
+        brand: true,
+        size: true,
+        color: true,
+        description: true,
+        entry: true,
+        sellPrice: true,
+      },
+      filter: { sell: { type: 'Emprestimo', buyer: { id: client } } },
+    };
+    fetch(baseURL + '/product', {
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setRows(data);
+      });
+  }, [client]);
 
   useEffect(() => {
     const shortcuts = (e: KeyboardEvent) => {
@@ -173,7 +205,11 @@ const MyPage: React.FC<IMyPage> = () => {
             setShow={setAddModalShow}
           />
         ) : (
-          <FinishSellForm finishSell={finishSell} />
+          <ClientSellForm
+            setClient={setClient}
+            setType={setType}
+            setShow={setAddModalShow}
+          />
         )}
       </MyModal>
       <MyTable
@@ -196,8 +232,7 @@ const MyPage: React.FC<IMyPage> = () => {
         <div className="absolute bottom-[0] right-[-5rem] hidden flex-col pb-3 group-hover:flex w-[7.5rem] items-center">
           <button
             onClick={() => {
-              setModal('finish');
-              setAddModalShow(true);
+              client && finishSell(type, client);
             }}
             className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
           >
@@ -210,6 +245,28 @@ const MyPage: React.FC<IMyPage> = () => {
               viewBox="0 0 16 16"
             >
               <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+            </svg>
+          </button>
+          <button
+            className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+            onClick={() => {
+              setModal('client');
+              setAddModalShow(true);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-person-circle ml-[11px]"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              <path
+                fillRule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+              />
             </svg>
           </button>
           <button
