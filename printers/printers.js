@@ -202,7 +202,7 @@ const printEtiqueta2 = (products) => {
             products[i * 3 + 1].price + // data
             '\n',
           //Barcode
-          '3D520002000245' + padId(products[i * 3 + 1].id) + '\n',
+          '3D5200002000245' + padId(products[i * 3 + 1].id) + '\n',
 
           //Etq 3
           //Renova
