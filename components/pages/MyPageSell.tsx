@@ -72,6 +72,25 @@ const MyPage: React.FC<IMyPage> = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        data.forEach((data: any) => {
+          let date = data.entry.split('/');
+          date = new Date(date[2], date[1] - 1, date[0]);
+          let today = new Date(Date.now());
+
+          let monthDiff = today.getUTCMonth() - date.getUTCMonth();
+
+          while (monthDiff < 0) {
+            monthDiff += 12;
+          }
+
+          if (monthDiff >= 7) {
+            data.sellPrice = data.price * 0.5;
+          } else if (monthDiff >= 6) {
+            data.sellPrice = data.price * 0.7;
+          } else if (monthDiff >= 5) {
+            data.sellPrice = data.price * 0.8;
+          } else data.sellPrice = data.price;
+        });
         setRows(data);
       });
   }, [client]);
