@@ -27,3 +27,41 @@ export async function createSell(
   });
   return sell;
 }
+
+export async function getRecipt(take?: number, skip?: number) {
+  const sells = await prisma.sell.findMany({
+    take,
+    skip,
+    select: {
+      id: true,
+      type: true,
+      buyer: { select: { name: true } },
+      products: {
+        select: {
+          id: true,
+          sellPrice: true,
+        },
+      },
+    },
+    orderBy: [{ id: 'desc' }],
+  });
+
+  const sellList = sells.map((sell) => {
+    const totalProducts = sell.products.length;
+    const totalSellPrice = sell.products.reduce(
+      (acummulator: any, current: any) => {
+        return parseFloat(acummulator) + parseFloat(current.sellPrice);
+      },
+      0.0
+    );
+    return {
+      id: sell.id,
+      type: sell.type,
+      buyer: sell.buyer.name,
+      totalProducts,
+      totalSellPrice,
+    };
+  });
+
+  return sellList;
+}

@@ -270,7 +270,7 @@ const MyPage: React.FC<IMyPage> = () => {
             </svg>
           </button>
           <button
-            onClick={() => printRecibo('Venda', rows)}
+            onClick={() => printRecibo(type, rows, client)}
             className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
           >
             <svg

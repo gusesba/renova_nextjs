@@ -84,7 +84,10 @@ export async function getProduct(id: number) {
     where: { id },
   });
 
-  if (product?.sell?.type == 'Emprestimo' || !product?.sellPrice) {
+  if (
+    product &&
+    ((product.sell && product.sell.type == 'Emprestimo') || !product.sellPrice)
+  ) {
     delete product.sell;
     return product;
   }

@@ -507,15 +507,47 @@ const printEtiqueta2 = (products) => {
     });
 };
 
-export const printRecibo = (sell, products) => {
+export const printRecibo3 = (sellId) => {
+  const body = {
+    action: 'GET',
+    number: 10,
+    fields: {
+      product: true,
+      color: true,
+      brand: true,
+      sellPrice: true,
+      sell: { select: { type: true, buyer: { select: { name: true } } } },
+    },
+    filter: { sell: { id: sellId } },
+  };
+
+  fetch(baseURL + '/product', {
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        if (data.length > 0)
+          printRecibo(data[0].sell.type, data, data[0].sell.buyer.name);
+      }
+    });
+};
+
+export const printRecibo = (sell, products, buyer) => {
   if (qz.websocket.isActive()) {
     qz.websocket.disconnect().then(() => printRecibo2(sell, products));
   } else {
-    printRecibo2(sell, products);
+    printRecibo2(sell, products, buyer);
   }
 };
 
-const printRecibo2 = (sell, products) => {
+const printRecibo2 = (sell, products, buyer) => {
   const date = new Date(Date.now());
   qz.websocket
     .connect()
@@ -556,6 +588,8 @@ const printRecibo2 = (sell, products) => {
 
         '\x0A', // line break
         '@renova_sustentavel_curitiba' + '\x0A', // text and line break
+        '\x0A', // line break
+        buyer,
         '\x0A', // line break
         '\x0A', // line break
         ('00' + date.getDate()).slice(-2) +
