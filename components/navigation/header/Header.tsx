@@ -54,6 +54,14 @@ const Header: React.FC<IHeader> = ({ pageName }) => {
                 Fechamento Cliente
               </Link>
             </NavDropdown.Item>
+            <NavDropdown.Item>
+              <Link
+                className="no-underline text-black dropdown-item"
+                href="/sells/receipt"
+              >
+                Recibos
+              </Link>
+            </NavDropdown.Item>
           </NavDropdown>
 
           <h2 className="absolute left-[45vw]">{pageName}</h2>
