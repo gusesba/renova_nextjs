@@ -28,6 +28,29 @@ export async function createSell(
   return sell;
 }
 
+export async function deleteSells(ids: Array<number>) {
+  const sells = await prisma.sell.findMany({
+    where: {
+      id: { in: ids },
+    },
+    include: {
+      products: true, // inclui os produtos vinculados à venda
+    },
+  });
+  sells.forEach((sell) => {
+    if (sell.products.length > 0) {
+      const index = ids.indexOf(sell.id);
+
+      ids.splice(index, 1);
+    }
+  });
+
+  const count = await prisma.sell.deleteMany({
+    where: { id: { in: ids } },
+  });
+  return count;
+}
+
 export async function getRecipt(take?: number, skip?: number) {
   const sells = await prisma.sell.findMany({
     take,
