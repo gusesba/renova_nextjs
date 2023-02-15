@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Form from 'react-bootstrap/Form';
 import { baseURL } from '../../config/config';
 import AlertContext from '../../contexts/AlertContext';
@@ -112,7 +118,16 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
         }, 3000);
       }
     }
+    document.querySelectorAll('input').forEach((input) => {
+      input.focus();
+    });
   };
+
+  useEffect(() => {
+    document.querySelectorAll('input').forEach((input) => {
+      input.focus();
+    });
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit} id="addForm">
