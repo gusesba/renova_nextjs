@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Form, FormCheck, Table } from 'react-bootstrap';
 import { baseURL } from '../../config/config';
-import { objToArray } from '../../utils/utils';
+import { fieldToObj, objToArray } from '../../utils/utils';
 
 export interface IMyTable {
   url: string;
@@ -22,11 +22,49 @@ const MyTable: React.FC<IMyTable> = ({
   selectedRows,
   filter,
   upload,
-  order,
+  order = [],
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0 as number | string);
   const [fieldsState, setFieldsState] = useState([] as string[]);
+  const [orderBy, setOrderBy] = useState(order) as Array<any>;
+
+  const _setOrderBy = (field: any) => {
+    let index = -1;
+    let fields = field.split('.');
+    if (orderBy) {
+      orderBy.forEach((item: any, key: number) => {
+        let testItem = item;
+        if (testItem) {
+          for (let i = 0; i < fields.length - 1; i++) {
+            if (testItem[fields[i]]) testItem = testItem[fields[i]];
+          }
+          if (testItem[fields[fields.length - 1]]) index = key;
+        }
+      });
+    }
+
+    if (index == -1) {
+      let obj = fieldToObj(field, 'asc');
+
+      setOrderBy(orderBy ? [...orderBy, obj] : [obj]);
+    } else {
+      let testItem = orderBy[index];
+      for (let i = 0; i < fields.length - 1; i++) {
+        if (testItem[fields[i]]) testItem = testItem[fields[i]];
+      }
+      if (testItem[fields[fields.length - 1]] == 'asc') {
+        let obj = fieldToObj(field, 'desc');
+        let newOrder = orderBy;
+        newOrder.splice(index, 1, obj);
+        setOrderBy([...newOrder]);
+      } else {
+        let newOrder = orderBy;
+        newOrder.splice(index, 1);
+        setOrderBy([...newOrder]);
+      }
+    }
+  };
 
   const onChange = (e: any) => {
     if (!isNaN(e.target.value) || e.target.value == '') {
@@ -35,13 +73,15 @@ const MyTable: React.FC<IMyTable> = ({
   };
 
   const fetchData = () => {
+    console.log(orderBy);
+
     const body = {
       action: 'GET',
       number: 10,
       fields: fields,
       skip: (page as number) * 10,
       filter,
-      order,
+      order: orderBy,
     };
 
     fetch(baseURL + url, {
@@ -64,7 +104,7 @@ const MyTable: React.FC<IMyTable> = ({
   useEffect(() => {
     setFieldsState(objToArray(fields));
     fetchData();
-  }, [page, upload, fields]);
+  }, [page, upload, fields, orderBy]);
 
   useEffect(() => {
     document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
@@ -94,7 +134,6 @@ const MyTable: React.FC<IMyTable> = ({
               <FormCheck
                 name="controllCheckbox"
                 onChange={(e) => {
-                  console.log(e.target.checked);
                   if (!e.target.checked) setSelectedRows([]);
                   else {
                     let arr = [] as Array<number>;
@@ -110,7 +149,13 @@ const MyTable: React.FC<IMyTable> = ({
             </th>
             {headers.map((column, key) => {
               return (
-                <th className="text-center group" key={key}>
+                <th
+                  onClick={() => {
+                    _setOrderBy(fieldsState[key]);
+                  }}
+                  className="text-center group"
+                  key={key}
+                >
                   {column}
                 </th>
               );
