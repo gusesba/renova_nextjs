@@ -50,6 +50,7 @@ export async function getProducts(
   skip?: number,
   filter = {},
   order = [{ id: 'desc' }],
+
   fields?: {}
 ) {
   const products = await prisma.product.findMany({

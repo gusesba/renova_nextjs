@@ -11,6 +11,7 @@ export interface IMyTable {
   setSelectedRows: Dispatch<SetStateAction<Array<number>>>;
   filter?: {};
   upload: number;
+  order?: Array<any>;
 }
 
 const MyTable: React.FC<IMyTable> = ({
@@ -21,6 +22,7 @@ const MyTable: React.FC<IMyTable> = ({
   selectedRows,
   filter,
   upload,
+  order,
 }) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0 as number | string);
@@ -39,6 +41,7 @@ const MyTable: React.FC<IMyTable> = ({
       fields: fields,
       skip: (page as number) * 10,
       filter,
+      order,
     };
 
     fetch(baseURL + url, {

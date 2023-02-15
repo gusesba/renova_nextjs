@@ -61,6 +61,7 @@ const Sells: NextPageWithLayout<ISells> = () => {
           description: true,
         }}
         url="/sell"
+        order={[{ sell: { createdAt: 'desc' } }]}
       />
     </>
   );

@@ -23,6 +23,7 @@ export interface IMyPage {
   fields: any;
   filter?: any;
   after?: Function;
+  order?: Array<any>;
 }
 
 const MyPage: React.FC<IMyPage> = ({
@@ -36,6 +37,7 @@ const MyPage: React.FC<IMyPage> = ({
   name,
   filter,
   after,
+  order,
 }) => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [selectedRows, _setSelectedRows] = useState([] as Array<number>);
@@ -183,6 +185,7 @@ const MyPage: React.FC<IMyPage> = ({
         setSelectedRows={setSelectedRows}
         filter={stateFilter}
         upload={upload}
+        order={order}
       />
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh]">
