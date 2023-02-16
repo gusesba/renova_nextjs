@@ -45,7 +45,8 @@ const Products: NextPageWithLayout<IProducts> = () => {
           description: true,
           entry: true,
         }}
-        url="/product "
+        url="/product"
+        order={[{ id: 'desc' }]}
       />
     </>
   );

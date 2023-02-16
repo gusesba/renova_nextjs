@@ -20,6 +20,7 @@ const Clients: NextPageWithLayout<IClients> = () => {
         url="/client"
         name="Cliente"
         SearchForm={SearchClientForm}
+        order={[{ id: 'desc' }]}
       />
     </>
   );
