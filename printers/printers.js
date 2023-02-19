@@ -510,7 +510,6 @@ const printEtiqueta2 = (products) => {
 export const printRecibo3 = (sellId) => {
   const body = {
     action: 'GET',
-    number: 10,
     fields: {
       product: true,
       color: true,
