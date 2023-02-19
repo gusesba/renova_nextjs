@@ -24,11 +24,13 @@ export const objToArray = (obj: any) => {
 };
 
 export const fieldToObj = (field: string, order: string) => {
-  let fields = field.split('.');
-  let obj = order as any;
+  if (field) {
+    let fields = field.split('.');
+    let obj = order as any;
 
-  for (let i = fields.length - 1; i >= 0; i--) {
-    obj = { [fields[i]]: obj };
+    for (let i = fields.length - 1; i >= 0; i--) {
+      obj = { [fields[i]]: obj };
+    }
+    return obj;
   }
-  return obj;
 };
