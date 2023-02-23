@@ -19,15 +19,6 @@ export default async function handler(
         if (product == null)
           res.status(200).json({ error: 'Produto não cadastrado' });
 
-        if (!(product as { error: string }).error) {
-          (product as Product).entry = `${(
-            (product as Product).entry as Date
-          ).getUTCDate()}/${(
-            (product as Product).entry as Date
-          ).getUTCMonth()}/${(
-            (product as Product).entry as Date
-          ).getUTCFullYear()}`;
-        }
         res.status(201).json(product);
       })
       .catch(async (e) => {

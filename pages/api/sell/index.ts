@@ -41,16 +41,16 @@ export default async function handler(
           }
 
           if (product.entry) {
-            product.entry = `${(product.entry as Date).getUTCDate()}/${
-              (product.entry as Date).getUTCMonth() + 1
-            }/${(product.entry as Date).getUTCFullYear()}`;
+            product.entry = `${(product.entry as Date).getDate()}/${
+              (product.entry as Date).getMonth() + 1
+            }/${(product.entry as Date).getFullYear()}`;
           }
           if (product.sell?.createdAt) {
             product.sell.createdAt = `${(
               product.sell.createdAt as Date
-            ).getUTCDate()}/${
-              (product.sell.createdAt as Date).getUTCMonth() + 1
-            }/${(product.sell.createdAt as Date).getUTCFullYear()}`;
+            ).getDate()}/${(product.sell.createdAt as Date).getMonth() + 1}/${(
+              product.sell.createdAt as Date
+            ).getFullYear()}`;
           }
         });
         res.status(201).json(products);

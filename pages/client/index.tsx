@@ -9,6 +9,7 @@ import MyTable from '../../components/table/MyTable';
 import { baseURL } from '../../config/config';
 import AlertContext from '../../contexts/AlertContext';
 import { printEtiqueta } from '../../printers/printers';
+import { addDays, addMiliseconds, LocaltoUTC } from '../../utils/utils';
 
 import { NextPageWithLayout } from '../page';
 export interface IClient {}
@@ -24,6 +25,7 @@ const Client: NextPageWithLayout<IClient> = () => {
     dateMin: new Date('01-01-2000').toString(),
     dateMax: new Date(Date.now()).toString(),
   });
+
   const [upload, setUpload] = useState(0);
 
   const [header, setHeader] = useState({
@@ -83,14 +85,15 @@ const Client: NextPageWithLayout<IClient> = () => {
   };
 
   useEffect(() => {
-    let maxDate = new Date(values.dateMax);
-    maxDate.setDate(maxDate.getDate() + 2);
     fetch(baseURL + '/client', {
       body: JSON.stringify({
         action: 'GETCLIENTHEADER',
         id: clientId,
-        dateMax: maxDate,
-        dateMin: values.dateMin,
+        dateMax: addMiliseconds(
+          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+          -1
+        ),
+        dateMin: LocaltoUTC(new Date(values.dateMin)),
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -450,8 +453,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                     sellPrice: { not: null },
                     sell: {
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                       type: 'Venda',
                     },
@@ -462,8 +468,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                       buyerId: clientId,
                       type: 'Venda',
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                     },
                   }
@@ -473,8 +482,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                     sellPrice: { not: null },
                     sell: {
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                       type: 'Emprestimo',
                     },
@@ -485,8 +497,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                       buyerId: clientId,
                       type: 'Emprestimo',
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                     },
                   }
@@ -496,8 +511,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                     sellPrice: { not: null },
                     sell: {
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                       type: 'Devolucao',
                     },
@@ -507,8 +525,11 @@ const Client: NextPageWithLayout<IClient> = () => {
                     sellPrice: { not: null },
                     sell: {
                       createdAt: {
-                        gte: new Date(values.dateMin),
-                        lte: new Date(values.dateMax),
+                        gte: LocaltoUTC(new Date(values.dateMin)),
+                        lte: addMiliseconds(
+                          addDays(LocaltoUTC(new Date(values.dateMax)), 1),
+                          -1
+                        ),
                       },
                       type: 'Doacao',
                     },

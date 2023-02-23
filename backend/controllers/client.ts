@@ -125,3 +125,9 @@ export async function getClientPageHeaderData(
     totalBuys: buys._sum.sellPrice,
   };
 }
+
+export async function getClientsSells(dateMax: string, dateMin: string) {
+  const sells = await prisma.product.findMany({});
+
+  return sells;
+}

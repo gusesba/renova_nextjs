@@ -49,11 +49,14 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
           .then((response) => response.json())
           .then((data) => {
             if (!data.error) {
-              let date = data.entry.split('/');
-              date = new Date(date[2], date[1] - 1, date[0]);
+              console.log(data.entry);
+
+              let date = new Date(data.entry);
+              console.log(date);
+
               let today = new Date(Date.now());
 
-              let monthDiff = today.getUTCMonth() - date.getUTCMonth();
+              let monthDiff = today.getMonth() - date.getMonth();
 
               while (monthDiff < 0) {
                 monthDiff += 12;
@@ -66,6 +69,10 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
               } else if (monthDiff >= 5) {
                 data.sellPrice = data.price * 0.8;
               } else data.sellPrice = data.price;
+
+              data.entry = `${date.getDate()}/${
+                date.getMonth() + 1
+              }/${date.getFullYear()}`;
 
               setRows([data].concat([...rows]));
               values.id = '';

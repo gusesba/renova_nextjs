@@ -7,6 +7,7 @@ import {
 } from '../../../backend/controllers/product';
 import { prisma } from '../../../prisma/prismaClient';
 import { Product } from '../../../types/types';
+import { LocaltoUTC } from '../../../utils/utils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -58,16 +59,16 @@ export default async function handler(
         await prisma.$disconnect();
         products.forEach((product) => {
           if (product.entry) {
-            product.entry = `${(product.entry as Date).getUTCDate()}/${
-              (product.entry as Date).getUTCMonth() + 1
-            }/${(product.entry as Date).getUTCFullYear()}`;
+            product.entry = `${(product.entry as Date).getDate()}/${
+              (product.entry as Date).getMonth() + 1
+            }/${(product.entry as Date).getFullYear()}`;
           }
           if (product.sell?.createdAt) {
             product.sell.createdAt = `${(
               product.sell.createdAt as Date
-            ).getUTCDate()}/${
-              (product.sell.createdAt as Date).getUTCMonth() + 1
-            }/${(product.sell.createdAt as Date).getUTCFullYear()}`;
+            ).getDate()}/${(product.sell.createdAt as Date).getMonth() + 1}/${(
+              product.sell.createdAt as Date
+            ).getFullYear()}`;
           }
         });
 
@@ -111,6 +112,7 @@ export default async function handler(
       sellId,
       sellPrice,
     } = req.body;
+    let date = LocaltoUTC(new Date(entry));
 
     return updateProduct(
       id,
@@ -121,7 +123,7 @@ export default async function handler(
       color,
       providerId,
       description,
-      entry,
+      date,
       sellId,
       sellPrice
     )

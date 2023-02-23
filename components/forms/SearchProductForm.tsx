@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import { LocaltoUTC } from '../../utils/utils';
 
 export interface ISearchProductForm {
   fields: {
@@ -167,21 +168,29 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
       };
 
     if (values.dateMin) {
+      let lte = new Date(values.dateMax);
+      lte.setDate(lte.getDate() + 1);
+      lte.setMilliseconds(lte.getMilliseconds() - 1);
       if (values.dateMax)
         filter.entry = {
-          lte: new Date(values.dateMax),
-          gte: new Date(values.dateMin),
+          lte: LocaltoUTC(lte),
+          gte: LocaltoUTC(new Date(values.dateMin)),
         };
       else
         filter.entry = {
           lte: undefined,
-          gte: new Date(values.dateMin),
+          gte: LocaltoUTC(new Date(values.dateMin)),
         };
-    } else if (values.dateMax)
+    } else if (values.dateMax) {
+      let lte = new Date(values.dateMax);
+      lte.setDate(lte.getDate() + 1);
+      lte.setMilliseconds(lte.getMilliseconds() - 1);
+
       filter.entry = {
-        lte: new Date(values.dateMax),
+        lte: LocaltoUTC(lte),
         gte: undefined,
       };
+    }
 
     setFilter(filter);
     setHeaders(headers);

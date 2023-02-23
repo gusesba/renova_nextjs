@@ -34,3 +34,23 @@ export const fieldToObj = (field: string, order: string) => {
     return obj;
   }
 };
+
+export const UTCtoLocal = (date: Date) => {
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+};
+
+export const LocaltoUTC = (date: Date) => {
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+};
+
+export const addDays = (date: Date, days: number) => {
+  let result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
+export const addMiliseconds = (date: Date, miliseconds: number) => {
+  let result = new Date(date);
+  result.setMilliseconds(result.getMilliseconds() + miliseconds);
+  return result;
+};

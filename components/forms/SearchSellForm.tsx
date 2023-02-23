@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FormCheck } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
+import { LocaltoUTC } from '../../utils/utils';
 
 export interface ISearchSellForm {
   fields: {
@@ -246,21 +247,28 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     let createdAt;
 
     if (values.outMin) {
-      if (values.outMax)
+      if (values.outMax) {
+        let lte = new Date(values.outMax);
+        lte.setDate(lte.getDate() + 1);
+        lte.setMilliseconds(lte.getMilliseconds() - 1);
         createdAt = {
-          lte: new Date(values.outMax),
-          gte: new Date(values.outMin),
+          lte: LocaltoUTC(lte),
+          gte: LocaltoUTC(new Date(values.outMin)),
         };
-      else
+      } else
         createdAt = {
           lte: undefined,
-          gte: new Date(values.outMin),
+          gte: LocaltoUTC(new Date(values.outMin)),
         };
-    } else if (values.outMax)
+    } else if (values.outMax) {
+      let lte = new Date(values.outMax);
+      lte.setDate(lte.getDate() + 1);
+      lte.setMilliseconds(lte.getMilliseconds() - 1);
       createdAt = {
-        lte: new Date(values.outMax),
+        lte: LocaltoUTC(lte),
         gte: undefined,
       };
+    }
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
     filter.product = { contains: values.product };
@@ -313,21 +321,28 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
       };
 
     if (values.dateMin) {
-      if (values.dateMax)
+      if (values.dateMax) {
+        let lte = new Date(values.dateMax);
+        lte.setDate(lte.getDate() + 1);
+        lte.setMilliseconds(lte.getMilliseconds() - 1);
         filter.entry = {
-          lte: new Date(values.dateMax),
-          gte: new Date(values.dateMin),
+          lte: LocaltoUTC(lte),
+          gte: LocaltoUTC(new Date(values.dateMin)),
         };
-      else
+      } else
         filter.entry = {
           lte: undefined,
-          gte: new Date(values.dateMin),
+          gte: LocaltoUTC(new Date(values.dateMin)),
         };
-    } else if (values.dateMax)
+    } else if (values.dateMax) {
+      let lte = new Date(values.dateMax);
+      lte.setDate(lte.getDate() + 1);
+      lte.setMilliseconds(lte.getMilliseconds() - 1);
       filter.entry = {
-        lte: new Date(values.dateMax),
+        lte: LocaltoUTC(lte),
         gte: undefined,
       };
+    }
 
     setFilter(filter);
     setHeaders(headers);
