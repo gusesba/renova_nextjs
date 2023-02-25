@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse<Client | null | { error: string }>
 ) {
   //IF GET REQUEST GET ONE CLIENT  - backend/client.ts
-  if (req.method == 'GET') {
+  if (req.method == 'POST') {
     return createExcel(req, res);
   }
 }

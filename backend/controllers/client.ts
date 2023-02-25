@@ -126,8 +126,53 @@ export async function getClientPageHeaderData(
   };
 }
 
-export async function getClientsSells(dateMax: string, dateMin: string) {
-  const sells = await prisma.product.findMany({});
+export async function getClientsSells(dateMin: Date, dateMax: Date) {
+  const sells = await prisma.client.findMany({
+    include: {
+      products: {
+        where: {
+          sell: {
+            type: 'Venda',
+            createdAt: {
+              gte: new Date(dateMin),
+              lte: new Date(dateMax),
+            },
+          },
+        },
+        include: {
+          sell: {
+            include: {
+              buyer: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      purchases: {
+        where: {
+          type: 'Venda',
+          createdAt: {
+            gte: new Date(dateMin),
+            lte: new Date(dateMax),
+          },
+        },
+        include: {
+          products: {
+            include: {
+              provider: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 
   return sells;
 }
