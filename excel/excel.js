@@ -17,7 +17,8 @@ const createExcel = async (req, res) => {
   // Criar uma nova worksheet para cada cliente
   clients.forEach((client) => {
     if (client.products.length === 0 && client.purchases.length === 0) return;
-    const worksheet = workbook.addWorksheet(client.name);
+
+    const worksheet = workbook.addWorksheet(client.name.replace(/\//g, '-'));
     worksheet.views = [{ showGridLines: false }];
 
     // Cria a célula do título "Dados do Cliente"
@@ -172,8 +173,8 @@ const createExcel = async (req, res) => {
         '',
         product.id,
         product.sellId,
-        product.price,
-        product.sellPrice,
+        product.price.toFixed(2),
+        product.sellPrice.toFixed(2),
         product.product,
         product.brand,
         product.size,
@@ -211,14 +212,16 @@ const createExcel = async (req, res) => {
       row.height = 25;
     });
 
-    for (let i = 2; i < 14; i++) {
-      row.getCell(i).style = {
-        ...row.getCell(i).style,
-        border: {
-          ...row.getCell(i).style.border,
-          bottom: { style: 'thin' },
-        },
-      };
+    if (client.products.length > 0) {
+      for (let i = 2; i < 14; i++) {
+        row.getCell(i).style = {
+          ...row.getCell(i).style,
+          border: {
+            ...row.getCell(i).style.border,
+            bottom: { style: 'thin' },
+          },
+        };
+      }
     }
 
     row = worksheet.addRow([]);
@@ -298,8 +301,8 @@ const createExcel = async (req, res) => {
           '',
           product.id,
           product.sellId,
-          product.price,
-          product.sellPrice,
+          product.price.toFixed(2),
+          product.sellPrice.toFixed(2),
           product.product,
           product.brand,
           product.size,
@@ -336,30 +339,29 @@ const createExcel = async (req, res) => {
         };
         row.height = 25;
       });
+    });
+    for (let i = 2; i < 14; i++) {
+      row.getCell(i).style = {
+        ...row.getCell(i).style,
+        border: {
+          ...row.getCell(i).style.border,
+          bottom: { style: 'thin' },
+        },
+      };
+    }
 
-      for (let i = 2; i < 14; i++) {
-        row.getCell(i).style = {
-          ...row.getCell(i).style,
-          border: {
-            ...row.getCell(i).style.border,
-            bottom: { style: 'thin' },
-          },
-        };
-      }
-
-      // Ajustar o tamanho das colunas com base no tamanho do conteúdo
-      headerRow.eachCell((cell, colNumber) => {
-        let maxLength = cell.value.toString().length;
-        worksheet
-          .getColumn(colNumber)
-          .eachCell({ includeEmpty: true }, (cell) => {
-            const columnLength = cell.value ? cell.value.toString().length : 0;
-            if (columnLength > maxLength) {
-              maxLength = columnLength;
-            }
-          });
-        worksheet.getColumn(colNumber).width = ((maxLength + 3) * 13) / 12; // Adiciona 3 caracteres extras para evitar que o conteúdo seja truncado
-      });
+    // Ajustar o tamanho das colunas com base no tamanho do conteúdo
+    headerRow.eachCell((cell, colNumber) => {
+      let maxLength = cell.value.toString().length;
+      worksheet
+        .getColumn(colNumber)
+        .eachCell({ includeEmpty: true }, (cell) => {
+          const columnLength = cell.value ? cell.value.toString().length : 0;
+          if (columnLength > maxLength) {
+            maxLength = columnLength;
+          }
+        });
+      worksheet.getColumn(colNumber).width = ((maxLength + 3) * 13) / 12; // Adiciona 3 caracteres extras para evitar que o conteúdo seja truncado
     });
   });
 

@@ -128,7 +128,7 @@ export async function updateProduct(
   color: string,
   providerId: number,
   description: string | undefined,
-  entry: Date,
+  entry: Date | undefined,
   sellId: number | undefined,
   sellPrice: number | undefined
 ) {

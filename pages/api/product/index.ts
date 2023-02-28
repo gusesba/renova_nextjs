@@ -112,7 +112,7 @@ export default async function handler(
       sellId,
       sellPrice,
     } = req.body;
-    let date = LocaltoUTC(new Date(entry));
+    let date = entry == undefined ? undefined : LocaltoUTC(new Date(entry));
 
     return updateProduct(
       id,
