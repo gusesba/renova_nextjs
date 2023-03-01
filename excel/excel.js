@@ -167,14 +167,17 @@ const createExcel = async (req, res) => {
     };
 
     headerRow.height = 25;
-
+    let somaTotal = 0;
+    let soma = 0;
     client.products.forEach((product) => {
+      somaTotal += parseFloat(product.price);
+      soma += parseFloat(product.sellPrice);
       row = worksheet.addRow([
         '',
         product.id,
         product.sellId,
-        product.price.toFixed(2),
-        product.sellPrice.toFixed(2),
+        parseFloat(product.price),
+        parseFloat(product.sellPrice),
         product.product,
         product.brand,
         product.size,
@@ -184,6 +187,9 @@ const createExcel = async (req, res) => {
         UTCtoLocal(product.sell.createdAt),
         product.sell.buyer.name,
       ]);
+
+      row.getCell(4).numFmt = '#,##0.00';
+      row.getCell(5).numFmt = '#,##0.00';
 
       for (let i = 2; i < 14; i++) {
         row.getCell(i).style = {
@@ -223,6 +229,10 @@ const createExcel = async (req, res) => {
         };
       }
     }
+
+    row = worksheet.addRow(['', '', '', somaTotal, soma]);
+
+    row.alignment = { vertical: 'middle', horizontal: 'center' };
 
     row = worksheet.addRow([]);
     row.height = 40;
@@ -294,15 +304,18 @@ const createExcel = async (req, res) => {
     };
 
     headerRow2.height = 25;
-
+    somaTotal = 0;
+    soma = 0;
     client.purchases.forEach((purchase) => {
       purchase.products.forEach((product) => {
+        somaTotal += parseFloat(product.price);
+        soma += parseFloat(product.sellPrice);
         row = worksheet.addRow([
           '',
           product.id,
           product.sellId,
-          product.price.toFixed(2),
-          product.sellPrice.toFixed(2),
+          parseFloat(product.price),
+          parseFloat(product.sellPrice),
           product.product,
           product.brand,
           product.size,
@@ -312,6 +325,9 @@ const createExcel = async (req, res) => {
           UTCtoLocal(purchase.createdAt),
           product.provider.name,
         ]);
+
+        row.getCell(4).numFmt = '#,##0.00';
+        row.getCell(5).numFmt = '#,##0.00';
 
         for (let i = 2; i < 14; i++) {
           row.getCell(i).style = {
@@ -349,6 +365,9 @@ const createExcel = async (req, res) => {
         },
       };
     }
+
+    row = worksheet.addRow(['', '', '', somaTotal, soma]);
+    row.alignment = { vertical: 'middle', horizontal: 'center' };
 
     // Ajustar o tamanho das colunas com base no tamanho do conteúdo
     headerRow.eachCell((cell, colNumber) => {
