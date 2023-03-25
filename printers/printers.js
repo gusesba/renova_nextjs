@@ -138,6 +138,7 @@ const printEtiqueta2 = (products) => {
             '\n',
           //Barcode
           '3D5200002000110' + padId(products[i * 3].id) + '\n',
+
           //Etq 2
           //Renova
           '3' + // rotation

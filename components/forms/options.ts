@@ -67,6 +67,9 @@ export const optionsProduct = [
   'Calcinha',
   'Rasteira',
   'Macaquinho',
+  'Moletom',
+  'Pantalona',
+  'Pulover',
   'Outro',
 ].map((item) => {
   return {
@@ -158,7 +161,8 @@ export const optionsColor = [
   'Bordo',
   'Animal',
   'Preto e Branco',
-
+  'Flores',
+  'Perola',
   'Outro',
 ].map((item) => {
   return {
