@@ -81,6 +81,7 @@ export async function getProduct(id: number) {
       entry: true,
       sellPrice: true,
       sell: { select: { type: true } },
+      provider: { select: { name: true } },
     },
     where: { id },
   });

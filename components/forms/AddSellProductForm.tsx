@@ -70,6 +70,9 @@ const AddSellProductForm: React.FC<IAddSellProductForm> = ({
                 data.sellPrice = data.price * 0.8;
               } else data.sellPrice = data.price;
 
+              if (data.provider.name === 'RENOVA') data.sellPrice = data.price;
+              delete data.provider;
+
               data.entry = `${date.getDate()}/${
                 date.getMonth() + 1
               }/${date.getFullYear()}`;

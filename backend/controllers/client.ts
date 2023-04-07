@@ -172,6 +172,9 @@ export async function getClientsSells(dateMin: Date, dateMax: Date) {
         },
       },
     },
+    orderBy: {
+      name: 'asc',
+    },
   });
 
   return sells;
