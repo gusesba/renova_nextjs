@@ -50,7 +50,6 @@ const MyPage: React.FC<IMyPage> = () => {
     if (!client) return;
     const body = {
       action: 'GET',
-      number: 10,
       fields: {
         id: true,
         price: true,
