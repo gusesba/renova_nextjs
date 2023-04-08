@@ -1,3 +1,4 @@
+import { Prisma } from 'prisma/prisma-client';
 import { prisma } from '../../prisma/prismaClient';
 
 //CREATE SELL
@@ -51,25 +52,23 @@ export async function deleteSells(ids: Array<number>) {
   return count;
 }
 
-export async function getRecipt(take?: number, skip?: number) {
+export async function getRecipt(
+  take?: number,
+  skip?: number,
+  filter = {},
+  order = [{ id: 'desc' }],
+  fields?: {}
+) {
   const sells = await prisma.sell.findMany({
     take,
     skip,
-    select: {
-      id: true,
-      type: true,
-      buyer: { select: { name: true } },
-      products: {
-        select: {
-          id: true,
-          sellPrice: true,
-        },
-      },
-    },
-    orderBy: [{ id: 'desc' }],
+    select: fields,
+    where: filter,
+    orderBy:
+      order as Prisma.Enumerable<Prisma.ProductOrderByWithAggregationInput>,
   });
 
-  const sellList = sells.map((sell) => {
+  const sellList = sells.map((sell: any) => {
     const totalProducts = sell.products.length;
     const totalSellPrice = sell.products.reduce(
       (acummulator: any, current: any) => {
@@ -80,9 +79,8 @@ export async function getRecipt(take?: number, skip?: number) {
     return {
       id: sell.id,
       type: sell.type,
-      buyer: sell.buyer.name,
-      totalProducts,
-      totalSellPrice,
+      buyer: { name: sell.buyer.name },
+      products: { sellPrice: totalProducts, id: totalSellPrice },
     };
   });
 

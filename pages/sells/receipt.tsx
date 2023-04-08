@@ -1,6 +1,6 @@
 import AddClientForm from '../../components/forms/AddClientForm';
 import EditClientForm from '../../components/forms/EditClientForm';
-import SearchClientForm from '../../components/forms/SearchClientForm';
+import SearchReceiptForm from '../../components/forms/SearchReceiptForm';
 import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import MyPage from '../../components/pages/MyPageTable';
 import { NextPageWithLayout } from '../page';
@@ -16,13 +16,18 @@ const Receipt: NextPageWithLayout<IReceipt> = () => {
         fields={{
           id: true,
           type: true,
-          buyer: true,
-          totalProducts: true,
-          totalSellPrice: true,
+          buyer: { select: { name: true } },
+          products: {
+            select: {
+              id: true,
+              sellPrice: true,
+            },
+          },
         }}
         url="/sell/receipt"
         name="Recibos"
-        SearchForm={SearchClientForm}
+        SearchForm={SearchReceiptForm}
+        order={[{ id: 'desc' }]}
       />
     </>
   );

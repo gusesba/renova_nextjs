@@ -10,8 +10,8 @@ export default async function handler(
 ) {
   //IF POST REQUEST GET Sells - backend/product.ts
   if (req.method == 'POST' && req.body?.action == 'GET') {
-    const { number, skip } = req.body;
-    return getRecipt(number, skip)
+    const { number, skip, filter, order, fields } = req.body;
+    return getRecipt(number, skip, filter, order, fields)
       .then(async (receipt: any) => {
         res.status(201).json(receipt);
       })

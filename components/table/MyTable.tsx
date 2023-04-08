@@ -102,7 +102,7 @@ const MyTable: React.FC<IMyTable> = ({
   useEffect(() => {
     setFieldsState(objToArray(fields));
     fetchData();
-  }, [page, upload, fields, orderBy]);
+  }, [page, upload, fields, orderBy, filter]);
 
   useEffect(() => {
     document.querySelectorAll('[type="checkbox"]').forEach((checkbox: any) => {
@@ -236,7 +236,6 @@ const MyTable: React.FC<IMyTable> = ({
                       return '';
                     }
                   }, row);
-
                   return (
                     <td className="text-center" key={key}>
                       {newField}
