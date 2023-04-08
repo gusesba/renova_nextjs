@@ -47,6 +47,7 @@ const MyPage: React.FC<IMyPage> = () => {
   };
 
   useEffect(() => {
+    if (!client) return;
     const body = {
       action: 'GET',
       number: 10,
