@@ -130,6 +130,106 @@ const MyPage: React.FC<IMyPage> = ({
       });
   };
 
+  const handleDevolver = () => {
+    const body = {
+      action: 'POST',
+      buyerId: 1,
+      type: 'Devolucao',
+      products: selectedRowsRef.current.map((column: any) => {
+        return {
+          id: column,
+          sellPrice: 0,
+        };
+      }),
+    };
+
+    console.log(selectedRowsRef.current);
+
+    fetch(baseURL + '/sell', {
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log(data.count);
+          setAlerts((oldAlerts) => {
+            return [
+              ...oldAlerts,
+              {
+                variant: 'success',
+                message: data.count + ' ' + name + 'Devolvidos',
+              },
+            ];
+          });
+          setTimeout(() => {
+            setAlerts((oldAlerts) => {
+              return oldAlerts.slice(1);
+            });
+          }, 3000);
+          setUpload(Math.random());
+          setSelectedRows([]);
+          document
+            .querySelectorAll('[type="checkbox"]')
+            .forEach((checkbox: any) => (checkbox.checked = false));
+        }
+      });
+  };
+
+  const handleDoar = () => {
+    const body = {
+      action: 'POST',
+      buyerId: 1,
+      type: 'Doacao',
+      products: selectedRowsRef.current.map((column: any) => {
+        return {
+          id: column,
+          sellPrice: 0,
+        };
+      }),
+    };
+
+    fetch(baseURL + '/sell', {
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          console.log(data.count);
+          setAlerts((oldAlerts) => {
+            return [
+              ...oldAlerts,
+              {
+                variant: 'success',
+                message: data.count + ' ' + name + 'Doados',
+              },
+            ];
+          });
+          setTimeout(() => {
+            setAlerts((oldAlerts) => {
+              return oldAlerts.slice(1);
+            });
+          }, 3000);
+          setUpload(Math.random());
+          setSelectedRows([]);
+          document
+            .querySelectorAll('[type="checkbox"]')
+            .forEach((checkbox: any) => (checkbox.checked = false));
+        }
+      });
+  };
+
   return (
     <section>
       <MyModal
@@ -190,6 +290,18 @@ const MyPage: React.FC<IMyPage> = ({
 
       <div className="group fixed flex flex-col right-[10vw] top-[90vh]">
         <div className="absolute bottom-[0] right-[-5rem] hidden flex-col pb-3 group-hover:flex w-[7.5rem] items-center">
+          <button
+            onClick={handleDevolver}
+            className="bg-[#000] text-white h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
+            Devolver
+          </button>
+          <button
+            onClick={handleDoar}
+            className="bg-[#000] text-white h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
+          >
+            Doar
+          </button>
           <button
             onClick={handleDelete}
             className="bg-[#000] text-white w-10 h-10 rounded-md hover:bg-gray-300 transition-all duration-300 mb-[13.5px]"
