@@ -57,8 +57,9 @@ export async function getProducts(
     take,
     skip,
     where: filter,
-    orderBy:
-      order as Prisma.Enumerable<Prisma.ProductOrderByWithAggregationInput>,
+    orderBy: order.concat({
+      id: 'desc',
+    }) as Prisma.Enumerable<Prisma.ProductOrderByWithAggregationInput>,
     select: fields,
   });
 

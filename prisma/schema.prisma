@@ -20,7 +20,6 @@ model Client {
   updatedAt        DateTime           @updatedAt
   products Product[]
   purchases Sell[]
-
 }
 
 model Product {

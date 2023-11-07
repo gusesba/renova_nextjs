@@ -18,6 +18,7 @@
   },
   "scripts": {
     "dev": "next dev",
+    "dev-local": "next dev -H 172.26.144.184",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

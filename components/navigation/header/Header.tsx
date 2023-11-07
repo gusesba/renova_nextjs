@@ -12,7 +12,6 @@ import { baseURL } from '../../../config/config';
 export interface IHeader {
   pageName?: string;
 }
-
 const Header: React.FC<IHeader> = ({ pageName }) => {
   return (
     <Navbar className="w-screen h-[9vh]" bg="light" variant="light">
