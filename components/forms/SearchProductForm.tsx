@@ -17,12 +17,14 @@ export interface ISearchProductForm {
   filter:
     | {
         id: number | undefined;
-        provider: { name: { contains: string } | undefined } | undefined;
-        description: { contains: string } | undefined;
-        product: { contains: string } | undefined;
-        brand: { contains: string } | undefined;
-        size: { contains: string } | undefined;
-        color: { contains: string } | undefined;
+        provider:
+          | { name: { contains: string; mode: string } | undefined }
+          | undefined;
+        description: { contains: string; mode: string } | undefined;
+        product: { contains: string; mode: string } | undefined;
+        brand: { contains: string; mode: string } | undefined;
+        size: { contains: string; mode: string } | undefined;
+        color: { contains: string; mode: string } | undefined;
         price: { lte: number | undefined; gte: number | undefined } | undefined;
         entry: { lte: string | undefined; gte: string | undefined } | undefined;
         sellPrice: number | null | undefined;
@@ -107,12 +109,14 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     let filter:
       | {
           id: number | undefined;
-          provider: { name: { contains: string } | undefined } | undefined;
-          description: { contains: string } | undefined;
-          product: { contains: string } | undefined;
-          brand: { contains: string } | undefined;
-          size: { contains: string } | undefined;
-          color: { contains: string } | undefined;
+          provider:
+            | { name: { contains: string; mode: string } | undefined }
+            | undefined;
+          description: { contains: string; mode: string } | undefined;
+          product: { contains: string; mode: string } | undefined;
+          brand: { contains: string; mode: string } | undefined;
+          size: { contains: string; mode: string } | undefined;
+          color: { contains: string; mode: string } | undefined;
           price:
             | { lte: number | undefined; gte: number | undefined }
             | undefined;
@@ -144,12 +148,14 @@ const SearchProductForm: React.FC<ISearchProductForm> = ({
     if (values.entryCheck) headers = headers.concat(['Entrada']);
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
-    filter.product = { contains: values.product };
-    filter.brand = { contains: values.brand };
-    filter.size = { contains: values.size };
-    filter.color = { contains: values.color };
-    filter.provider = { name: { contains: values.providerName } };
-    filter.description = { contains: values.description };
+    filter.product = { contains: values.product, mode: 'insensitive' };
+    filter.brand = { contains: values.brand, mode: 'insensitive' };
+    filter.size = { contains: values.size, mode: 'insensitive' };
+    filter.color = { contains: values.color, mode: 'insensitive' };
+    filter.provider = {
+      name: { contains: values.providerName, mode: 'insensitive' },
+    };
+    filter.description = { contains: values.description, mode: 'insensitive' };
     if (values.priceMin) {
       if (values.priceMax)
         filter.price = {

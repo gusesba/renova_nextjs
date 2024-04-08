@@ -7,8 +7,8 @@ export interface ISearchClientForm {
   filter:
     | {
         id: number | undefined;
-        name: { contains: string } | undefined;
-        phone: { contains: string } | undefined;
+        name: { contains: string; mode: 'insensitive' } | undefined;
+        phone: { contains: string; mode: 'insensitive' } | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -43,8 +43,8 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
 
     let filter: {
       id: number | undefined;
-      name: { contains: string } | undefined;
-      phone: { contains: string } | undefined;
+      name: { contains: string; mode: 'insensitive' } | undefined;
+      phone: { contains: string; mode: 'insensitive' } | undefined;
     } = { id: undefined, name: undefined, phone: undefined };
 
     let headers = ['Id'];
@@ -53,8 +53,8 @@ const SearchClientForm: React.FC<ISearchClientForm> = ({
     if (values.phoneCheck) headers = headers.concat(['Telefone']);
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
-    filter.name = { contains: values.name };
-    filter.phone = { contains: values.phone };
+    filter.name = { contains: values.name, mode: 'insensitive' };
+    filter.phone = { contains: values.phone, mode: 'insensitive' };
 
     setFilter(filter);
     setHeaders(headers);

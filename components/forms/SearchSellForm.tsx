@@ -37,12 +37,14 @@ export interface ISearchSellForm {
   filter:
     | {
         id: number | undefined;
-        provider: { name: { contains: string } | undefined } | undefined;
-        description: { contains: string } | undefined;
-        product: { contains: string } | undefined;
-        brand: { contains: string } | undefined;
-        size: { contains: string } | undefined;
-        color: { contains: string } | undefined;
+        provider:
+          | { name: { contains: string; mode: string } | undefined }
+          | undefined;
+        description: { contains: string; mode: string } | undefined;
+        product: { contains: string; mode: string } | undefined;
+        brand: { contains: string; mode: string } | undefined;
+        size: { contains: string; mode: string } | undefined;
+        color: { contains: string; mode: string } | undefined;
         price: { lte: number | undefined; gte: number | undefined } | undefined;
         entry: { lte: string | undefined; gte: string | undefined } | undefined;
         sellPrice:
@@ -50,8 +52,8 @@ export interface ISearchSellForm {
           | undefined;
         sell:
           | {
-              type: { contains: string } | undefined;
-              buyer: { name: { contains: string } } | undefined;
+              type: { contains: string; mode: string } | undefined;
+              buyer: { name: { contains: string; mode: string } } | undefined;
               createdAt:
                 | { lte: string | undefined; gte: string | undefined }
                 | undefined;
@@ -188,12 +190,14 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     let filter:
       | {
           id: number | undefined;
-          provider: { name: { contains: string } | undefined } | undefined;
-          description: { contains: string } | undefined;
-          product: { contains: string } | undefined;
-          brand: { contains: string } | undefined;
-          size: { contains: string } | undefined;
-          color: { contains: string } | undefined;
+          provider:
+            | { name: { contains: string; mode: string } | undefined }
+            | undefined;
+          description: { contains: string; mode: string } | undefined;
+          product: { contains: string; mode: string } | undefined;
+          brand: { contains: string; mode: string } | undefined;
+          size: { contains: string; mode: string } | undefined;
+          color: { contains: string; mode: string } | undefined;
           price:
             | { lte: number | undefined; gte: number | undefined }
             | undefined;
@@ -203,8 +207,10 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
           entry: { lte: Date | undefined; gte: Date | undefined } | undefined;
           sell:
             | {
-                type: { contains: string } | undefined;
-                buyer: { name: { contains: string } | undefined } | undefined;
+                type: { contains: string; mode: string } | undefined;
+                buyer:
+                  | { name: { contains: string; mode: string } | undefined }
+                  | undefined;
                 createdAt:
                   | { lte: Date | undefined; gte: Date | undefined }
                   | undefined;
@@ -271,17 +277,19 @@ const SearchSellForm: React.FC<ISearchSellForm> = ({
     }
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
-    filter.product = { contains: values.product };
-    filter.brand = { contains: values.brand };
-    filter.size = { contains: values.size };
-    filter.color = { contains: values.color };
-    filter.provider = { name: { contains: values.providerName } };
+    filter.product = { contains: values.product, mode: 'insensitive' };
+    filter.brand = { contains: values.brand, mode: 'insensitive' };
+    filter.size = { contains: values.size, mode: 'insensitive' };
+    filter.color = { contains: values.color, mode: 'insensitive' };
+    filter.provider = {
+      name: { contains: values.providerName, mode: 'insensitive' },
+    };
     filter.sell = {
-      type: { contains: values.type },
-      buyer: { name: { contains: values.buyer } },
+      type: { contains: values.type, mode: 'insensitive' },
+      buyer: { name: { contains: values.buyer, mode: 'insensitive' } },
       createdAt: createdAt,
     };
-    filter.description = { contains: values.description };
+    filter.description = { contains: values.description, mode: 'insensitive' };
     if (values.priceMin) {
       if (values.priceMax)
         filter.price = {

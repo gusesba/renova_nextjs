@@ -5,8 +5,10 @@ export interface ISearchReceiptForm {
   filter:
     | {
         id: number | undefined;
-        type: { contains: string } | undefined;
-        buyer: { name: { contains: string } | undefined } | undefined;
+        type: { contains: string; mode: string } | undefined;
+        buyer:
+          | { name: { contains: string; mode: string } | undefined }
+          | undefined;
       }
     | undefined;
   setFilter: Dispatch<SetStateAction<{} | undefined>>;
@@ -38,13 +40,17 @@ const SearchReceiptForm: React.FC<ISearchReceiptForm> = ({
 
     let filter: {
       id: number | undefined;
-      type: { contains: string } | undefined;
-      buyer: { name: { contains: string } | undefined } | undefined;
+      type: { contains: string; mode: string } | undefined;
+      buyer:
+        | { name: { contains: string; mode: string } | undefined }
+        | undefined;
     } = { id: undefined, type: undefined, buyer: { name: undefined } };
 
     filter.id = isNaN(parseInt(values.id)) ? undefined : parseInt(values.id);
-    filter.type = { contains: values.type };
-    filter.buyer = { name: { contains: values.buyerName } };
+    filter.type = { contains: values.type, mode: 'insensitive' };
+    filter.buyer = {
+      name: { contains: values.buyerName, mode: 'insensitive' },
+    };
     setFilter(filter);
   };
 
