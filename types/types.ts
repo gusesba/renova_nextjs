@@ -1,4 +1,4 @@
-import { Decimal } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
 
 export type Client = {
   id?: number;
@@ -10,7 +10,7 @@ export type Client = {
 
 export type Product = {
   id?: number;
-  price?: Decimal;
+  price?: Prisma.Decimal;
   product?: string;
   brand?: string;
   size?: string;
@@ -19,7 +19,7 @@ export type Product = {
   description?: string | null;
   entry?: Date | string;
   sellId?: number | null;
-  sellPrice?: Decimal | null;
+  sellPrice?: Prisma.Decimal | null;
   createdAt?: Date;
   updatedAt?: Date;
   sell?: Sell;
