@@ -79,9 +79,9 @@ export async function getClientPageHeaderData(
   dateMin: string
 ) {
   const client = await prisma.client.findUnique({
-    select: { name: true, phone: true },
-    where: { id },
-  });
+  select: { name: true, phone: true },
+  where: { id },
+}) as { name: string; phone: string } | null;
 
   const sells = await prisma.product.aggregate({
     _count: { id: true },
