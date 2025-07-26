@@ -25,7 +25,8 @@
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.6.1",
