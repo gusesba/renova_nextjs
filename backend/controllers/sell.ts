@@ -29,14 +29,14 @@ export async function createSell(
 }
 
 export async function deleteSells(ids: Array<number>) {
-  const sells: (Sell & { products: Product[] })[]  = await prisma.sell.findMany({
+  const sells = await prisma.sell.findMany({
     where: {
       id: { in: ids },
     },
     include: {
-      products: true, // inclui os produtos vinculados à venda
+      products: true,
     },
-  });
+  }) as Array<Sell & { products: Product[] }>;
   sells.forEach((sell) => {
     if (sell.products.length > 0) {
       const index = ids.indexOf(sell.id);
