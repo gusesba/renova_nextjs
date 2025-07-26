@@ -1,6 +1,5 @@
-import { Prisma } from 'prisma/prisma-client';
+import { Prisma, Product, Sell } from 'prisma/prisma-client';
 import { prisma } from '../../prisma/prismaClient';
-
 //CREATE SELL
 //PARAMS
 //  TYPE  : STRING
@@ -30,7 +29,7 @@ export async function createSell(
 }
 
 export async function deleteSells(ids: Array<number>) {
-  const sells = await prisma.sell.findMany({
+  const sells: (Sell & { products: Product[] })[]  = await prisma.sell.findMany({
     where: {
       id: { in: ids },
     },
